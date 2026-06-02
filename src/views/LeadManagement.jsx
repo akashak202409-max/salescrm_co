@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Search, Filter, Phone, MoreVertical, X, Edit2, Mail, Trash2, Users, Flame, CalendarCheck, Clock, Calendar, ChevronDown, ChevronUp, MapPin, Activity, User, FileText, UserPlus, Sparkles, Thermometer, Snowflake, FileSignature, HandshakeIcon, CheckCircle2, Trash } from 'lucide-react';
+import { Search, Filter, Phone, MoreVertical, X, Edit2, Mail, Trash2, Users, Flame, CalendarCheck, Clock, Calendar, ChevronDown, ChevronUp, MapPin, Activity, User, FileText, UserPlus, Sparkles, Thermometer, Snowflake, FileSignature, HandshakeIcon, CheckCircle2, Trash, Send, ArrowUpDown } from 'lucide-react';
+import { useToast } from '../components/Toast';
 
 const LEAD_SOURCES = [
   'Referral',
@@ -154,7 +155,7 @@ const LeadManagement = () => {
     start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
   });
-  const [expandedLeadId, setExpandedLeadId] = useState(null);
+
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [editingNoteText, setEditingNoteText] = useState('');
   const [newLead, setNewLead] = useState({
@@ -170,6 +171,10 @@ const LeadManagement = () => {
     location: '',
     remark: ''
   });
+
+  const [selectedLeadForTimeline, setSelectedLeadForTimeline] = useState(null);
+  const [timelineSortOrder, setTimelineSortOrder] = useState('desc'); // 'desc' (newest first) or 'asc' (oldest first)
+  const addToast = useToast();
 
   const [statusFilter, setStatusFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -223,7 +228,11 @@ const LeadManagement = () => {
           timestamp: formattedTime,
           message: `Updated notes: "${editingNoteText}"`
         }];
-        return { ...l, notes: editingNoteText, history: newHistory };
+        const updatedLead = { ...l, notes: editingNoteText, history: newHistory };
+        if (selectedLeadForTimeline && selectedLeadForTimeline.id === id) {
+          setSelectedLeadForTimeline(updatedLead);
+        }
+        return updatedLead;
       }
       return l;
     }));
@@ -243,7 +252,11 @@ const LeadManagement = () => {
             timestamp: formattedTime,
             message: `Updated status to: ${newStatus.toUpperCase()}`
           }];
-          return { ...l, status: newStatus, history: newHistory };
+          const updatedLead = { ...l, status: newStatus, history: newHistory };
+          if (selectedLeadForTimeline && selectedLeadForTimeline.id === id) {
+            setSelectedLeadForTimeline(updatedLead);
+          }
+          return updatedLead;
         }
         return l;
       }));
@@ -265,7 +278,7 @@ const LeadManagement = () => {
             message: `Added appointment note: "${apptDetails.remark}"`
           });
         }
-        return { 
+        const updatedLead = { 
           ...l, 
           status: 'Appointment Fixed', 
           followUp: `${apptDetails.date}, ${apptDetails.time}`,
@@ -273,6 +286,10 @@ const LeadManagement = () => {
           appointmentRemark: apptDetails.remark,
           history: newHistory
         };
+        if (selectedLeadForTimeline && selectedLeadForTimeline.id === activeApptLeadId) {
+          setSelectedLeadForTimeline(updatedLead);
+        }
+        return updatedLead;
       }
       return l;
     }));
@@ -296,7 +313,11 @@ const LeadManagement = () => {
           timestamp: formattedTime,
           message: `Updated assignTo to: ${newManager}`
         }];
-        return { ...l, manager: newManager, history: newHistory };
+        const updatedLead = { ...l, manager: newManager, history: newHistory };
+        if (selectedLeadForTimeline && selectedLeadForTimeline.id === id) {
+          setSelectedLeadForTimeline(updatedLead);
+        }
+        return updatedLead;
       }
       return l;
     }));
@@ -311,7 +332,11 @@ const LeadManagement = () => {
           timestamp: formattedTime,
           message: `Updated source to: ${newSource.toUpperCase()}`
         }];
-        return { ...l, source: newSource, history: newHistory };
+        const updatedLead = { ...l, source: newSource, history: newHistory };
+        if (selectedLeadForTimeline && selectedLeadForTimeline.id === id) {
+          setSelectedLeadForTimeline(updatedLead);
+        }
+        return updatedLead;
       }
       return l;
     }));
@@ -343,6 +368,14 @@ const LeadManagement = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <style>{`
+        .lead-row {
+          transition: background-color 0.15s ease;
+        }
+        .lead-row:hover {
+          background-color: rgba(79, 70, 229, 0.03) !important;
+        }
+      `}</style>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700' }}>Lead Management</h2>
         
@@ -530,7 +563,7 @@ const LeadManagement = () => {
           <table style={{ width: '100%', minWidth: '1100px', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead style={{ backgroundColor: '#F1F5F9', borderBottom: '1px solid var(--border-color)' }}>
               <tr>
-                <th style={{ width: '40px', padding: '0.75rem 0.5rem', textAlign: 'center' }}></th>
+
                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Date</th>
                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Lead ID</th>
                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Customer Name</th>
@@ -547,18 +580,32 @@ const LeadManagement = () => {
           <tbody>
             {filteredLeads.map((lead, index) => (
               <React.Fragment key={lead.id}>
-              <tr style={{ borderBottom: (index === leads.length - 1 && expandedLeadId !== lead.id) ? 'none' : '1px solid var(--border-color)', backgroundColor: expandedLeadId === lead.id ? 'rgba(79, 70, 229, 0.02)' : 'transparent' }}>
-                <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
-                  <button onClick={() => setExpandedLeadId(expandedLeadId === lead.id ? null : lead.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {expandedLeadId === lead.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                  </button>
-                </td>
+              <tr 
+                onClick={() => setSelectedLeadForTimeline(lead)}
+                className="lead-row"
+                style={{ 
+                  borderBottom: index === leads.length - 1 ? 'none' : '1px solid var(--border-color)',
+                  cursor: 'pointer'
+                }}
+              >
                 <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>{lead.date}</td>
-                <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: '500', color: 'var(--primary-color)', textAlign: 'center', whiteSpace: 'nowrap' }}>{lead.id}</td>
+                <td 
+                  style={{ 
+                    padding: '0.75rem 1rem', 
+                    fontSize: '0.8125rem', 
+                    fontWeight: '600', 
+                    color: 'var(--secondary-color)', 
+                    textAlign: 'center', 
+                    whiteSpace: 'nowrap'
+                  }}
+                  title="Lead ID"
+                >
+                  {lead.id}
+                </td>
                 <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: '600', textAlign: 'center', whiteSpace: 'nowrap' }}>{lead.name}</td>
                 <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: 'var(--text-main)', textAlign: 'center', whiteSpace: 'nowrap' }}>{lead.projectType}</td>
                 <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>{lead.phone}</td>
-                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', backgroundColor: getSourceStyles(lead.source).bg, borderRadius: '9999px', padding: '0.2rem 0.1rem 0.2rem 0.6rem' }}>
                     <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: getSourceStyles(lead.source).dot, flexShrink: 0 }} />
                     <select
@@ -589,7 +636,7 @@ const LeadManagement = () => {
                     </select>
                   </div>
                 </td>
-                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <select 
                     value={lead.status}
                     onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
@@ -624,7 +671,7 @@ const LeadManagement = () => {
                     <option value="Junk">JUNK</option>
                   </select>
                 </td>
-                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <select 
                     value={lead.manager}
                     onChange={(e) => updateLeadManager(lead.id, e.target.value)}
@@ -646,8 +693,29 @@ const LeadManagement = () => {
                   </select>
                 </td>
                 <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>{lead.followUp}</td>
-                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+                    <button 
+                      title="Timeline & Notes" 
+                      onClick={(e) => { e.stopPropagation(); setSelectedLeadForTimeline(lead); }}
+                      style={{ 
+                        background: 'var(--primary-color)', 
+                        border: 'none', 
+                        color: 'white', 
+                        width: '28px', 
+                        height: '28px', 
+                        borderRadius: '50%', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        cursor: 'pointer',
+                        transition: 'transform 0.15s ease'
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.15)'}
+                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                    >
+                      <Activity size={12} />
+                    </button>
                     <button title="Call" style={{ background: '#E0E7FF', border: 'none', color: 'var(--primary-color)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                       <Phone size={12} />
                     </button>
@@ -662,7 +730,7 @@ const LeadManagement = () => {
                     </button>
                   </div>
                 </td>
-                <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center', maxWidth: '120px' }}>
+                <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center', maxWidth: '120px' }} onClick={(e) => e.stopPropagation()}>
                   {editingNoteId === lead.id ? (
                     <input
                       autoFocus
@@ -685,47 +753,7 @@ const LeadManagement = () => {
                   )}
                 </td>
               </tr>
-              {expandedLeadId === lead.id && (
-                <tr style={{ backgroundColor: 'rgba(79, 70, 229, 0.02)' }}>
-                  <td colSpan="12" style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                    <div style={{ padding: '1.5rem 2rem', background: 'white', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                      <h4 style={{ margin: '0 0 1rem 0', fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-main)' }}>Lead Change History & Notes</h4>
-                      
-                      <div style={{ position: 'relative', paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
-                        {/* Vertical line tracker */}
-                        <div style={{ position: 'absolute', left: '6px', top: '6px', bottom: '6px', width: '2px', backgroundColor: 'var(--border-color)', zIndex: 0 }} />
-                        
-                        {(lead.history || []).map((h, i) => (
-                          <div key={i} style={{ display: 'flex', gap: '1.5rem', fontSize: '0.8125rem', alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
-                            {/* Bullet dot */}
-                            <div style={{ 
-                              position: 'absolute', 
-                              left: '-22px', 
-                              top: '4px', 
-                              width: '8px', 
-                              height: '8px', 
-                              borderRadius: '50%', 
-                              backgroundColor: 'var(--primary-color)', 
-                              border: '2px solid white', 
-                              boxShadow: '0 0 0 2px var(--primary-color)',
-                              zIndex: 2 
-                            }} />
-                            {/* Timestamp */}
-                            <span style={{ color: 'var(--text-muted)', width: '150px', flexShrink: 0, fontWeight: '500', whiteSpace: 'nowrap' }}>
-                              {h.timestamp}
-                            </span>
-                            {/* Message text */}
-                            <span style={{ color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.4' }}>
-                              {h.message}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
 
-                    </div>
-                  </td>
-                </tr>
-              )}
               </React.Fragment>
             ))}
           </tbody>
@@ -829,6 +857,291 @@ const LeadManagement = () => {
                 <button type="submit" className="btn btn-primary">Confirm Appointment</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Slide-out Timeline Drawer */}
+      {selectedLeadForTimeline && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.4)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex',
+          justifyContent: 'flex-end', // Anchored right, so drawer sits on the right
+          animation: 'fadeInBackdrop 0.25s ease-out'
+        }}
+        onClick={() => setSelectedLeadForTimeline(null)} // Click outside to close
+        >
+          <div style={{
+            width: '100%',
+            maxWidth: '460px',
+            height: '100%',
+            backgroundColor: 'var(--surface-color)',
+            boxShadow: '-10px 0 30px rgba(0, 0, 0, 0.15)',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            zIndex: 1001,
+            animation: 'slideInRightToLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+            borderLeft: '1px solid var(--border-color)',
+            overflow: 'hidden'
+          }}
+          onClick={(e) => e.stopPropagation()} // Prevent closing when clicking drawer content
+          >
+            <style>{`
+              @keyframes fadeInBackdrop {
+                from { opacity: 0; }
+                to { opacity: 1; }
+              }
+              @keyframes slideInRightToLeft {
+                from { transform: translateX(100%); }
+                to { transform: translateX(0); }
+              }
+              @keyframes timelineFadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+              .timeline-scroll::-webkit-scrollbar {
+                width: 6px;
+              }
+              .timeline-scroll::-webkit-scrollbar-track {
+                background: transparent;
+              }
+              .timeline-scroll::-webkit-scrollbar-thumb {
+                background: #CBD5E1;
+                border-radius: 3px;
+              }
+              .timeline-scroll::-webkit-scrollbar-thumb:hover {
+                background: #94A3B8;
+              }
+            `}</style>
+            
+            {/* Header */}
+            <div style={{
+              padding: '1.5rem',
+              borderBottom: '1px solid var(--border-color)',
+              backgroundColor: 'var(--surface-color)',
+              color: 'var(--text-main)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)' }}>
+                  Lead Change History & Notes
+                </h3>
+              </div>
+              <button 
+                onClick={() => setSelectedLeadForTimeline(null)}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  cursor: 'pointer', 
+                  color: 'var(--text-muted)',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.backgroundColor = '#F1F5F9';
+                  e.currentTarget.style.color = 'var(--text-main)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Main Drawer Body Scrollable */}
+            <div className="timeline-scroll" style={{
+              flex: 1,
+              overflowY: 'auto',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.5rem',
+              backgroundColor: '#F8FAFC'
+            }}>
+
+
+              {/* Timeline Section */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-main)' }}>
+                    Change History & Logs
+                  </h4>
+                  <button
+                    onClick={() => setTimelineSortOrder(timelineSortOrder === 'desc' ? 'asc' : 'desc')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--secondary-color)',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <ArrowUpDown size={12} /> {timelineSortOrder === 'desc' ? 'Newest First' : 'Oldest First'}
+                  </button>
+                </div>
+
+                <div style={{
+                  position: 'relative',
+                  paddingLeft: '1.75rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1.25rem',
+                  marginTop: '0.5rem'
+                }}>
+                  {/* Continuous Timeline Vertical Line */}
+                  <div style={{
+                    position: 'absolute',
+                    left: '8px',
+                    top: '8px',
+                    bottom: '8px',
+                    width: '2px',
+                    backgroundColor: 'var(--border-color)'
+                  }} />
+
+                  {/* Sort & Map Timeline entries */}
+                  {(() => {
+                    const historyList = [...(selectedLeadForTimeline.history || [])]
+                      .filter(h => {
+                        const m = h.message.toLowerCase();
+                        return m.includes('status') || m.includes('created') || m.includes('received');
+                      });
+
+                    if (timelineSortOrder === 'desc') {
+                      historyList.reverse();
+                    }
+                    
+                    if (historyList.length === 0) {
+                      return (
+                        <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontStyle: 'italic', padding: '1rem 0' }}>
+                          No status tracking logs recorded yet.
+                        </div>
+                      );
+                    }
+
+                    return historyList.map((h, i) => {
+                      // Determine icon and color styling based on status tracking event
+                      let Icon = FileText;
+                      let iconBg = '#F1F5F9';
+                      let iconColor = '#64748B';
+
+                      const msg = h.message.toLowerCase();
+
+                      if (msg.includes('created') || msg.includes('received')) {
+                        Icon = UserPlus;
+                        iconBg = '#DCFCE7';
+                        iconColor = '#16A34A';
+                      } else if (msg.includes('hot')) {
+                        Icon = Flame;
+                        iconBg = '#FEE2E2';
+                        iconColor = '#DC2626';
+                      } else if (msg.includes('cold')) {
+                        Icon = Snowflake;
+                        iconBg = '#F1F5F9';
+                        iconColor = '#475569';
+                      } else if (msg.includes('warm')) {
+                        Icon = Thermometer;
+                        iconBg = '#FEF3C7';
+                        iconColor = '#D97706';
+                      } else if (msg.includes('appointment') || msg.includes('appt')) {
+                        Icon = CalendarCheck;
+                        iconBg = '#ECFDF5';
+                        iconColor = '#10B981';
+                      } else if (msg.includes('quotation') || msg.includes('quot')) {
+                        Icon = FileText;
+                        iconBg = '#E0E7FF';
+                        iconColor = '#4F46E5';
+                      } else if (msg.includes('negotiation') || msg.includes('negot')) {
+                        Icon = FileSignature;
+                        iconBg = '#FFFBEB';
+                        iconColor = '#D97706';
+                      } else if (msg.includes('order confirmed') || msg.includes('confirmed') || msg.includes('order')) {
+                        Icon = CheckCircle2;
+                        iconBg = '#DCFCE7';
+                        iconColor = '#16A34A';
+                      } else if (msg.includes('junk')) {
+                        Icon = Trash2;
+                        iconBg = '#F3F4F6';
+                        iconColor = '#4B5563';
+                      } else if (msg.includes('status')) {
+                        Icon = Activity;
+                        iconBg = '#EEF2FF';
+                        iconColor = '#4F46E5';
+                      }
+
+                      return (
+                        <div 
+                          key={i} 
+                          style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            gap: '0.25rem', 
+                            fontSize: '0.8125rem',
+                            position: 'relative',
+                            animation: 'timelineFadeIn 0.25s ease-out'
+                          }}
+                        >
+                          {/* Node Icon Ball */}
+                          <div style={{
+                            position: 'absolute',
+                            left: '-37px',
+                            top: '2px',
+                            width: '20px',
+                            height: '20px',
+                            borderRadius: '50%',
+                            backgroundColor: iconBg,
+                            border: '2.5px solid #FFFFFF',
+                            boxShadow: '0 0 0 1.5px ' + iconColor,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 2
+                          }}>
+                            <Icon size={9} color={iconColor} strokeWidth={2.5} />
+                          </div>
+
+                          {/* Timeline Text Card */}
+                          <div style={{
+                            backgroundColor: '#FFFFFF',
+                            borderRadius: 'var(--radius-md)',
+                            padding: '0.75rem',
+                            border: '1px solid var(--border-color)',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.02)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.25rem'
+                          }}>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem', fontWeight: '600' }}>
+                              {h.timestamp}
+                            </span>
+                            <span style={{ color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.4' }}>
+                              {h.message}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    });
+                  })()}
+
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

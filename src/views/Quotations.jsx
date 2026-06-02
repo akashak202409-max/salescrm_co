@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { FileText, Download, Eye, Plus, CheckCircle, Clock, X, ThumbsUp, Send, Upload } from 'lucide-react';
 
 const initialQuotesData = [
-  { id: 'QT-5001', leadId: 'LD-1001', client: 'Acme Corp', project: 'Office Renovation', amount: '$500,000', gst: '$90,000', status: 'Approved', revision: 'Rev 1', fileName: 'acme_renovation_final.pdf' },
-  { id: 'QT-5002', leadId: 'LD-1002', client: 'John Doe', project: 'Residential Villa', amount: '$150,000', gst: '$27,000', status: 'Pending Approval', revision: 'Rev 3', fileName: null },
-  { id: 'QT-5003', leadId: 'LD-1003', client: 'Stark Industries', project: 'Warehouse Build', amount: '$1,200,000', gst: '$216,000', status: 'In Preparation', revision: 'Rev 0', fileName: null },
-  { id: 'QT-5004', leadId: 'LD-1004', client: 'Wayne Enterprises', project: 'HQ Retrofitting', amount: '$850,000', gst: '$153,000', status: 'Completed', revision: 'Rev 2', fileName: 'wayne_manor_proposal.pdf' },
-  { id: 'QT-5005', leadId: 'LD-1005', client: 'Oscorp Labs', project: 'Ventilation Upgrade', amount: '$320,000', gst: '$57,600', status: 'Approved', revision: 'Rev 1', fileName: null },
-  { id: 'QT-5006', leadId: 'LD-1006', client: 'LexCorp', project: 'Server Room Expansion', amount: '$450,000', gst: '$81,000', status: 'Pending Approval', revision: 'Rev 1', fileName: null },
+  { id: 'QT-5001', leadId: 'LD-1001', client: 'Acme Corp', project: 'Office Renovation', amount: '$500,000', gst: '$90,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: 'acme_renovation_final.pdf' },
+  { id: 'QT-5002', leadId: 'LD-1002', client: 'John Doe', project: 'Residential Villa', amount: '$150,000', gst: '$27,000', approvalStatus: 'Pending', quotationStatus: 'Prepared', revision: 'Rev 3', fileName: null },
+  { id: 'QT-5003', leadId: 'LD-1003', client: 'Stark Industries', project: 'Warehouse Build', amount: '$1,200,000', gst: '$216,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null },
+  { id: 'QT-5004', leadId: 'LD-1004', client: 'Wayne Enterprises', project: 'HQ Retrofitting', amount: '$850,000', gst: '$153,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 2', fileName: 'wayne_manor_proposal.pdf' },
+  { id: 'QT-5005', leadId: 'LD-1005', client: 'Oscorp Labs', project: 'Ventilation Upgrade', amount: '$320,000', gst: '$57,600', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: null },
+  { id: 'QT-5006', leadId: 'LD-1006', client: 'LexCorp', project: 'Server Room Expansion', amount: '$450,000', gst: '$81,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 1', fileName: null },
 ];
 
-const getStatusSelectStyle = (status) => {
+const getApprovalStatusStyle = (status) => {
   const base = {
     padding: '0.35rem 1.6rem 0.35rem 0.75rem',
     borderRadius: '9999px',
@@ -28,8 +28,27 @@ const getStatusSelectStyle = (status) => {
   };
 
   if (status === 'Approved') return { ...base, backgroundColor: '#DCFCE7', color: '#166534' };
-  if (status === 'Pending Approval') return { ...base, backgroundColor: '#FEF3C7', color: '#92400E' };
-  if (status === 'Completed') return { ...base, backgroundColor: '#E0F2FE', color: '#0369A1' };
+  return { ...base, backgroundColor: '#FEF3C7', color: '#92400E' }; // Pending
+};
+
+const getQuotationStatusStyle = (status) => {
+  const base = {
+    padding: '0.35rem 1.6rem 0.35rem 0.75rem',
+    borderRadius: '9999px',
+    fontSize: '0.75rem',
+    fontWeight: '600',
+    border: 'none',
+    outline: 'none',
+    cursor: 'pointer',
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    display: 'inline-flex',
+    alignItems: 'center',
+    textAlign: 'center',
+    transition: 'all 0.2s ease',
+  };
+
+  if (status === 'Prepared') return { ...base, backgroundColor: '#E0F2FE', color: '#0369A1' };
   return { ...base, backgroundColor: '#E0E7FF', color: '#3730A3' }; // In Preparation
 };
 
@@ -37,7 +56,7 @@ const Quotations = () => {
   const [quotes, setQuotes] = useState(initialQuotesData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newQuote, setNewQuote] = useState({
-    leadId: '', client: '', project: '', amount: '', gst: '', status: 'In Preparation', revision: 'Rev 0', fileName: null
+    leadId: '', client: '', project: '', amount: '', gst: '', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null
   });
 
   const handleGenerateQuote = (e) => {
@@ -55,11 +74,15 @@ const Quotations = () => {
       gst: formattedGst
     }]);
     setIsModalOpen(false);
-    setNewQuote({ leadId: '', client: '', project: '', amount: '', gst: '', status: 'In Preparation', revision: 'Rev 0', fileName: null });
+    setNewQuote({ leadId: '', client: '', project: '', amount: '', gst: '', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null });
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setQuotes(quotes.map(q => q.id === id ? { ...q, status: newStatus } : q));
+  const handleApprovalStatusChange = (id, newStatus) => {
+    setQuotes(quotes.map(q => q.id === id ? { ...q, approvalStatus: newStatus } : q));
+  };
+
+  const handleQuotationStatusChange = (id, newStatus) => {
+    setQuotes(quotes.map(q => q.id === id ? { ...q, quotationStatus: newStatus } : q));
   };
 
   const handleFileUpload = (id, event) => {
@@ -74,10 +97,10 @@ const Quotations = () => {
   };
 
   // Compute card stats
-  const requestedCount = quotes.filter(q => q.status === 'In Preparation' || q.status === 'Requested').length;
-  const pendingCount = quotes.filter(q => q.status === 'Pending Approval').length;
-  const completedCount = quotes.filter(q => q.status === 'Completed').length;
-  const approvedCount = quotes.filter(q => q.status === 'Approved').length;
+  const requestedCount = quotes.filter(q => q.quotationStatus === 'In Preparation' || q.quotationStatus === 'Inprepared').length;
+  const pendingCount = quotes.filter(q => q.approvalStatus === 'Pending').length;
+  const completedCount = quotes.filter(q => q.quotationStatus === 'Prepared').length;
+  const approvedCount = quotes.filter(q => q.approvalStatus === 'Approved').length;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -121,6 +144,7 @@ const Quotations = () => {
               <tr>
                 <th style={{ padding: '1rem 1.5rem', fontWeight: '600', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Lead ID</th>
                 <th style={{ padding: '1rem 1.5rem', fontWeight: '600', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Customer Name</th>
+                <th style={{ padding: '1rem 1.5rem', fontWeight: '600', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Approval Status</th>
                 <th style={{ padding: '1rem 1.5rem', fontWeight: '600', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Quotations Status</th>
                 <th style={{ padding: '1rem 1.5rem', fontWeight: '600', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Upload Quotation</th>
                 <th style={{ padding: '1rem 1.5rem', fontWeight: '600', fontSize: '0.875rem', color: 'var(--text-muted)', textAlign: 'right' }}>Action</th>
@@ -142,18 +166,31 @@ const Quotations = () => {
                     </div>
                   </td>
                   
+                  {/* Approval Status Drop Down Column */}
+                  <td style={{ padding: '1rem 1.5rem' }}>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                      <select
+                        value={quote.approvalStatus}
+                        onChange={(e) => handleApprovalStatusChange(quote.id, e.target.value)}
+                        style={getApprovalStatusStyle(quote.approvalStatus)}
+                      >
+                        <option value="Approved" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Approved</option>
+                        <option value="Pending" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Pending</option>
+                      </select>
+                      <span style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', fontSize: '0.55rem', opacity: 0.7, color: 'inherit' }}>▼</span>
+                    </div>
+                  </td>
+                  
                   {/* Quotation Status Drop Down Column */}
                   <td style={{ padding: '1rem 1.5rem' }}>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
                       <select
-                        value={quote.status}
-                        onChange={(e) => handleStatusChange(quote.id, e.target.value)}
-                        style={getStatusSelectStyle(quote.status)}
+                        value={quote.quotationStatus}
+                        onChange={(e) => handleQuotationStatusChange(quote.id, e.target.value)}
+                        style={getQuotationStatusStyle(quote.quotationStatus)}
                       >
+                        <option value="Prepared" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Prepared</option>
                         <option value="In Preparation" style={{ color: '#1E293B', backgroundColor: '#fff' }}>In Preparation</option>
-                        <option value="Pending Approval" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Pending Approval</option>
-                        <option value="Completed" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Completed</option>
-                        <option value="Approved" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Approved</option>
                       </select>
                       <span style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', fontSize: '0.55rem', opacity: 0.7, color: 'inherit' }}>▼</span>
                     </div>
@@ -261,14 +298,21 @@ const Quotations = () => {
                   <option value="Warehouse Build">Warehouse Build</option>
                 </select>
               </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Status</label>
-                <select required value={newQuote.status} onChange={(e) => setNewQuote({...newQuote, status: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                  <option value="In Preparation">In Preparation</option>
-                  <option value="Pending Approval">Pending Approval</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Approved">Approved</option>
-                </select>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Approval Status</label>
+                  <select required value={newQuote.approvalStatus} onChange={(e) => setNewQuote({...newQuote, approvalStatus: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Quotation Status</label>
+                  <select required value={newQuote.quotationStatus} onChange={(e) => setNewQuote({...newQuote, quotationStatus: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                    <option value="In Preparation">In Preparation</option>
+                    <option value="Prepared">Prepared</option>
+                  </select>
+                </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
