@@ -306,22 +306,7 @@ const Quotations = () => {
                   <option value="Other roofing">Other roofing</option>
                 </select>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Approval Status</label>
-                  <select required value={newQuote.approvalStatus} onChange={(e) => setNewQuote({...newQuote, approvalStatus: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Quotation Status</label>
-                  <select required value={newQuote.quotationStatus} onChange={(e) => setNewQuote({...newQuote, quotationStatus: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                    <option value="In Preparation">In Preparation</option>
-                    <option value="Prepared">Prepared</option>
-                  </select>
-                </div>
-              </div>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Amount (ex. GST)</label>
