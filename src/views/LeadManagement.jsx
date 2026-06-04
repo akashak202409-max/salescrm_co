@@ -172,13 +172,12 @@ const LeadManagement = () => {
     remark: ''
   });
 
-  const [isRemarkModalOpen, setIsRemarkModalOpen] = useState(false);
-  const [activeRemarkLeadId, setActiveRemarkLeadId] = useState(null);
-  const [pendingStatus, setPendingStatus] = useState('');
-  const [statusRemark, setStatusRemark] = useState('');
-
   const [selectedLeadForTimeline, setSelectedLeadForTimeline] = useState(null);
   const [timelineSortOrder, setTimelineSortOrder] = useState('desc'); // 'desc' (newest first) or 'asc' (oldest first)
+  const [isRemarkModalOpen, setIsRemarkModalOpen] = useState(false);
+  const [remarkLeadId, setRemarkLeadId] = useState(null);
+  const [remarkNewStatus, setRemarkNewStatus] = useState('');
+  const [remarkText, setRemarkText] = useState('');
   const addToast = useToast();
 
   const [statusFilter, setStatusFilter] = useState('All');
@@ -245,15 +244,16 @@ const LeadManagement = () => {
   };
 
   const updateLeadStatus = (id, newStatus) => {
+    const lead = leads.find(l => l.id === id);
+    if (!lead || lead.status === newStatus) return;
+
     if (newStatus === 'Appointment Fixed') {
       setActiveApptLeadId(id);
       setIsApptModalOpen(true);
     } else {
-      const currentLead = leads.find(l => l.id === id);
-      if (currentLead && currentLead.status === newStatus) return;
-      setActiveRemarkLeadId(id);
-      setPendingStatus(newStatus);
-      setStatusRemark('');
+      setRemarkLeadId(id);
+      setRemarkNewStatus(newStatus);
+      setRemarkText('');
       setIsRemarkModalOpen(true);
     }
   };
@@ -261,38 +261,35 @@ const LeadManagement = () => {
   const handleRemarkSubmit = (e) => {
     e.preventDefault();
     const formattedTime = getFormattedTimestamp();
+
     setLeads(leads.map(l => {
-      if (l.id === activeRemarkLeadId) {
+      if (l.id === remarkLeadId) {
         const newHistory = [...(l.history || []), {
           timestamp: formattedTime,
-          message: `Updated status to: ${pendingStatus.toUpperCase()}`
+          message: `Updated status to: ${remarkNewStatus.toUpperCase()}`,
+          remark: remarkText.trim()
         }];
-        if (statusRemark.trim()) {
-          newHistory.push({
-            timestamp: formattedTime,
-            message: `Remark: "${statusRemark.trim()}"`
-          });
-        }
-        const updatedLead = { ...l, status: pendingStatus, history: newHistory };
-        if (selectedLeadForTimeline && selectedLeadForTimeline.id === activeRemarkLeadId) {
+        const updatedLead = { ...l, status: remarkNewStatus, history: newHistory };
+        if (selectedLeadForTimeline && selectedLeadForTimeline.id === remarkLeadId) {
           setSelectedLeadForTimeline(updatedLead);
         }
         return updatedLead;
       }
       return l;
     }));
+
     setIsRemarkModalOpen(false);
-    setActiveRemarkLeadId(null);
-    setPendingStatus('');
-    setStatusRemark('');
+    setRemarkLeadId(null);
+    setRemarkNewStatus('');
+    setRemarkText('');
     addToast('Status updated successfully!', 'success');
   };
 
   const cancelRemarkModal = () => {
     setIsRemarkModalOpen(false);
-    setActiveRemarkLeadId(null);
-    setPendingStatus('');
-    setStatusRemark('');
+    setRemarkLeadId(null);
+    setRemarkNewStatus('');
+    setRemarkText('');
   };
 
   const handleApptSubmit = (e) => {
@@ -302,14 +299,9 @@ const LeadManagement = () => {
       if (l.id === activeApptLeadId) {
         const newHistory = [...(l.history || []), {
           timestamp: formattedTime,
-          message: `Updated status to: APPT FIXED`
+          message: `Updated status to: APPT FIXED`,
+          remark: apptDetails.remark ? apptDetails.remark.trim() : undefined
         }];
-        if (apptDetails.remark) {
-          newHistory.push({
-            timestamp: formattedTime,
-            message: `Added appointment note: "${apptDetails.remark}"`
-          });
-        }
         const updatedLead = { 
           ...l, 
           status: 'Appointment Fixed', 
@@ -851,6 +843,90 @@ const LeadManagement = () => {
         </div>
       )}
 
+      {/* Status Change Remark Modal */}
+      {isRemarkModalOpen && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)'
+        }}>
+          <div className="card" style={{ width: '100%', maxWidth: '450px', padding: '2rem', animation: 'scaleIn 0.25s ease-out' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.25rem', fontFamily: 'Poppins, sans-serif', color: 'var(--text-main)', fontWeight: '600' }}>
+                Status Update Remark
+              </h3>
+              <button 
+                onClick={cancelRemarkModal} 
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.25rem', borderRadius: '50%', transition: 'background-color 0.2s' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F1F5F9'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <form onSubmit={handleRemarkSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.75rem', lineHeight: '1.5' }}>
+                  You are changing the status to <strong style={{ 
+                    color: getStatusStyles(remarkNewStatus).color, 
+                    backgroundColor: getStatusStyles(remarkNewStatus).bg,
+                    padding: '0.15rem 0.6rem',
+                    borderRadius: '9999px',
+                    fontSize: '0.75rem',
+                    fontWeight: '700',
+                    display: 'inline-block',
+                    marginLeft: '0.25rem'
+                  }}>{remarkNewStatus.toUpperCase()}</strong>.
+                </p>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: 'var(--text-main)' }}>
+                  Add a Remark / Note for this transition:
+                </label>
+                <textarea 
+                  rows="3" 
+                  value={remarkText} 
+                  onChange={(e) => setRemarkText(e.target.value)} 
+                  placeholder="e.g., Talked to client, they requested pricing details..." 
+                  required
+                  style={{ 
+                    width: '100%', 
+                    padding: '0.75rem', 
+                    borderRadius: 'var(--radius-md)', 
+                    border: '1px solid var(--border-color)', 
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '0.875rem',
+                    color: 'var(--text-main)',
+                    outline: 'none',
+                    resize: 'vertical',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                ></textarea>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '0.5rem' }}>
+                <button 
+                  type="button" 
+                  onClick={cancelRemarkModal} 
+                  className="btn btn-outline"
+                  style={{ padding: '0.5rem 1.25rem' }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn btn-primary"
+                  style={{ padding: '0.5rem 1.25rem' }}
+                >
+                  Save Status
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Appointment Fixed Modal */}
       {isApptModalOpen && (
         <div style={{
@@ -887,40 +963,6 @@ const LeadManagement = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
                 <button type="button" onClick={cancelApptModal} className="btn btn-outline">Cancel</button>
                 <button type="submit" className="btn btn-primary">Confirm Appointment</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Status Change Remark Modal */}
-      {isRemarkModalOpen && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <div className="card" style={{ width: '100%', maxWidth: '450px', padding: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h3 style={{ margin: 0, fontSize: '1.25rem' }}>Update Status to {pendingStatus.toUpperCase()}</h3>
-              <button onClick={cancelRemarkModal} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
-                <X size={20} />
-              </button>
-            </div>
-            <form onSubmit={handleRemarkSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Status Change Remark / Note</label>
-                <textarea 
-                  rows="3" 
-                  value={statusRemark} 
-                  onChange={(e) => setStatusRemark(e.target.value)} 
-                  placeholder="Enter a remark for this status change (optional)..." 
-                  style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', resize: 'vertical' }}
-                ></textarea>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-                <button type="button" onClick={cancelRemarkModal} className="btn btn-outline">Cancel</button>
-                <button type="submit" className="btn btn-primary">Update Status</button>
               </div>
             </form>
           </div>
@@ -1199,6 +1241,20 @@ const LeadManagement = () => {
                             <span style={{ color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.4' }}>
                               {h.message}
                             </span>
+                            {h.remark && (
+                              <div style={{ 
+                                display: 'block', 
+                                borderLeft: '3px solid var(--secondary-color)', 
+                                paddingLeft: '0.6rem', 
+                                marginTop: '0.35rem', 
+                                color: 'var(--text-muted)', 
+                                fontStyle: 'italic', 
+                                fontSize: '0.75rem',
+                                lineHeight: '1.4'
+                              }}>
+                                &ldquo;{h.remark}&rdquo;
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
