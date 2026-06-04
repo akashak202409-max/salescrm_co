@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Phone, MoreVertical, X, Edit2, Mail, Trash2, Users, Flame, CalendarCheck, Clock, Calendar, ChevronDown, ChevronUp, MapPin, Activity, User, FileText, UserPlus, Sparkles, Thermometer, Snowflake, FileSignature, HandshakeIcon, CheckCircle2, Trash, Send, ArrowUpDown } from 'lucide-react';
+import { Search, Filter, Phone, MoreVertical, X, Edit2, Mail, Trash2, Users, Flame, CalendarCheck, Clock, Calendar, ChevronDown, ChevronUp, MapPin, Activity, User, FileText, UserPlus, Sparkles, Thermometer, Snowflake, FileSignature, HandshakeIcon, CheckCircle2, Trash, Send, ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useToast } from '../components/Toast';
 
 const LEAD_SOURCES = [
@@ -158,10 +158,121 @@ const LeadManagement = () => {
     start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
   });
-  const [pendingDateRange, setPendingDateRange] = useState({
-    start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
-    end: new Date().toISOString().split('T')[0]
-  });
+
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [selectedPreset, setSelectedPreset] = useState('Last 30 Days');
+  const [rangeSelectionState, setRangeSelectionState] = useState('start');
+  const [currentNavDate, setCurrentNavDate] = useState(new Date());
+
+  const applyPreset = (presetName) => {
+    const today = new Date();
+    let start = new Date();
+    let end = new Date();
+
+    switch (presetName) {
+      case 'Today':
+        start = today;
+        end = today;
+        break;
+      case 'Yesterday':
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+        start = yesterday;
+        end = yesterday;
+        break;
+      case 'Last 7 Days':
+        const last7 = new Date();
+        last7.setDate(today.getDate() - 7);
+        start = last7;
+        end = today;
+        break;
+      case 'Last 30 Days':
+        const last30 = new Date();
+        last30.setDate(today.getDate() - 30);
+        start = last30;
+        end = today;
+        break;
+      case 'This Month':
+        start = new Date(today.getFullYear(), today.getMonth(), 1);
+        end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        break;
+      default:
+        break;
+    }
+
+    setSelectedPreset(presetName);
+    if (presetName !== 'Custom') {
+      setDateRange({
+        start: start.toISOString().split('T')[0],
+        end: end.toISOString().split('T')[0],
+      });
+      setIsCalendarOpen(false);
+    }
+  };
+
+  const prevMonth = () => {
+    setCurrentNavDate(new Date(currentNavDate.getFullYear(), currentNavDate.getMonth() - 1, 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentNavDate(new Date(currentNavDate.getFullYear(), currentNavDate.getMonth() + 1, 1));
+  };
+
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const numDays = new Date(year, month + 1, 0).getDate();
+    
+    const days = [];
+    
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+    
+    for (let i = 1; i <= numDays; i++) {
+      days.push(new Date(year, month, i));
+    }
+    
+    return days;
+  };
+
+  const isSelected = (day) => {
+    if (!day) return false;
+    const formatted = day.toISOString().split('T')[0];
+    return formatted === dateRange.start || formatted === dateRange.end;
+  };
+
+  const isRange = (day) => {
+    if (!day || !dateRange.start || !dateRange.end) return false;
+    const formatted = day.toISOString().split('T')[0];
+    return formatted > dateRange.start && formatted < dateRange.end;
+  };
+
+  const handleDayClick = (day) => {
+    if (!day) return;
+    const formatted = day.toISOString().split('T')[0];
+    
+    if (!rangeSelectionState || rangeSelectionState === 'start') {
+      setDateRange({ start: formatted, end: '' });
+      setRangeSelectionState('end');
+      setSelectedPreset('Custom');
+    } else {
+      if (formatted < dateRange.start) {
+        setDateRange({ start: formatted, end: dateRange.start });
+      } else {
+        setDateRange({ ...dateRange, end: formatted });
+      }
+      setRangeSelectionState('start');
+      setIsCalendarOpen(false);
+    }
+  };
+
+  const formatDateDisplay = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
 
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [editingNoteText, setEditingNoteText] = useState('');
@@ -216,7 +327,19 @@ const LeadManagement = () => {
     }
   };
 
-  const filteredLeads = leads.filter(l => {
+  const leadsInDateRange = leads.filter(l => {
+    if (dateRange.start && dateRange.end) {
+      const leadDateObj = new Date(l.date);
+      const startObj = new Date(dateRange.start);
+      startObj.setHours(0, 0, 0, 0);
+      const endObj = new Date(dateRange.end);
+      endObj.setHours(23, 59, 59, 999);
+      if (leadDateObj < startObj || leadDateObj > endObj) return false;
+    }
+    return true;
+  });
+
+  const filteredLeads = leadsInDateRange.filter(l => {
     if (searchQuery.trim() !== '') {
       const q = searchQuery.toLowerCase();
       const matchName = (l.name || '').toLowerCase().includes(q);
@@ -583,41 +706,169 @@ const LeadManagement = () => {
 
       {/* Overview Section */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
           <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: '600', color: 'var(--text-main)' }}>Overview</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--surface-color)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: '500' }}>From</span>
-            <input type="date" value={pendingDateRange.start} onChange={(e) => setPendingDateRange({...pendingDateRange, start: e.target.value})} style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '0.875rem', color: 'var(--text-main)' }} />
-            <span style={{ color: 'var(--text-muted)' }}>-</span>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: '500' }}>To</span>
-            <input type="date" value={pendingDateRange.end} onChange={(e) => setPendingDateRange({...pendingDateRange, end: e.target.value})} style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '0.875rem', color: 'var(--text-main)' }} />
-            <button
-              onClick={() => setDateRange({ ...pendingDateRange })}
+          <div style={{ position: 'relative' }}>
+            <button 
+              onClick={() => setIsCalendarOpen(!isCalendarOpen)}
               style={{
-                marginLeft: '0.5rem',
-                padding: '0.3rem 0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                background: 'var(--surface-color)',
+                padding: '0.6rem 1.25rem',
                 borderRadius: 'var(--radius-md)',
-                border: 'none',
-                background: 'var(--primary-color)',
-                color: '#fff',
-                fontSize: '0.8rem',
-                fontWeight: '600',
+                border: '1px solid var(--border-color)',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                 cursor: 'pointer',
-                letterSpacing: '0.3px',
-                transition: 'opacity 0.15s',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                color: 'var(--text-main)',
+                outline: 'none',
+                transition: 'all 0.2s'
               }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
-              Apply
+              <Calendar size={16} color="var(--primary-color)" />
+              <span>
+                {selectedPreset === 'Custom' 
+                  ? `${formatDateDisplay(dateRange.start)} - ${formatDateDisplay(dateRange.end)}` 
+                  : `${selectedPreset} (${formatDateDisplay(dateRange.start)} - ${formatDateDisplay(dateRange.end)})`}
+              </span>
+              <ChevronRight size={14} style={{ transform: isCalendarOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s', opacity: 0.7 }} />
             </button>
+
+            {isCalendarOpen && (
+              <div style={{
+                position: 'absolute',
+                top: '48px',
+                right: 0,
+                backgroundColor: 'var(--surface-color)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 'var(--radius-lg)',
+                boxShadow: 'var(--shadow-lg)',
+                display: 'flex',
+                zIndex: 100,
+                overflow: 'hidden',
+                minWidth: '460px'
+              }}>
+                {/* Presets Sidebar */}
+                <div style={{
+                  width: '160px',
+                  borderRight: '1px solid var(--border-color)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  backgroundColor: '#F8FAFC',
+                  padding: '0.5rem 0'
+                }}>
+                  {['Today', 'Yesterday', 'Last 7 Days', 'Last 30 Days', 'This Month', 'Custom'].map(preset => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => applyPreset(preset)}
+                      style={{
+                        padding: '0.6rem 1rem',
+                        border: 'none',
+                        background: 'transparent',
+                        textAlign: 'left',
+                        fontSize: '0.8125rem',
+                        fontWeight: selectedPreset === preset ? '600' : '500',
+                        color: selectedPreset === preset ? 'var(--primary-color)' : 'var(--text-muted)',
+                        backgroundColor: selectedPreset === preset ? '#EEF2FF' : 'transparent',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        width: '100%'
+                      }}
+                    >
+                      {preset}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Calendar View Area */}
+                <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '300px' }}>
+                  
+                  {/* Header Navigator */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <button 
+                      type="button"
+                      onClick={prevMonth}
+                      style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', padding: '4px', borderRadius: '4px' }}
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-main)', userSelect: 'none' }}>
+                      {currentNavDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                    </span>
+                    <button 
+                      type="button"
+                      onClick={nextMonth}
+                      style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', padding: '4px', borderRadius: '4px' }}
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+
+                  {/* Weekdays Grid */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', textAlign: 'center', marginBottom: '4px' }}>
+                    {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
+                      <span key={d} style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)' }}>{d}</span>
+                    ))}
+                  </div>
+
+                  {/* Days Grid */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
+                    {getDaysInMonth(currentNavDate).map((day, idx) => {
+                      if (!day) return <div key={`empty-${idx}`}></div>;
+                      
+                      const isSel = isSelected(day);
+                      const isInRange = isRange(day);
+                      const isToday = day.toDateString() === new Date().toDateString();
+                      
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleDayClick(day)}
+                          style={{
+                            padding: '0.35rem 0',
+                            fontSize: '0.75rem',
+                            fontWeight: isSel || isToday ? '700' : '500',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                            backgroundColor: isSel 
+                              ? 'var(--primary-color)' 
+                              : isInRange 
+                                ? '#EEF2FF' 
+                                : 'transparent',
+                            color: isSel 
+                              ? 'white' 
+                              : isInRange 
+                                ? 'var(--primary-color)' 
+                                : isToday 
+                                  ? 'var(--primary-color)' 
+                                  : 'var(--text-main)',
+                            boxShadow: isToday && !isSel ? 'inset 0 0 0 1px var(--primary-color)' : 'none'
+                          }}
+                          title={day.toLocaleDateString()}
+                        >
+                          {day.getDate()}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
           {/* Row 1 */}
           <LeadOverviewCard 
             title="Total Leads" 
-            value={leads.length} 
+            value={leadsInDateRange.length} 
             subtitle="All leads in system" 
             icon={Users} 
             color="#4F46E5" 
@@ -628,7 +879,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="New Leads" 
-            value={leads.filter(l => {
+            value={leadsInDateRange.filter(l => {
               const s = (l.status||'').toLowerCase();
               return s.includes('new') || s.includes('received');
             }).length} 
@@ -642,7 +893,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="Hot Leads" 
-            value={leads.filter(l => (l.status||'').toLowerCase().includes('hot')).length} 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('hot')).length} 
             subtitle="High conversion chance" 
             icon={Flame} 
             color="#E11D48" 
@@ -653,7 +904,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="Warm Leads" 
-            value={leads.filter(l => (l.status||'').toLowerCase().includes('warm')).length} 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('warm')).length} 
             subtitle="Nurturing in progress" 
             icon={Thermometer} 
             color="#F97316" 
@@ -664,7 +915,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="Cold Leads" 
-            value={leads.filter(l => (l.status||'').toLowerCase().includes('cold')).length} 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('cold')).length} 
             subtitle="Need re-engagement" 
             icon={Snowflake} 
             color="#64748B" 
@@ -676,7 +927,7 @@ const LeadManagement = () => {
           {/* Row 2 */}
           <LeadOverviewCard 
             title="Appt. Fixed" 
-            value={leads.filter(l => {
+            value={leadsInDateRange.filter(l => {
               const s = (l.status||'').toLowerCase();
               return s.includes('appointment') || s.includes('appt');
             }).length} 
@@ -690,7 +941,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="Quotation Send" 
-            value={leads.filter(l => (l.status||'').toLowerCase().includes('quot')).length} 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('quot')).length} 
             subtitle="Awaiting response" 
             icon={FileText} 
             color="#8B5CF6" 
@@ -701,7 +952,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="Negotiation" 
-            value={leads.filter(l => (l.status||'').toLowerCase().includes('negot')).length} 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('negot')).length} 
             subtitle="In discussion" 
             icon={FileSignature} 
             color="#D97706" 
@@ -712,7 +963,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="Order Confirmed" 
-            value={leads.filter(l => (l.status||'').toLowerCase().includes('order')).length} 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('order')).length} 
             subtitle="Successfully closed" 
             icon={CheckCircle2} 
             color="#16A34A" 
@@ -723,7 +974,7 @@ const LeadManagement = () => {
           />
           <LeadOverviewCard 
             title="Junk" 
-            value={leads.filter(l => (l.status||'').toLowerCase().includes('junk')).length} 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('junk')).length} 
             subtitle="Unqualified leads" 
             icon={Trash2} 
             color="#94A3B8" 
