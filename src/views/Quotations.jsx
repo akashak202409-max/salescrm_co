@@ -166,19 +166,21 @@ const Quotations = () => {
                     </div>
                   </td>
                   
-                  {/* Approval Status Drop Down Column */}
+                  {/* Approval Status Badge Column */}
                   <td style={{ padding: '1rem 1.5rem' }}>
-                    <div style={{ position: 'relative', display: 'inline-block' }}>
-                      <select
-                        value={quote.approvalStatus}
-                        onChange={(e) => handleApprovalStatusChange(quote.id, e.target.value)}
-                        style={getApprovalStatusStyle(quote.approvalStatus)}
-                      >
-                        <option value="Approved" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Approved</option>
-                        <option value="Pending" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Pending</option>
-                      </select>
-                      <span style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', fontSize: '0.55rem', opacity: 0.7, color: 'inherit' }}>▼</span>
-                    </div>
+                    <span style={{
+                      padding: '0.35rem 0.75rem',
+                      borderRadius: '9999px',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      backgroundColor: quote.approvalStatus === 'Approved' ? '#DCFCE7' : '#FEF3C7',
+                      color: quote.approvalStatus === 'Approved' ? '#166534' : '#92400E'
+                    }}>
+                      {quote.approvalStatus}
+                    </span>
                   </td>
                   
                   {/* Quotation Status Drop Down Column */}
