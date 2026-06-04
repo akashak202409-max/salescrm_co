@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, Settings, User } from 'lucide-react';
+import { Bell, User } from 'lucide-react';
 import { useToast } from './Toast';
 import { useLocation } from 'react-router-dom';
 
@@ -29,14 +29,16 @@ const TopNav = () => {
       </div>
 
       {/* Right Section */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-        <button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center' }} onClick={() => addToast('Opening Notification Center')}>
-          <Bell size={20} />
-          <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', backgroundColor: 'var(--danger-color)', borderRadius: '50%' }}></span>
-        </button>
-        <button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => addToast('Opening User Profile')}>
-          <User size={20} />
-        </button>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', position: 'relative' }} onClick={() => addToast('Opening Notification Center')}>
+            <Bell size={20} />
+            <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', backgroundColor: 'var(--danger-color)', borderRadius: '50%' }}></span>
+          </button>
+          <button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }} onClick={() => addToast('Opening User Profile')}>
+            <User size={20} />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -146,33 +146,13 @@ const LeadOverviewCard = ({ title, value, subtitle, icon: Icon, color, bg, borde
 
 const LeadManagement = () => {
   const [leads, setLeads] = useState(() => {
-    const saved = localStorage.getItem('leads');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return initialLeadsData;
+    const saved = localStorage.getItem('crm_leads');
+    return saved ? JSON.parse(saved) : initialLeadsData;
   });
 
   useEffect(() => {
-    localStorage.setItem('leads', JSON.stringify(leads));
+    localStorage.setItem('crm_leads', JSON.stringify(leads));
   }, [leads]);
-
-  const [isQuotModalOpen, setIsQuotModalOpen] = useState(false);
-  const [activeQuotLeadId, setActiveQuotLeadId] = useState(null);
-  const [quotDetails, setQuotDetails] = useState({
-    leadId: '',
-    client: '',
-    project: '',
-    approvalStatus: 'Pending',
-    quotationStatus: 'In Preparation',
-    amount: '',
-    gst: ''
-  });
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState({
     start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
@@ -205,10 +185,28 @@ const LeadManagement = () => {
   const [remarkLeadId, setRemarkLeadId] = useState(null);
   const [remarkNewStatus, setRemarkNewStatus] = useState('');
   const [remarkText, setRemarkText] = useState('');
+
+  const [isGenQuoteModalOpen, setIsGenQuoteModalOpen] = useState(false);
+  const [genQuoteLeadId, setGenQuoteLeadId] = useState(null);
+  const [genQuoteDetails, setGenQuoteDetails] = useState({
+    leadId: '',
+    client: '',
+    project: '',
+    approvalStatus: 'Pending',
+    quotationStatus: 'In Preparation',
+    amount: '',
+    gst: ''
+  });
+
   const addToast = useToast();
 
   const [statusFilter, setStatusFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [headerFilters, setHeaderFilters] = useState({
+    services: 'All',
+    source: 'All',
+    assignTo: 'All'
+  });
 
   const toggleFilter = (filterName) => {
     if (statusFilter === filterName) {
@@ -227,19 +225,43 @@ const LeadManagement = () => {
       if (!matchName && !matchId && !matchProj) return false;
     }
 
-    if (statusFilter === 'All') return true;
-    
-    const statusLower = (l.status || '').toLowerCase();
-    if (statusFilter === 'New') return statusLower.includes('new') || statusLower.includes('received');
-    if (statusFilter === 'Hot') return statusLower.includes('hot');
-    if (statusFilter === 'Warm') return statusLower.includes('warm');
-    if (statusFilter === 'Cold') return statusLower.includes('cold');
-    if (statusFilter === 'Appt. Fixed') return statusLower.includes('appointment') || statusLower.includes('appt');
-    if (statusFilter === 'Quotation Send') return statusLower.includes('quot');
-    if (statusFilter === 'Negotiation') return statusLower.includes('negot');
-    if (statusFilter === 'Order Confirmed') return statusLower.includes('order');
-    if (statusFilter === 'Junk') return statusLower.includes('junk');
-    
+    if (statusFilter !== 'All') {
+      const statusLower = (l.status || '').toLowerCase();
+      let matchesStatus = false;
+      if (statusFilter === 'New') {
+        matchesStatus = statusLower.includes('new') || statusLower.includes('received');
+      } else if (statusFilter === 'Hot') {
+        matchesStatus = statusLower.includes('hot');
+      } else if (statusFilter === 'Warm') {
+        matchesStatus = statusLower.includes('warm');
+      } else if (statusFilter === 'Cold') {
+        matchesStatus = statusLower.includes('cold');
+      } else if (statusFilter === 'Appt. Fixed') {
+        matchesStatus = statusLower.includes('appointment') || statusLower.includes('appt');
+      } else if (statusFilter === 'Quotation Send') {
+        matchesStatus = statusLower.includes('quot');
+      } else if (statusFilter === 'Negotiation') {
+        matchesStatus = statusLower.includes('negot');
+      } else if (statusFilter === 'Order Confirmed') {
+        matchesStatus = statusLower.includes('order');
+      } else if (statusFilter === 'Junk') {
+        matchesStatus = statusLower.includes('junk');
+      }
+      if (!matchesStatus) return false;
+    }
+
+    if (headerFilters.services !== 'All') {
+      if (l.projectType !== headerFilters.services) return false;
+    }
+
+    if (headerFilters.source !== 'All') {
+      if (l.source !== headerFilters.source) return false;
+    }
+
+    if (headerFilters.assignTo !== 'All') {
+      if (l.manager !== headerFilters.assignTo) return false;
+    }
+
     return true;
   });
 
@@ -278,8 +300,8 @@ const LeadManagement = () => {
       setActiveApptLeadId(id);
       setIsApptModalOpen(true);
     } else if (newStatus === 'Quotation Send') {
-      setActiveQuotLeadId(id);
-      setQuotDetails({
+      setGenQuoteLeadId(id);
+      setGenQuoteDetails({
         leadId: lead.id,
         client: lead.name || '',
         project: lead.projectType || '',
@@ -288,7 +310,7 @@ const LeadManagement = () => {
         amount: '',
         gst: ''
       });
-      setIsQuotModalOpen(true);
+      setIsGenQuoteModalOpen(true);
     } else {
       setRemarkLeadId(id);
       setRemarkNewStatus(newStatus);
@@ -367,29 +389,16 @@ const LeadManagement = () => {
     setApptDetails({ date: '', time: '', location: '', remark: '' });
   };
 
-  const handleQuotSubmit = (e) => {
+  const handleGenQuoteSubmit = (e) => {
     e.preventDefault();
     const formattedTime = getFormattedTimestamp();
 
-    // Format amount and gst with '$' if not present
-    let amt = quotDetails.amount.trim();
-    if (amt && !amt.startsWith('$')) {
-      if (!isNaN(amt.replace(/,/g, ''))) {
-        amt = '$' + Number(amt.replace(/,/g, '')).toLocaleString();
-      } else {
-        amt = '$' + amt;
-      }
-    }
-    let gstAmt = quotDetails.gst.trim();
-    if (gstAmt && !gstAmt.startsWith('$')) {
-      if (!isNaN(gstAmt.replace(/,/g, ''))) {
-        gstAmt = '$' + Number(gstAmt.replace(/,/g, '')).toLocaleString();
-      } else {
-        gstAmt = '$' + gstAmt;
-      }
-    }
+    // Ensure amount and gst have $ symbol
+    const formattedAmount = genQuoteDetails.amount.startsWith('$') ? genQuoteDetails.amount : `$${genQuoteDetails.amount}`;
+    const formattedGst = genQuoteDetails.gst.startsWith('$') ? genQuoteDetails.gst : `$${genQuoteDetails.gst}`;
 
-    const fallbackQuotesData = [
+    // Read existing quotes from localStorage to calculate new ID
+    const initialQuotesDataFallback = [
       { id: 'QT-5001', leadId: 'LD-1001', client: 'Acme Corp', project: 'PEB', amount: '$500,000', gst: '$90,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: 'acme_renovation_final.pdf' },
       { id: 'QT-5002', leadId: 'LD-1002', client: 'John Doe', project: 'Tensile', amount: '$150,000', gst: '$27,000', approvalStatus: 'Pending', quotationStatus: 'Prepared', revision: 'Rev 3', fileName: null },
       { id: 'QT-5003', leadId: 'LD-1003', client: 'Stark Industries', project: 'Other roofing', amount: '$1,200,000', gst: '$216,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null },
@@ -397,57 +406,37 @@ const LeadManagement = () => {
       { id: 'QT-5005', leadId: 'LD-1005', client: 'Oscorp Labs', project: 'Tensile', amount: '$320,000', gst: '$57,600', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: null },
       { id: 'QT-5006', leadId: 'LD-1006', client: 'LexCorp', project: 'Other roofing', amount: '$450,000', gst: '$81,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 1', fileName: null },
     ];
+    const savedQuotesStr = localStorage.getItem('crm_quotes');
+    const existingQuotes = savedQuotesStr ? JSON.parse(savedQuotesStr) : initialQuotesDataFallback;
+    const newQuoteId = `QT-${5001 + existingQuotes.length}`;
 
-    const saved = localStorage.getItem('quotes');
-    let currentQuotes = [];
-    if (saved) {
-      try {
-        currentQuotes = JSON.parse(saved);
-      } catch (err) {
-        currentQuotes = fallbackQuotesData;
-      }
-    } else {
-      currentQuotes = fallbackQuotesData;
-    }
-
-    let maxIdNum = 5006;
-    currentQuotes.forEach(q => {
-      const match = q.id.match(/QT-(\d+)/);
-      if (match) {
-        const val = parseInt(match[1], 10);
-        if (val > maxIdNum) {
-          maxIdNum = val;
-        }
-      }
-    });
-    const newId = `QT-${maxIdNum + 1}`;
-
+    // Append new quote to quotes list in localStorage
     const newQuoteObj = {
-      id: newId,
-      leadId: quotDetails.leadId,
-      client: quotDetails.client,
-      project: quotDetails.project,
-      amount: amt,
-      gst: gstAmt,
-      approvalStatus: quotDetails.approvalStatus,
-      quotationStatus: quotDetails.quotationStatus,
+      id: newQuoteId,
+      leadId: genQuoteLeadId,
+      client: genQuoteDetails.client,
+      project: genQuoteDetails.project,
+      amount: formattedAmount,
+      gst: formattedGst,
+      approvalStatus: genQuoteDetails.approvalStatus,
+      quotationStatus: genQuoteDetails.quotationStatus,
       revision: 'Rev 0',
       fileName: null
     };
+    const updatedQuotes = [...existingQuotes, newQuoteObj];
+    localStorage.setItem('crm_quotes', JSON.stringify(updatedQuotes));
 
-    const updatedQuotes = [...currentQuotes, newQuoteObj];
-    localStorage.setItem('quotes', JSON.stringify(updatedQuotes));
-
-    // Update lead status to "Quotation Send"
+    // Update the lead's status & history timeline log
     setLeads(leads.map(l => {
-      if (l.id === activeQuotLeadId) {
+      if (l.id === genQuoteLeadId) {
+        const historyMessage = `Generated quotation ${newQuoteId} - Amount: ${formattedAmount}, Approval: ${genQuoteDetails.approvalStatus}, Status: ${genQuoteDetails.quotationStatus}`;
         const newHistory = [...(l.history || []), {
           timestamp: formattedTime,
           message: `Updated status to: QUOTATION SEND`,
-          remark: `Generated quotation ${newId} with amount: ${amt} (GST: ${gstAmt})`
+          remark: historyMessage
         }];
         const updatedLead = { ...l, status: 'Quotation Send', history: newHistory };
-        if (selectedLeadForTimeline && selectedLeadForTimeline.id === activeQuotLeadId) {
+        if (selectedLeadForTimeline && selectedLeadForTimeline.id === genQuoteLeadId) {
           setSelectedLeadForTimeline(updatedLead);
         }
         return updatedLead;
@@ -455,9 +444,9 @@ const LeadManagement = () => {
       return l;
     }));
 
-    setIsQuotModalOpen(false);
-    setActiveQuotLeadId(null);
-    setQuotDetails({
+    setIsGenQuoteModalOpen(false);
+    setGenQuoteLeadId(null);
+    setGenQuoteDetails({
       leadId: '',
       client: '',
       project: '',
@@ -466,13 +455,14 @@ const LeadManagement = () => {
       amount: '',
       gst: ''
     });
-    addToast('Quotation generated successfully and lead status updated!', 'success');
+
+    addToast('Quotation generated successfully!', 'success');
   };
 
-  const cancelQuotModal = () => {
-    setIsQuotModalOpen(false);
-    setActiveQuotLeadId(null);
-    setQuotDetails({
+  const cancelGenQuoteModal = () => {
+    setIsGenQuoteModalOpen(false);
+    setGenQuoteLeadId(null);
+    setGenQuoteDetails({
       leadId: '',
       client: '',
       project: '',
@@ -553,6 +543,14 @@ const LeadManagement = () => {
         }
         .lead-row:hover {
           background-color: rgba(79, 70, 229, 0.03) !important;
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeInBackdrop {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
       `}</style>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -742,18 +740,136 @@ const LeadManagement = () => {
           <table style={{ width: '100%', minWidth: '1100px', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead style={{ backgroundColor: '#F1F5F9', borderBottom: '1px solid var(--border-color)' }}>
               <tr>
-
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Date</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Lead ID</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Customer Name</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Services</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Phone Number</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Lead Source</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Status</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Assign To</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Follow-up</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Actions</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Notes</th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Date</th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Lead ID</th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Customer Name</th>
+                 <th style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                  <select
+                    value={headerFilters.services}
+                    onChange={(e) => setHeaderFilters({ ...headerFilters, services: e.target.value })}
+                    style={{
+                      border: 'none',
+                      background: 'transparent',
+                      outline: 'none',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      color: 'var(--text-muted)',
+                      cursor: 'pointer',
+                      appearance: 'none',
+                      WebkitAppearance: 'none',
+                      backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 0px center',
+                      backgroundSize: '0.45rem auto',
+                      paddingRight: '0.75rem',
+                      textAlignLast: 'center',
+                      fontFamily: 'inherit'
+                    }}
+                  >
+                    <option value="All" style={{ color: 'var(--text-main)' }}>SERVICES (ALL)</option>
+                    <option value="PEB" style={{ color: 'var(--text-main)' }}>PEB</option>
+                    <option value="Tensile" style={{ color: 'var(--text-main)' }}>TENSILE</option>
+                    <option value="Other roofing" style={{ color: 'var(--text-main)' }}>OTHER ROOFING</option>
+                  </select>
+                </th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Phone Number</th>
+                 <th style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                  <select
+                    value={headerFilters.source}
+                    onChange={(e) => setHeaderFilters({ ...headerFilters, source: e.target.value })}
+                    style={{
+                      border: 'none',
+                      background: 'transparent',
+                      outline: 'none',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      color: 'var(--text-muted)',
+                      cursor: 'pointer',
+                      appearance: 'none',
+                      WebkitAppearance: 'none',
+                      backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 0px center',
+                      backgroundSize: '0.45rem auto',
+                      paddingRight: '0.75rem',
+                      textAlignLast: 'center',
+                      fontFamily: 'inherit'
+                    }}
+                  >
+                    <option value="All" style={{ color: 'var(--text-main)' }}>LEAD SOURCE (ALL)</option>
+                    {LEAD_SOURCES.map(src => (
+                      <option key={src} value={src} style={{ color: 'var(--text-main)' }}>{src.toUpperCase()}</option>
+                    ))}
+                  </select>
+                </th>
+                 <th style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    style={{
+                      border: 'none',
+                      background: 'transparent',
+                      outline: 'none',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      color: 'var(--text-muted)',
+                      cursor: 'pointer',
+                      appearance: 'none',
+                      WebkitAppearance: 'none',
+                      backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 0px center',
+                      backgroundSize: '0.45rem auto',
+                      paddingRight: '0.75rem',
+                      textAlignLast: 'center',
+                      fontFamily: 'inherit'
+                    }}
+                  >
+                    <option value="All" style={{ color: 'var(--text-main)' }}>STATUS (ALL)</option>
+                    <option value="New" style={{ color: 'var(--text-main)' }}>NEW LEAD</option>
+                    <option value="Hot" style={{ color: 'var(--text-main)' }}>HOT</option>
+                    <option value="Warm" style={{ color: 'var(--text-main)' }}>WARM</option>
+                    <option value="Cold" style={{ color: 'var(--text-main)' }}>COLD</option>
+                    <option value="Appt. Fixed" style={{ color: 'var(--text-main)' }}>APPT FIXED</option>
+                    <option value="Quotation Send" style={{ color: 'var(--text-main)' }}>QUOTATION SEND</option>
+                    <option value="Negotiation" style={{ color: 'var(--text-main)' }}>NEGOTIATION</option>
+                    <option value="Order Confirmed" style={{ color: 'var(--text-main)' }}>ORDER CONFIRMED</option>
+                    <option value="Junk" style={{ color: 'var(--text-main)' }}>JUNK</option>
+                  </select>
+                </th>
+                 <th style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                  <select
+                    value={headerFilters.assignTo}
+                    onChange={(e) => setHeaderFilters({ ...headerFilters, assignTo: e.target.value })}
+                    style={{
+                      border: 'none',
+                      background: 'transparent',
+                      outline: 'none',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      color: 'var(--text-muted)',
+                      cursor: 'pointer',
+                      appearance: 'none',
+                      WebkitAppearance: 'none',
+                      backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 0px center',
+                      backgroundSize: '0.45rem auto',
+                      paddingRight: '0.75rem',
+                      textAlignLast: 'center',
+                      fontFamily: 'inherit'
+                    }}
+                  >
+                    <option value="All" style={{ color: 'var(--text-main)' }}>ASSIGN TO (ALL)</option>
+                    <option value="Unassigned" style={{ color: 'var(--text-main)' }}>UNASSIGNED</option>
+                    <option value="Sarah Smith" style={{ color: 'var(--text-main)' }}>SARAH SMITH</option>
+                    <option value="Mike Johnson" style={{ color: 'var(--text-main)' }}>MIKE JOHNSON</option>
+                    <option value="Alex Wong" style={{ color: 'var(--text-main)' }}>ALEX WONG</option>
+                  </select>
+                </th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Follow-up</th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Actions</th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -992,6 +1108,238 @@ const LeadManagement = () => {
         </div>
       )}
 
+      {/* Generate Quotation Modal */}
+      {isGenQuoteModalOpen && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.4)', zIndex: 1000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
+          animation: 'fadeInBackdrop 0.25s ease-out'
+        }}>
+          <div className="card" style={{ 
+            width: '100%', 
+            maxWidth: '560px', 
+            padding: '2rem', 
+            animation: 'scaleIn 0.25s ease-out',
+            backgroundColor: 'var(--surface-color)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            borderRadius: 'var(--radius-lg)'
+          }}>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem' }}>
+              <h3 style={{ 
+                margin: 0, 
+                fontSize: '1.5rem', 
+                fontFamily: 'Poppins, sans-serif', 
+                color: '#1E293B', 
+                fontWeight: '700' 
+              }}>
+                Generate Quotation
+              </h3>
+              <button 
+                onClick={cancelGenQuoteModal} 
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  cursor: 'pointer', 
+                  color: 'var(--text-muted)', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  padding: '0.25rem', 
+                  borderRadius: '50%', 
+                  transition: 'background-color 0.2s' 
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F1F5F9'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleGenQuoteSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              
+              {/* Row 1: Lead ID | Client Name */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
+                    Lead ID
+                  </label>
+                  <input 
+                    readOnly 
+                    value={genQuoteDetails.leadId} 
+                    type="text" 
+                    placeholder="e.g. LD-1007" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.625rem 0.875rem', 
+                      borderRadius: 'var(--radius-md)', 
+                      border: '1px solid var(--border-color)', 
+                      outline: 'none',
+                      backgroundColor: '#F8FAFC',
+                      color: '#64748B',
+                      cursor: 'not-allowed',
+                      fontSize: '0.875rem'
+                    }} 
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
+                    Client Name
+                  </label>
+                  <input 
+                    required 
+                    value={genQuoteDetails.client} 
+                    onChange={(e) => setGenQuoteDetails({...genQuoteDetails, client: e.target.value})} 
+                    type="text" 
+                    placeholder="e.g. Acme Corp" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.625rem 0.875rem', 
+                      borderRadius: 'var(--radius-md)', 
+                      border: '1px solid var(--border-color)', 
+                      outline: 'none',
+                      fontSize: '0.875rem',
+                      color: 'var(--text-main)',
+                      transition: 'border-color 0.2s'
+                    }} 
+                    onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                  />
+                </div>
+              </div>
+
+              {/* Row 2: Services */}
+              <div>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
+                  Services
+                </label>
+                <select 
+                  required 
+                  value={genQuoteDetails.project} 
+                  onChange={(e) => setGenQuoteDetails({...genQuoteDetails, project: e.target.value})} 
+                  style={{ 
+                    width: '100%', 
+                    padding: '0.625rem 0.875rem', 
+                    borderRadius: 'var(--radius-md)', 
+                    border: '1px solid var(--border-color)', 
+                    backgroundColor: 'var(--surface-color)', 
+                    color: 'var(--text-main)', 
+                    outline: 'none',
+                    fontSize: '0.875rem',
+                    transition: 'border-color 0.2s',
+                    cursor: 'pointer'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                >
+                  <option value="">Select type</option>
+                  <option value="PEB">PEB</option>
+                  <option value="Tensile">Tensile</option>
+                  <option value="Other roofing">Other roofing</option>
+                </select>
+              </div>
+
+              {/* Row 4: Amount | GST Amount */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
+                    Amount (ex. GST)
+                  </label>
+                  <input 
+                    required 
+                    value={genQuoteDetails.amount} 
+                    onChange={(e) => setGenQuoteDetails({...genQuoteDetails, amount: e.target.value})} 
+                    type="text" 
+                    placeholder="e.g. $100,000" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.625rem 0.875rem', 
+                      borderRadius: 'var(--radius-md)', 
+                      border: '1px solid var(--border-color)',
+                      outline: 'none',
+                      fontSize: '0.875rem',
+                      color: 'var(--text-main)',
+                      transition: 'border-color 0.2s'
+                    }} 
+                    onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
+                    GST Amount
+                  </label>
+                  <input 
+                    required 
+                    value={genQuoteDetails.gst} 
+                    onChange={(e) => setGenQuoteDetails({...genQuoteDetails, gst: e.target.value})} 
+                    type="text" 
+                    placeholder="e.g. $18,000" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.625rem 0.875rem', 
+                      borderRadius: 'var(--radius-md)', 
+                      border: '1px solid var(--border-color)',
+                      outline: 'none',
+                      fontSize: '0.875rem',
+                      color: 'var(--text-main)',
+                      transition: 'border-color 0.2s'
+                    }} 
+                    onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
+                <button 
+                  type="button" 
+                  onClick={cancelGenQuoteModal} 
+                  className="btn btn-outline"
+                  style={{
+                    padding: '0.625rem 1.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--border-color)',
+                    backgroundColor: 'transparent',
+                    color: 'var(--text-main)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn"
+                  style={{
+                    padding: '0.625rem 1.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: '#2E2A72',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                >
+                  Generate
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Status Change Remark Modal */}
       {isRemarkModalOpen && (
         <div style={{
@@ -1112,249 +1460,6 @@ const LeadManagement = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
                 <button type="button" onClick={cancelApptModal} className="btn btn-outline">Cancel</button>
                 <button type="submit" className="btn btn-primary">Confirm Appointment</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Generate Quotation Modal */}
-      {isQuotModalOpen && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.4)',
-          backdropFilter: 'blur(4px)',
-          WebkitBackdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <div className="card" style={{ 
-            width: '100%', 
-            maxWidth: '560px', 
-            padding: '2.5rem',
-            borderRadius: '16px',
-            backgroundColor: '#fff',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-            border: '1px solid #F1F5F9',
-            animation: 'scaleIn 0.2s ease-out'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-              <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700', color: '#1E293B', fontFamily: 'Poppins, sans-serif' }}>Generate Quotation</h3>
-              <button 
-                onClick={cancelQuotModal} 
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  cursor: 'pointer', 
-                  color: '#94A3B8',
-                  padding: '0.25rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '50%',
-                  transition: 'background-color 0.2s'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F1F5F9'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-              >
-                <X size={24} />
-              </button>
-            </div>
-            <form onSubmit={handleQuotSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Lead ID</label>
-                  <input 
-                    required 
-                    value={quotDetails.leadId} 
-                    onChange={(e) => setQuotDetails({...quotDetails, leadId: e.target.value})} 
-                    type="text" 
-                    placeholder="e.g. LD-1007" 
-                    style={{ 
-                      width: '100%', 
-                      padding: '0.75rem 1rem', 
-                      borderRadius: '8px', 
-                      border: '1px solid #E2E8F0', 
-                      backgroundColor: '#F8FAFC', 
-                      color: '#64748B',
-                      outline: 'none',
-                      fontSize: '0.875rem'
-                    }} 
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Client Name</label>
-                  <input 
-                    required 
-                    value={quotDetails.client} 
-                    onChange={(e) => setQuotDetails({...quotDetails, client: e.target.value})} 
-                    type="text" 
-                    placeholder="e.g. Acme Corp" 
-                    style={{ 
-                      width: '100%', 
-                      padding: '0.75rem 1rem', 
-                      borderRadius: '8px', 
-                      border: '1px solid #E2E8F0', 
-                      backgroundColor: '#F8FAFC', 
-                      color: '#64748B',
-                      outline: 'none',
-                      fontSize: '0.875rem'
-                    }} 
-                    readOnly
-                  />
-                </div>
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Services</label>
-                <select 
-                  required 
-                  value={quotDetails.project} 
-                  onChange={(e) => setQuotDetails({...quotDetails, project: e.target.value})} 
-                  style={{ 
-                    width: '100%', 
-                    padding: '0.75rem 1rem', 
-                    borderRadius: '8px', 
-                    border: '1px solid #E2E8F0', 
-                    backgroundColor: '#fff', 
-                    color: '#1E293B', 
-                    outline: 'none',
-                    fontSize: '0.875rem',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="">Select type</option>
-                  <option value="PEB">PEB</option>
-                  <option value="Tensile">Tensile</option>
-                  <option value="Other roofing">Other roofing</option>
-                </select>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Approval Status</label>
-                  <select 
-                    required 
-                    value={quotDetails.approvalStatus} 
-                    onChange={(e) => setQuotDetails({...quotDetails, approvalStatus: e.target.value})} 
-                    style={{ 
-                      width: '100%', 
-                      padding: '0.75rem 1rem', 
-                      borderRadius: '8px', 
-                      border: '1px solid #E2E8F0', 
-                      backgroundColor: '#fff', 
-                      color: '#1E293B', 
-                      outline: 'none',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Quotation Status</label>
-                  <select 
-                    required 
-                    value={quotDetails.quotationStatus} 
-                    onChange={(e) => setQuotDetails({...quotDetails, quotationStatus: e.target.value})} 
-                    style={{ 
-                      width: '100%', 
-                      padding: '0.75rem 1rem', 
-                      borderRadius: '8px', 
-                      border: '1px solid #E2E8F0', 
-                      backgroundColor: '#fff', 
-                      color: '#1E293B', 
-                      outline: 'none',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <option value="In Preparation">In Preparation</option>
-                    <option value="Prepared">Prepared</option>
-                  </select>
-                </div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Amount (ex. GST)</label>
-                  <input 
-                    required 
-                    value={quotDetails.amount} 
-                    onChange={(e) => setQuotDetails({...quotDetails, amount: e.target.value})} 
-                    type="text" 
-                    placeholder="e.g. $100,000" 
-                    style={{ 
-                      width: '100%', 
-                      padding: '0.75rem 1rem', 
-                      borderRadius: '8px', 
-                      border: '1px solid #E2E8F0', 
-                      backgroundColor: '#fff', 
-                      color: '#1E293B',
-                      outline: 'none',
-                      fontSize: '0.875rem'
-                    }} 
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>GST Amount</label>
-                  <input 
-                    required 
-                    value={quotDetails.gst} 
-                    onChange={(e) => setQuotDetails({...quotDetails, gst: e.target.value})} 
-                    type="text" 
-                    placeholder="e.g. $18,000" 
-                    style={{ 
-                      width: '100%', 
-                      padding: '0.75rem 1rem', 
-                      borderRadius: '8px', 
-                      border: '1px solid #E2E8F0', 
-                      backgroundColor: '#fff', 
-                      color: '#1E293B',
-                      outline: 'none',
-                      fontSize: '0.875rem'
-                    }} 
-                  />
-                </div>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
-                <button 
-                  type="button" 
-                  onClick={cancelQuotModal} 
-                  style={{ 
-                    background: '#fff', 
-                    border: '1px solid #E2E8F0', 
-                    padding: '0.6rem 1.5rem', 
-                    borderRadius: '8px', 
-                    cursor: 'pointer', 
-                    fontSize: '0.875rem', 
-                    fontWeight: '500', 
-                    color: '#475569',
-                    transition: 'background-color 0.2s'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8FAFC'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  style={{ 
-                    background: '#312E81', 
-                    border: 'none', 
-                    color: '#fff', 
-                    padding: '0.6rem 1.5rem', 
-                    borderRadius: '8px', 
-                    cursor: 'pointer', 
-                    fontSize: '0.875rem', 
-                    fontWeight: '500',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
-                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-                >
-                  Generate
-                </button>
               </div>
             </form>
           </div>

@@ -64,6 +64,8 @@ const Appointments = () => {
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   const [rescheduleAptId, setRescheduleAptId] = useState(null);
   const [rescheduleDetails, setRescheduleDetails] = useState({ date: '', timeStart: '', timeEnd: '' });
+  const [selectedManager, setSelectedManager] = useState('All');
+  const uniqueManagers = Array.from(new Set(appointments.map(a => a.manager).filter(Boolean)));
 
   /* ── Live counts ── */
   const totalAppointments = appointments.length;
@@ -72,11 +74,11 @@ const Appointments = () => {
   const visitComplete     = appointments.filter(a => a.type === 'Visits' && a.status === 'Completed').length;
 
   /* ── Filter ── */
-  const filtered = appointments.filter(a =>
-    a.type === activeTab &&
-    (a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-     a.manager.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filtered = appointments.filter(a => {
+    const matchesTab = a.type === activeTab;
+    const matchesManager = selectedManager === 'All' || a.manager === selectedManager;
+    return matchesTab && matchesManager;
+  });
 
   /* ── Calendar helpers ── */
   const year  = calendarDate.getFullYear();
@@ -187,17 +189,31 @@ const Appointments = () => {
               ))}
             </div>
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <Search size={15} style={{ position: 'absolute', left: '12px', color: 'var(--text-muted)' }} />
-                <input
-                  type="text" placeholder="Search..." value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  style={{ padding: '0.45rem 1rem 0.45rem 2.25rem', borderRadius: '9999px', border: '1px solid var(--border-color)', outline: 'none', fontSize: '0.875rem', width: '220px', backgroundColor: 'var(--surface-color)' }}
-                />
-              </div>
-              <button style={{ background: 'none', border: '1px solid var(--border-color)', borderRadius: '9999px', padding: '0.45rem 0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'var(--text-muted)' }}>
-                <Filter size={15} />
-              </button>
+              <select
+                value={selectedManager}
+                onChange={e => setSelectedManager(e.target.value)}
+                style={{
+                  padding: '0.45rem 2rem 0.45rem 1rem',
+                  borderRadius: '9999px',
+                  border: '1px solid var(--border-color)',
+                  outline: 'none',
+                  fontSize: '0.875rem',
+                  color: 'var(--text-muted)',
+                  backgroundColor: 'var(--surface-color)',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  WebkitAppearance: 'none',
+                  backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 0.75rem center',
+                  backgroundSize: '0.55rem auto',
+                }}
+              >
+                <option value="All">All Managers</option>
+                {uniqueManagers.map(mgr => (
+                  <option key={mgr} value={mgr}>{mgr}</option>
+                ))}
+              </select>
             </div>
           </div>
 
