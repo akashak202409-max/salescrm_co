@@ -28,7 +28,7 @@ const initialLeadsData = [
     id: 'LD-1029', 
     date: 'Oct 24, 2026', 
     name: 'John Doe', 
-    projectType: 'Commercial Interior', 
+    projectType: 'PEB', 
     phone: '+1 234 567 8900', 
     source: 'Website Enquiry', 
     budget: '$150k - $200k', 
@@ -46,7 +46,7 @@ const initialLeadsData = [
     id: 'LD-1030', 
     date: 'Oct 23, 2026', 
     name: 'Acme Corp', 
-    projectType: 'Office Renovation', 
+    projectType: 'Tensile', 
     phone: '+1 987 654 3210', 
     source: 'Referral', 
     budget: '$500k+', 
@@ -65,7 +65,7 @@ const initialLeadsData = [
     id: 'LD-1031', 
     date: 'Oct 21, 2026', 
     name: 'Globex Inc', 
-    projectType: 'Residential Villa', 
+    projectType: 'Other roofing', 
     phone: '+1 555 123 4567', 
     source: 'Cold Calling', 
     budget: '$80k - $120k', 
@@ -83,7 +83,7 @@ const initialLeadsData = [
     id: 'LD-1032', 
     date: 'Oct 18, 2026', 
     name: 'Stark Industries', 
-    projectType: 'Warehouse Build', 
+    projectType: 'PEB', 
     phone: '+1 444 987 1234', 
     source: 'LinkedIn Leads', 
     budget: 'Pending', 
@@ -807,11 +807,11 @@ const LeadManagement = () => {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Services</label>
-                  <select required value={newLead.projectType} onChange={(e) => setNewLead({...newLead, projectType: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                  <select required value={newLead.projectType} onChange={(e) => setNewLead({...newLead, projectType: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--surface-color)', color: 'var(--text-main)', outline: 'none' }}>
                     <option value="">Select type</option>
-                    <option value="Commercial Interior">Commercial Interior</option>
-                    <option value="Office Renovation">Office Renovation</option>
-                    <option value="Residential Villa">Residential Villa</option>
+                    <option value="PEB">PEB</option>
+                    <option value="Tensile">Tensile</option>
+                    <option value="Other roofing">Other roofing</option>
                   </select>
                 </div>
                 <div>

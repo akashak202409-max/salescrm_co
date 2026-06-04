@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { FileText, Download, Eye, Plus, CheckCircle, Clock, X, ThumbsUp, Send, Upload } from 'lucide-react';
 
 const initialQuotesData = [
-  { id: 'QT-5001', leadId: 'LD-1001', client: 'Acme Corp', project: 'Office Renovation', amount: '$500,000', gst: '$90,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: 'acme_renovation_final.pdf' },
-  { id: 'QT-5002', leadId: 'LD-1002', client: 'John Doe', project: 'Residential Villa', amount: '$150,000', gst: '$27,000', approvalStatus: 'Pending', quotationStatus: 'Prepared', revision: 'Rev 3', fileName: null },
-  { id: 'QT-5003', leadId: 'LD-1003', client: 'Stark Industries', project: 'Warehouse Build', amount: '$1,200,000', gst: '$216,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null },
-  { id: 'QT-5004', leadId: 'LD-1004', client: 'Wayne Enterprises', project: 'HQ Retrofitting', amount: '$850,000', gst: '$153,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 2', fileName: 'wayne_manor_proposal.pdf' },
-  { id: 'QT-5005', leadId: 'LD-1005', client: 'Oscorp Labs', project: 'Ventilation Upgrade', amount: '$320,000', gst: '$57,600', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: null },
-  { id: 'QT-5006', leadId: 'LD-1006', client: 'LexCorp', project: 'Server Room Expansion', amount: '$450,000', gst: '$81,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 1', fileName: null },
+  { id: 'QT-5001', leadId: 'LD-1001', client: 'Acme Corp', project: 'PEB', amount: '$500,000', gst: '$90,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: 'acme_renovation_final.pdf' },
+  { id: 'QT-5002', leadId: 'LD-1002', client: 'John Doe', project: 'Tensile', amount: '$150,000', gst: '$27,000', approvalStatus: 'Pending', quotationStatus: 'Prepared', revision: 'Rev 3', fileName: null },
+  { id: 'QT-5003', leadId: 'LD-1003', client: 'Stark Industries', project: 'Other roofing', amount: '$1,200,000', gst: '$216,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null },
+  { id: 'QT-5004', leadId: 'LD-1004', client: 'Wayne Enterprises', project: 'PEB', amount: '$850,000', gst: '$153,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 2', fileName: 'wayne_manor_proposal.pdf' },
+  { id: 'QT-5005', leadId: 'LD-1005', client: 'Oscorp Labs', project: 'Tensile', amount: '$320,000', gst: '$57,600', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: null },
+  { id: 'QT-5006', leadId: 'LD-1006', client: 'LexCorp', project: 'Other roofing', amount: '$450,000', gst: '$81,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 1', fileName: null },
 ];
 
 const getApprovalStatusStyle = (status) => {
@@ -289,13 +289,12 @@ const Quotations = () => {
                 </div>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Project Type</label>
-                <select required value={newQuote.project} onChange={(e) => setNewQuote({...newQuote, project: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                  <option value="">Select project type</option>
-                  <option value="Commercial Interior">Commercial Interior</option>
-                  <option value="Office Renovation">Office Renovation</option>
-                  <option value="Residential Villa">Residential Villa</option>
-                  <option value="Warehouse Build">Warehouse Build</option>
+                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Services</label>
+                <select required value={newQuote.project} onChange={(e) => setNewQuote({...newQuote, project: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--surface-color)', color: 'var(--text-main)', outline: 'none' }}>
+                  <option value="">Select type</option>
+                  <option value="PEB">PEB</option>
+                  <option value="Tensile">Tensile</option>
+                  <option value="Other roofing">Other roofing</option>
                 </select>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
