@@ -766,11 +766,7 @@ const LeadManagement = () => {
         const newHistory = [...(l.history || []), {
           timestamp: formattedTime,
           message: `Updated status to: APPT FIXED`,
-          remark: `Appointment Details:
-• Date: ${apptDetails.date}
-• Time: ${apptDetails.time}
-• Location: ${apptDetails.location}
-• Remark: ${apptDetails.remark ? apptDetails.remark.trim() : 'N/A'}`
+          remark: apptDetails.remark ? apptDetails.remark.trim() : undefined
         }];
         const updatedLead = { 
           ...l, 
@@ -2268,10 +2264,9 @@ const LeadManagement = () => {
                                 color: 'var(--text-muted)', 
                                 fontStyle: 'italic', 
                                 fontSize: '0.75rem',
-                                lineHeight: '1.4',
-                                whiteSpace: 'pre-line'
+                                lineHeight: '1.4'
                               }}>
-                                &ldquo;{h.remark}&rdquo;
+                                <strong>Remark:</strong> &ldquo;{h.remark}&rdquo;
                               </div>
                             )}
                           </div>
