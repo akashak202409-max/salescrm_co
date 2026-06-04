@@ -98,6 +98,281 @@ const initialLeadsData = [
       { timestamp: 'Oct 18, 2026 - 12:00 PM', message: 'Status changed to COLD' },
     ]
   },
+  {
+    id: 'LD-1033',
+    date: 'Jun 4, 2026',
+    name: 'Rajesh Patel',
+    projectType: 'PEB',
+    phone: '+91 98765 43210',
+    source: 'Referral',
+    budget: '₹450k',
+    status: 'Hot Leads',
+    manager: 'Sarah Smith',
+    followUp: 'Today, 5:00 PM',
+    priority: 'High',
+    notes: 'Needs urgent structural drawing approval.',
+    history: [
+      { timestamp: 'Jun 4, 2026 - 10:00 AM', message: 'Lead created via Referral' },
+      { timestamp: 'Jun 4, 2026 - 11:30 AM', message: 'Assigned to Sarah Smith' }
+    ]
+  },
+  {
+    id: 'LD-1034',
+    date: 'Jun 3, 2026',
+    name: 'Sanjay Sharma',
+    projectType: 'Tensile',
+    phone: '+91 87654 32109',
+    source: 'Website Enquiry',
+    budget: '₹180k',
+    status: 'New Lead',
+    manager: 'Unassigned',
+    followUp: 'Tomorrow',
+    priority: 'Medium',
+    notes: 'Enquired through tensile canopy contact form.',
+    history: [
+      { timestamp: 'Jun 3, 2026 - 02:15 PM', message: 'Lead created via Website' }
+    ]
+  },
+  {
+    id: 'LD-1035',
+    date: 'Jun 3, 2026',
+    name: 'Priya Nair',
+    projectType: 'Other roofing',
+    phone: '+91 76543 21098',
+    source: 'Cold Calling',
+    budget: '₹95k',
+    status: 'Warm Leads',
+    manager: 'Alex Wong',
+    followUp: 'Next Week',
+    priority: 'Medium',
+    notes: 'Looking for warehouse roof insulation.',
+    history: [
+      { timestamp: 'Jun 3, 2026 - 09:30 AM', message: 'Lead created via Cold Calling' },
+      { timestamp: 'Jun 3, 2026 - 04:00 PM', message: 'Assigned to Alex Wong' }
+    ]
+  },
+  {
+    id: 'LD-1036',
+    date: 'Jun 2, 2026',
+    name: 'Amit Verma',
+    projectType: 'PEB',
+    phone: '+91 95432 10987',
+    source: 'Meta Leads',
+    budget: '₹1.2M',
+    status: 'Appointment Fixed',
+    manager: 'Mike Johnson',
+    followUp: 'Jun 8, 11:00 AM',
+    priority: 'High',
+    notes: 'Meeting scheduled at site location in Noida.',
+    history: [
+      { timestamp: 'Jun 2, 2026 - 11:00 AM', message: 'Lead created via Meta Ads' },
+      { timestamp: 'Jun 2, 2026 - 01:15 PM', message: 'Assigned to Mike Johnson' },
+      { timestamp: 'Jun 2, 2026 - 03:30 PM', message: 'Status changed to APPOINTMENT FIXED' }
+    ]
+  },
+  {
+    id: 'LD-1037',
+    date: 'Jun 4, 2026',
+    name: 'mnjdbljs',
+    projectType: 'Tensile',
+    phone: '1234543234',
+    source: 'Cold Calling',
+    budget: '₹150k',
+    status: 'New Lead',
+    manager: 'Unassigned',
+    followUp: 'No Date',
+    priority: 'Low',
+    notes: 'Sample lead.',
+    history: [
+      { timestamp: 'Jun 4, 2026 - 01:00 PM', message: 'Lead created' }
+    ]
+  },
+  {
+    id: 'LD-1038',
+    date: 'Jun 1, 2026',
+    name: 'Vikram Malhotra',
+    projectType: 'Other roofing',
+    phone: '+91 93210 98765',
+    source: 'LinkedIn Leads',
+    budget: '₹320k',
+    status: 'Quotation Send',
+    manager: 'Sarah Smith',
+    followUp: 'Tomorrow',
+    priority: 'High',
+    notes: 'Quotation sent for Polycarbonate sheet roofing.',
+    history: [
+      { timestamp: 'Jun 1, 2026 - 08:30 AM', message: 'Lead created via LinkedIn' },
+      { timestamp: 'Jun 1, 2026 - 11:00 AM', message: 'Assigned to Sarah Smith' },
+      { timestamp: 'Jun 1, 2026 - 04:00 PM', message: 'Quotation generated and sent' }
+    ]
+  },
+  {
+    id: 'LD-1039',
+    date: 'May 28, 2026',
+    name: 'Anjali Gupta',
+    projectType: 'PEB',
+    phone: '+91 92109 87654',
+    source: 'Website Enquiry',
+    budget: '₹800k',
+    status: 'Negotiation',
+    manager: 'Mike Johnson',
+    followUp: 'Jun 6, 2:30 PM',
+    priority: 'High',
+    notes: 'Negotiating project margin and terms.',
+    history: [
+      { timestamp: 'May 28, 2026 - 10:00 AM', message: 'Lead created via Website' },
+      { timestamp: 'May 28, 2026 - 02:00 PM', message: 'Assigned to Mike Johnson' },
+      { timestamp: 'May 28, 2026 - 05:00 PM', message: 'Status changed to NEGOTIATION' }
+    ]
+  },
+  {
+    id: 'LD-1040',
+    date: 'May 25, 2026',
+    name: 'Deepak Rao',
+    projectType: 'Tensile',
+    phone: '+91 91098 76543',
+    source: 'Referral',
+    budget: '₹250k',
+    status: 'Order Confirmed',
+    manager: 'Alex Wong',
+    followUp: 'No Date',
+    priority: 'High',
+    notes: 'Advance payment cleared, design initiated.',
+    history: [
+      { timestamp: 'May 25, 2026 - 11:30 AM', message: 'Lead created via Referral' },
+      { timestamp: 'May 25, 2026 - 01:00 PM', message: 'Assigned to Alex Wong' },
+      { timestamp: 'May 25, 2026 - 04:30 PM', message: 'Status changed to ORDER CONFIRMED' }
+    ]
+  },
+  {
+    id: 'LD-1041',
+    date: 'May 22, 2026',
+    name: 'Rohan Das',
+    projectType: 'PEB',
+    phone: '+91 90987 65432',
+    source: 'Meta Leads',
+    budget: '₹1.5M',
+    status: 'Quotation Send',
+    manager: 'Sarah Smith',
+    followUp: 'Today',
+    priority: 'Medium',
+    notes: 'Awaiting review from corporate board.',
+    history: [
+      { timestamp: 'May 22, 2026 - 09:00 AM', message: 'Lead created via Meta Ads' },
+      { timestamp: 'May 22, 2026 - 12:00 PM', message: 'Assigned to Sarah Smith' },
+      { timestamp: 'May 22, 2026 - 03:00 PM', message: 'Quotation generated and sent' }
+    ]
+  },
+  {
+    id: 'LD-1042',
+    date: 'May 20, 2026',
+    name: 'Karan Singh',
+    projectType: 'Other roofing',
+    phone: '+91 89876 54321',
+    source: 'Cold Calling',
+    budget: '₹60k',
+    status: 'Junk',
+    manager: 'Unassigned',
+    followUp: 'No Date',
+    priority: 'Low',
+    notes: 'Wrong number / Not interested.',
+    history: [
+      { timestamp: 'May 20, 2026 - 11:00 AM', message: 'Lead created via Cold Calling' },
+      { timestamp: 'May 20, 2026 - 02:00 PM', message: 'Status changed to JUNK' }
+    ]
+  },
+  {
+    id: 'LD-1043',
+    date: 'May 18, 2026',
+    name: 'Neha Kapoor',
+    projectType: 'Tensile',
+    phone: '+91 88765 43210',
+    source: 'LinkedIn Leads',
+    budget: '₹400k',
+    status: 'Warm Leads',
+    manager: 'Mike Johnson',
+    followUp: 'Next Week',
+    priority: 'Medium',
+    notes: 'Follow up after budget approval.',
+    history: [
+      { timestamp: 'May 18, 2026 - 10:30 AM', message: 'Lead created via LinkedIn' },
+      { timestamp: 'May 18, 2026 - 03:00 PM', message: 'Assigned to Mike Johnson' }
+    ]
+  },
+  {
+    id: 'LD-1044',
+    date: 'May 15, 2026',
+    name: 'Arjun Mehra',
+    projectType: 'PEB',
+    phone: '+91 87654 32101',
+    source: 'Website Enquiry',
+    budget: '₹650k',
+    status: 'Appointment Fixed',
+    manager: 'Alex Wong',
+    followUp: 'Jun 12, 10:00 AM',
+    priority: 'High',
+    notes: 'Site feasibility report scheduled.',
+    history: [
+      { timestamp: 'May 15, 2026 - 09:45 AM', message: 'Lead created via Website' },
+      { timestamp: 'May 15, 2026 - 01:15 PM', message: 'Assigned to Alex Wong' },
+      { timestamp: 'May 15, 2026 - 04:00 PM', message: 'Status changed to APPOINTMENT FIXED' }
+    ]
+  },
+  {
+    id: 'LD-1045',
+    date: 'May 12, 2026',
+    name: 'Divya Teja',
+    projectType: 'Other roofing',
+    phone: '+91 86543 21098',
+    source: 'Referral',
+    budget: '₹120k',
+    status: 'Cold Leads',
+    manager: 'Sarah Smith',
+    followUp: 'No Date',
+    priority: 'Low',
+    notes: 'Low response, follow up later.',
+    history: [
+      { timestamp: 'May 12, 2026 - 11:00 AM', message: 'Lead created via Referral' },
+      { timestamp: 'May 12, 2026 - 02:00 PM', message: 'Assigned to Sarah Smith' }
+    ]
+  },
+  {
+    id: 'LD-1046',
+    date: 'May 10, 2026',
+    name: 'Aditya Birla',
+    projectType: 'PEB',
+    phone: '+91 85432 10987',
+    source: 'LinkedIn Leads',
+    budget: '₹2.5M',
+    status: 'Negotiation',
+    manager: 'Mike Johnson',
+    followUp: 'Jun 15',
+    priority: 'High',
+    notes: 'Large commercial shed proposal revision in progress.',
+    history: [
+      { timestamp: 'May 10, 2026 - 09:00 AM', message: 'Lead created via LinkedIn' },
+      { timestamp: 'May 10, 2026 - 12:00 PM', message: 'Assigned to Mike Johnson' },
+      { timestamp: 'May 10, 2026 - 03:00 PM', message: 'Status changed to NEGOTIATION' }
+    ]
+  },
+  {
+    id: 'LD-1047',
+    date: 'May 08, 2026',
+    name: 'Meera Reddy',
+    projectType: 'Tensile',
+    phone: '+91 84321 09876',
+    source: 'Meta Leads',
+    budget: '₹300k',
+    status: 'New Lead',
+    manager: 'Alex Wong',
+    followUp: 'Tomorrow',
+    priority: 'Medium',
+    notes: 'Sent catalog on WhatsApp.',
+    history: [
+      { timestamp: 'May 08, 2026 - 10:15 AM', message: 'Lead created via Meta Ads' },
+      { timestamp: 'May 08, 2026 - 01:30 PM', message: 'Assigned to Alex Wong' }
+    ]
+  }
 ];
 
 const getStatusStyles = (status) => {
@@ -147,7 +422,14 @@ const LeadOverviewCard = ({ title, value, subtitle, icon: Icon, color, bg, borde
 const LeadManagement = () => {
   const [leads, setLeads] = useState(() => {
     const saved = localStorage.getItem('crm_leads');
-    return saved ? JSON.parse(saved) : initialLeadsData;
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.length < 5) {
+        return initialLeadsData;
+      }
+      return parsed;
+    }
+    return initialLeadsData;
   });
 
   useEffect(() => {
