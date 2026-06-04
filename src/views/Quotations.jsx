@@ -162,7 +162,7 @@ const Quotations = () => {
                   <td style={{ padding: '1rem 1.5rem' }}>
                     <div style={{ fontSize: '0.875rem', fontWeight: '600' }}>{quote.client}</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      {quote.project} • {quote.revision} • <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{quote.amount}</span>
+                      {quote.project}
                     </div>
                   </td>
                   
