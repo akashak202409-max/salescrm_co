@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, Download, Eye, Plus, CheckCircle, Clock, X, ThumbsUp, Send, Upload } from 'lucide-react';
 
 const initialQuotesData = [
@@ -53,7 +53,22 @@ const getQuotationStatusStyle = (status) => {
 };
 
 const Quotations = () => {
-  const [quotes, setQuotes] = useState(initialQuotesData);
+  const [quotes, setQuotes] = useState(() => {
+    const saved = localStorage.getItem('quotes');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return initialQuotesData;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('quotes', JSON.stringify(quotes));
+  }, [quotes]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newQuote, setNewQuote] = useState({
     leadId: '', client: '', project: '', amount: '', gst: '', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null
@@ -183,20 +198,22 @@ const Quotations = () => {
                     </span>
                   </td>
                   
-                  {/* Quotation Status Drop Down Column */}
-                  <td style={{ padding: '1rem 1.5rem' }}>
-                    <div style={{ position: 'relative', display: 'inline-block' }}>
-                      <select
-                        value={quote.quotationStatus}
-                        onChange={(e) => handleQuotationStatusChange(quote.id, e.target.value)}
-                        style={getQuotationStatusStyle(quote.quotationStatus)}
-                      >
-                        <option value="Prepared" style={{ color: '#1E293B', backgroundColor: '#fff' }}>Prepared</option>
-                        <option value="In Preparation" style={{ color: '#1E293B', backgroundColor: '#fff' }}>In Preparation</option>
-                      </select>
-                      <span style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', fontSize: '0.55rem', opacity: 0.7, color: 'inherit' }}>▼</span>
-                    </div>
-                  </td>
+                   {/* Quotation Status Badge Column */}
+                   <td style={{ padding: '1rem 1.5rem' }}>
+                     <span style={{
+                       padding: '0.35rem 0.75rem',
+                       borderRadius: '9999px',
+                       fontSize: '0.75rem',
+                       fontWeight: '600',
+                       display: 'inline-flex',
+                       alignItems: 'center',
+                       textAlign: 'center',
+                       backgroundColor: quote.quotationStatus === 'Prepared' ? '#E0F2FE' : '#E0E7FF',
+                       color: quote.quotationStatus === 'Prepared' ? '#0369A1' : '#3730A3'
+                     }}>
+                       {quote.quotationStatus}
+                     </span>
+                   </td>
                   
                   {/* Upload Quotation Column */}
                   <td style={{ padding: '1rem 1.5rem' }}>

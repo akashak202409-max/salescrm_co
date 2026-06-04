@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Phone, MoreVertical, X, Edit2, Mail, Trash2, Users, Flame, CalendarCheck, Clock, Calendar, ChevronDown, ChevronUp, MapPin, Activity, User, FileText, UserPlus, Sparkles, Thermometer, Snowflake, FileSignature, HandshakeIcon, CheckCircle2, Trash, Send, ArrowUpDown } from 'lucide-react';
 import { useToast } from '../components/Toast';
 
@@ -145,7 +145,34 @@ const LeadOverviewCard = ({ title, value, subtitle, icon: Icon, color, bg, borde
 );
 
 const LeadManagement = () => {
-  const [leads, setLeads] = useState(initialLeadsData);
+  const [leads, setLeads] = useState(() => {
+    const saved = localStorage.getItem('leads');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return initialLeadsData;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('leads', JSON.stringify(leads));
+  }, [leads]);
+
+  const [isQuotModalOpen, setIsQuotModalOpen] = useState(false);
+  const [activeQuotLeadId, setActiveQuotLeadId] = useState(null);
+  const [quotDetails, setQuotDetails] = useState({
+    leadId: '',
+    client: '',
+    project: '',
+    approvalStatus: 'Pending',
+    quotationStatus: 'In Preparation',
+    amount: '',
+    gst: ''
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState({
     start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
@@ -250,6 +277,18 @@ const LeadManagement = () => {
     if (newStatus === 'Appointment Fixed') {
       setActiveApptLeadId(id);
       setIsApptModalOpen(true);
+    } else if (newStatus === 'Quotation Send') {
+      setActiveQuotLeadId(id);
+      setQuotDetails({
+        leadId: lead.id,
+        client: lead.name || '',
+        project: lead.projectType || '',
+        approvalStatus: 'Pending',
+        quotationStatus: 'In Preparation',
+        amount: '',
+        gst: ''
+      });
+      setIsQuotModalOpen(true);
     } else {
       setRemarkLeadId(id);
       setRemarkNewStatus(newStatus);
@@ -326,6 +365,122 @@ const LeadManagement = () => {
     setIsApptModalOpen(false);
     setActiveApptLeadId(null);
     setApptDetails({ date: '', time: '', location: '', remark: '' });
+  };
+
+  const handleQuotSubmit = (e) => {
+    e.preventDefault();
+    const formattedTime = getFormattedTimestamp();
+
+    // Format amount and gst with '$' if not present
+    let amt = quotDetails.amount.trim();
+    if (amt && !amt.startsWith('$')) {
+      if (!isNaN(amt.replace(/,/g, ''))) {
+        amt = '$' + Number(amt.replace(/,/g, '')).toLocaleString();
+      } else {
+        amt = '$' + amt;
+      }
+    }
+    let gstAmt = quotDetails.gst.trim();
+    if (gstAmt && !gstAmt.startsWith('$')) {
+      if (!isNaN(gstAmt.replace(/,/g, ''))) {
+        gstAmt = '$' + Number(gstAmt.replace(/,/g, '')).toLocaleString();
+      } else {
+        gstAmt = '$' + gstAmt;
+      }
+    }
+
+    const fallbackQuotesData = [
+      { id: 'QT-5001', leadId: 'LD-1001', client: 'Acme Corp', project: 'PEB', amount: '$500,000', gst: '$90,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: 'acme_renovation_final.pdf' },
+      { id: 'QT-5002', leadId: 'LD-1002', client: 'John Doe', project: 'Tensile', amount: '$150,000', gst: '$27,000', approvalStatus: 'Pending', quotationStatus: 'Prepared', revision: 'Rev 3', fileName: null },
+      { id: 'QT-5003', leadId: 'LD-1003', client: 'Stark Industries', project: 'Other roofing', amount: '$1,200,000', gst: '$216,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null },
+      { id: 'QT-5004', leadId: 'LD-1004', client: 'Wayne Enterprises', project: 'PEB', amount: '$850,000', gst: '$153,000', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 2', fileName: 'wayne_manor_proposal.pdf' },
+      { id: 'QT-5005', leadId: 'LD-1005', client: 'Oscorp Labs', project: 'Tensile', amount: '$320,000', gst: '$57,600', approvalStatus: 'Approved', quotationStatus: 'Prepared', revision: 'Rev 1', fileName: null },
+      { id: 'QT-5006', leadId: 'LD-1006', client: 'LexCorp', project: 'Other roofing', amount: '$450,000', gst: '$81,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 1', fileName: null },
+    ];
+
+    const saved = localStorage.getItem('quotes');
+    let currentQuotes = [];
+    if (saved) {
+      try {
+        currentQuotes = JSON.parse(saved);
+      } catch (err) {
+        currentQuotes = fallbackQuotesData;
+      }
+    } else {
+      currentQuotes = fallbackQuotesData;
+    }
+
+    let maxIdNum = 5006;
+    currentQuotes.forEach(q => {
+      const match = q.id.match(/QT-(\d+)/);
+      if (match) {
+        const val = parseInt(match[1], 10);
+        if (val > maxIdNum) {
+          maxIdNum = val;
+        }
+      }
+    });
+    const newId = `QT-${maxIdNum + 1}`;
+
+    const newQuoteObj = {
+      id: newId,
+      leadId: quotDetails.leadId,
+      client: quotDetails.client,
+      project: quotDetails.project,
+      amount: amt,
+      gst: gstAmt,
+      approvalStatus: quotDetails.approvalStatus,
+      quotationStatus: quotDetails.quotationStatus,
+      revision: 'Rev 0',
+      fileName: null
+    };
+
+    const updatedQuotes = [...currentQuotes, newQuoteObj];
+    localStorage.setItem('quotes', JSON.stringify(updatedQuotes));
+
+    // Update lead status to "Quotation Send"
+    setLeads(leads.map(l => {
+      if (l.id === activeQuotLeadId) {
+        const newHistory = [...(l.history || []), {
+          timestamp: formattedTime,
+          message: `Updated status to: QUOTATION SEND`,
+          remark: `Generated quotation ${newId} with amount: ${amt} (GST: ${gstAmt})`
+        }];
+        const updatedLead = { ...l, status: 'Quotation Send', history: newHistory };
+        if (selectedLeadForTimeline && selectedLeadForTimeline.id === activeQuotLeadId) {
+          setSelectedLeadForTimeline(updatedLead);
+        }
+        return updatedLead;
+      }
+      return l;
+    }));
+
+    setIsQuotModalOpen(false);
+    setActiveQuotLeadId(null);
+    setQuotDetails({
+      leadId: '',
+      client: '',
+      project: '',
+      approvalStatus: 'Pending',
+      quotationStatus: 'In Preparation',
+      amount: '',
+      gst: ''
+    });
+    addToast('Quotation generated successfully and lead status updated!', 'success');
+  };
+
+  const cancelQuotModal = () => {
+    setIsQuotModalOpen(false);
+    setActiveQuotLeadId(null);
+    setQuotDetails({
+      leadId: '',
+      client: '',
+      project: '',
+      approvalStatus: 'Pending',
+      quotationStatus: 'In Preparation',
+      amount: '',
+      gst: ''
+    });
   };
 
   const updateLeadManager = (id, newManager) => {
@@ -957,6 +1112,249 @@ const LeadManagement = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
                 <button type="button" onClick={cancelApptModal} className="btn btn-outline">Cancel</button>
                 <button type="submit" className="btn btn-primary">Confirm Appointment</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Generate Quotation Modal */}
+      {isQuotModalOpen && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.4)',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
+          zIndex: 1000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <div className="card" style={{ 
+            width: '100%', 
+            maxWidth: '560px', 
+            padding: '2.5rem',
+            borderRadius: '16px',
+            backgroundColor: '#fff',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            border: '1px solid #F1F5F9',
+            animation: 'scaleIn 0.2s ease-out'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700', color: '#1E293B', fontFamily: 'Poppins, sans-serif' }}>Generate Quotation</h3>
+              <button 
+                onClick={cancelQuotModal} 
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  cursor: 'pointer', 
+                  color: '#94A3B8',
+                  padding: '0.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '50%',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F1F5F9'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <form onSubmit={handleQuotSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Lead ID</label>
+                  <input 
+                    required 
+                    value={quotDetails.leadId} 
+                    onChange={(e) => setQuotDetails({...quotDetails, leadId: e.target.value})} 
+                    type="text" 
+                    placeholder="e.g. LD-1007" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem 1rem', 
+                      borderRadius: '8px', 
+                      border: '1px solid #E2E8F0', 
+                      backgroundColor: '#F8FAFC', 
+                      color: '#64748B',
+                      outline: 'none',
+                      fontSize: '0.875rem'
+                    }} 
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Client Name</label>
+                  <input 
+                    required 
+                    value={quotDetails.client} 
+                    onChange={(e) => setQuotDetails({...quotDetails, client: e.target.value})} 
+                    type="text" 
+                    placeholder="e.g. Acme Corp" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem 1rem', 
+                      borderRadius: '8px', 
+                      border: '1px solid #E2E8F0', 
+                      backgroundColor: '#F8FAFC', 
+                      color: '#64748B',
+                      outline: 'none',
+                      fontSize: '0.875rem'
+                    }} 
+                    readOnly
+                  />
+                </div>
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Services</label>
+                <select 
+                  required 
+                  value={quotDetails.project} 
+                  onChange={(e) => setQuotDetails({...quotDetails, project: e.target.value})} 
+                  style={{ 
+                    width: '100%', 
+                    padding: '0.75rem 1rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid #E2E8F0', 
+                    backgroundColor: '#fff', 
+                    color: '#1E293B', 
+                    outline: 'none',
+                    fontSize: '0.875rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="">Select type</option>
+                  <option value="PEB">PEB</option>
+                  <option value="Tensile">Tensile</option>
+                  <option value="Other roofing">Other roofing</option>
+                </select>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Approval Status</label>
+                  <select 
+                    required 
+                    value={quotDetails.approvalStatus} 
+                    onChange={(e) => setQuotDetails({...quotDetails, approvalStatus: e.target.value})} 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem 1rem', 
+                      borderRadius: '8px', 
+                      border: '1px solid #E2E8F0', 
+                      backgroundColor: '#fff', 
+                      color: '#1E293B', 
+                      outline: 'none',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Quotation Status</label>
+                  <select 
+                    required 
+                    value={quotDetails.quotationStatus} 
+                    onChange={(e) => setQuotDetails({...quotDetails, quotationStatus: e.target.value})} 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem 1rem', 
+                      borderRadius: '8px', 
+                      border: '1px solid #E2E8F0', 
+                      backgroundColor: '#fff', 
+                      color: '#1E293B', 
+                      outline: 'none',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="In Preparation">In Preparation</option>
+                    <option value="Prepared">Prepared</option>
+                  </select>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>Amount (ex. GST)</label>
+                  <input 
+                    required 
+                    value={quotDetails.amount} 
+                    onChange={(e) => setQuotDetails({...quotDetails, amount: e.target.value})} 
+                    type="text" 
+                    placeholder="e.g. $100,000" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem 1rem', 
+                      borderRadius: '8px', 
+                      border: '1px solid #E2E8F0', 
+                      backgroundColor: '#fff', 
+                      color: '#1E293B',
+                      outline: 'none',
+                      fontSize: '0.875rem'
+                    }} 
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>GST Amount</label>
+                  <input 
+                    required 
+                    value={quotDetails.gst} 
+                    onChange={(e) => setQuotDetails({...quotDetails, gst: e.target.value})} 
+                    type="text" 
+                    placeholder="e.g. $18,000" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem 1rem', 
+                      borderRadius: '8px', 
+                      border: '1px solid #E2E8F0', 
+                      backgroundColor: '#fff', 
+                      color: '#1E293B',
+                      outline: 'none',
+                      fontSize: '0.875rem'
+                    }} 
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
+                <button 
+                  type="button" 
+                  onClick={cancelQuotModal} 
+                  style={{ 
+                    background: '#fff', 
+                    border: '1px solid #E2E8F0', 
+                    padding: '0.6rem 1.5rem', 
+                    borderRadius: '8px', 
+                    cursor: 'pointer', 
+                    fontSize: '0.875rem', 
+                    fontWeight: '500', 
+                    color: '#475569',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8FAFC'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  style={{ 
+                    background: '#312E81', 
+                    border: 'none', 
+                    color: '#fff', 
+                    padding: '0.6rem 1.5rem', 
+                    borderRadius: '8px', 
+                    cursor: 'pointer', 
+                    fontSize: '0.875rem', 
+                    fontWeight: '500',
+                    transition: 'opacity 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                >
+                  Generate
+                </button>
               </div>
             </form>
           </div>
