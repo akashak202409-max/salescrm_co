@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, CheckCircle2, AtSign, ChevronDown } from 'lucide-react';
 import { useToast } from '../components/Toast';
 
 const Login = () => {
@@ -80,11 +80,12 @@ const Login = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '1.125rem'
+                color: 'white'
               }}>
-                N
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '18px', height: '18px' }}>
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
               </div>
               <span style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1E1B4B', letterSpacing: '-0.3px' }}>
                 Nexus CRM
@@ -162,7 +163,7 @@ const Login = () => {
                   // If odd last item spans full row
                   className={idx === 4 ? 'span-full' : ''}
                 >
-                  <CheckCircle2 size={16} color="#10B981" fill="#D1FAE5" />
+                  <CheckCircle2 size={16} color="#2563EB" fill="#DBEAFE" />
                   <span>{item}</span>
                 </div>
               ))}
@@ -223,25 +224,31 @@ const Login = () => {
                   }}>
                     Select Role
                   </label>
-                  <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem 1rem',
-                      borderRadius: '0.5rem',
-                      border: '1px solid #CBD5E1',
-                      outline: 'none',
-                      fontSize: '0.875rem',
-                      color: '#0F172A',
-                      backgroundColor: '#FFFFFF',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <option value="Sales Manager">Sales Manager</option>
-                    <option value="Executive">Executive</option>
-                    <option value="Admin">Administrator</option>
-                  </select>
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <select
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem 2.5rem 0.75rem 1rem',
+                        borderRadius: '0.5rem',
+                        border: '1px solid #CBD5E1',
+                        outline: 'none',
+                        fontSize: '0.875rem',
+                        color: '#0F172A',
+                        backgroundColor: '#FFFFFF',
+                        cursor: 'pointer',
+                        appearance: 'none',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none'
+                      }}
+                    >
+                      <option value="Sales Manager">Sales Manager</option>
+                      <option value="Executive">Executive</option>
+                      <option value="Admin">Administrator</option>
+                    </select>
+                    <ChevronDown size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
+                  </div>
                 </div>
 
                 {/* Email / Employee ID */}
@@ -275,7 +282,7 @@ const Login = () => {
                       onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
                       onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
                     />
-                    <Mail size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px' }} />
+                    <AtSign size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
                   </div>
                 </div>
 
