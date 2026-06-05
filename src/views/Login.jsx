@@ -13,6 +13,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
+  const [formMode, setFormMode] = useState('login'); // 'login' | 'forgot' | 'success'
+
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -24,6 +26,16 @@ const Login = () => {
     localStorage.setItem('crm_authenticated', 'true');
     addToast('Welcome back to Nexus CRM!', 'success');
     navigate('/dashboard');
+  };
+
+  const handleResetSubmit = (e) => {
+    e.preventDefault();
+    if (!email) {
+      addToast('Please enter your email or employee ID', 'warning');
+      return;
+    }
+    addToast('Password reset link sent to your email!', 'success');
+    setFormMode('success');
   };
 
   return (
@@ -226,187 +238,247 @@ const Login = () => {
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}>
-                  Welcome Back 👋
+                  {formMode === 'login' && 'Welcome Back 👋'}
+                  {formMode === 'forgot' && 'Reset Password 🔒'}
+                  {formMode === 'success' && 'Link Sent! ✉️'}
                 </h2>
                 <p style={{
                   fontSize: '0.875rem',
                   color: '#64748B',
                   margin: 0
                 }}>
-                  Login to continue managing your sales workflow.
+                  {formMode === 'login' && 'Login to continue managing your sales workflow.'}
+                  {formMode === 'forgot' && 'Enter your email or employee ID to receive a password reset link.'}
+                  {formMode === 'success' && 'Instructions have been dispatched successfully.'}
                 </p>
               </div>
 
               {/* Form */}
-              <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                
-                {/* Select Role */}
-                <div>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '0.8125rem',
-                    fontWeight: '600',
-                    color: '#475569',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Select Role
-                  </label>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <select
-                      value={role}
-                      onChange={(e) => setRole(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem 2.5rem 0.75rem 1rem',
-                        borderRadius: '0.5rem',
-                        border: '1px solid #CBD5E1',
-                        outline: 'none',
-                        fontSize: '0.875rem',
-                        color: '#0F172A',
-                        backgroundColor: '#FFFFFF',
-                        cursor: 'pointer',
-                        appearance: 'none',
-                        WebkitAppearance: 'none',
-                        MozAppearance: 'none'
-                      }}
-                    >
-                      <option value="Sales Head">Sales Head</option>
-                      <option value="Sales Coordinator">Sales Coordinator</option>
-                      <option value="Sales Manager">Sales Manager</option>
-                    </select>
-                    <ChevronDown size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
-                  </div>
-                </div>
-
-                {/* Email / Employee ID */}
-                <div>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '0.8125rem',
-                    fontWeight: '600',
-                    color: '#475569',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Email / Employee ID
-                  </label>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <input
-                      required
-                      type="text"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. akash@nexus.com"
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem 2.5rem 0.75rem 1rem',
-                        borderRadius: '0.5rem',
-                        border: '1px solid #CBD5E1',
-                        outline: 'none',
-                        fontSize: '0.875rem',
-                        color: '#0F172A',
-                        transition: 'border-color 0.2s'
-                      }}
-                      onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
-                      onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
-                    />
-                    <AtSign size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
-                  </div>
-                </div>
-
-                {/* Password */}
-                <div>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '0.8125rem',
-                    fontWeight: '600',
-                    color: '#475569',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Password
-                  </label>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <input
-                      required
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter password"
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem 2.5rem 0.75rem 1rem',
-                        borderRadius: '0.5rem',
-                        border: '1px solid #CBD5E1',
-                        outline: 'none',
-                        fontSize: '0.875rem',
-                        color: '#0F172A',
-                        transition: 'border-color 0.2s'
-                      }}
-                      onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
-                      onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      style={{
-                        position: 'absolute',
-                        right: '12px',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: 0
-                      }}
-                    >
-                      {showPassword ? <EyeOff size={16} color="#94A3B8" /> : <Eye size={16} color="#94A3B8" />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Remember Me & Forgot Password */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#64748B' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={rememberMe} 
-                      onChange={(e) => setRememberMe(e.target.checked)} 
-                      style={{ accentColor: '#4F46E5' }} 
-                    />
-                    Remember Me
-                  </label>
-                  <a 
-                    href="#forgot" 
-                    onClick={(e) => { e.preventDefault(); addToast('Password reset link sent to your email!', 'info'); }}
-                    style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: '600' }}
-                  >
-                    Forgot Password?
-                  </a>
-                </div>
-
-                {/* Login Button */}
-                <button
-                  type="submit"
-                  style={{
-                    backgroundColor: '#4F46E5',
-                    color: '#FFFFFF',
-                    border: 'none',
+              {formMode === 'success' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <div style={{
+                    backgroundColor: '#ECFDF5',
+                    border: '1px solid #A7F3D0',
                     borderRadius: '0.5rem',
-                    padding: '0.875rem',
-                    fontWeight: '700',
+                    padding: '1rem',
+                    color: '#065F46',
                     fontSize: '0.875rem',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.2s',
-                    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
-                    marginTop: '0.5rem'
-                  }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
-                >
-                  Login to Dashboard
-                </button>
+                    lineHeight: '1.5'
+                  }}>
+                    A secure password reset link has been successfully dispatched to <strong>{email}</strong>. Check your inbox and spam folders.
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setFormMode('login')}
+                    style={{
+                      backgroundColor: '#4F46E5',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '0.5rem',
+                      padding: '0.875rem',
+                      fontWeight: '700',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s',
+                      boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+                      marginTop: '0.5rem',
+                      textAlign: 'center'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
+                  >
+                    Return to Login
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={formMode === 'login' ? handleLoginSubmit : handleResetSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  
+                  {formMode === 'login' && (
+                    /* Select Role */
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.8125rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Select Role
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <select
+                          value={role}
+                          onChange={(e) => setRole(e.target.value)}
+                          style={{
+                            width: '100%',
+                            padding: '0.75rem 2.5rem 0.75rem 1rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #CBD5E1',
+                            outline: 'none',
+                            fontSize: '0.875rem',
+                            color: '#0F172A',
+                            backgroundColor: '#FFFFFF',
+                            cursor: 'pointer',
+                            appearance: 'none',
+                            WebkitAppearance: 'none',
+                            MozAppearance: 'none'
+                          }}
+                        >
+                          <option value="Sales Head">Sales Head</option>
+                          <option value="Sales Coordinator">Sales Coordinator</option>
+                          <option value="Sales Manager">Sales Manager</option>
+                        </select>
+                        <ChevronDown size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
+                      </div>
+                    </div>
+                  )}
 
-              </form>
+                  {/* Email / Employee ID */}
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.8125rem',
+                      fontWeight: '600',
+                      color: '#475569',
+                      marginBottom: '0.5rem'
+                    }}>
+                      Email / Employee ID
+                    </label>
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      <input
+                        required
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="e.g. akash@nexus.com"
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem 2.5rem 0.75rem 1rem',
+                          borderRadius: '0.5rem',
+                          border: '1px solid #CBD5E1',
+                          outline: 'none',
+                          fontSize: '0.875rem',
+                          color: '#0F172A',
+                          transition: 'border-color 0.2s'
+                        }}
+                        onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                        onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                      />
+                      <AtSign size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
+                    </div>
+                  </div>
+
+                  {formMode === 'login' && (
+                    <>
+                      {/* Password */}
+                      <div>
+                        <label style={{
+                          display: 'block',
+                          fontSize: '0.8125rem',
+                          fontWeight: '600',
+                          color: '#475569',
+                          marginBottom: '0.5rem'
+                        }}>
+                          Password
+                        </label>
+                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                          <input
+                            required
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter password"
+                            style={{
+                              width: '100%',
+                              padding: '0.75rem 2.5rem 0.75rem 1rem',
+                              borderRadius: '0.5rem',
+                              border: '1px solid #CBD5E1',
+                              outline: 'none',
+                              fontSize: '0.875rem',
+                              color: '#0F172A',
+                              transition: 'border-color 0.2s'
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                            onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={{
+                              position: 'absolute',
+                              right: '12px',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              padding: 0
+                            }}
+                          >
+                            {showPassword ? <EyeOff size={16} color="#94A3B8" /> : <Eye size={16} color="#94A3B8" />}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Remember Me & Forgot Password */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#64748B' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={rememberMe} 
+                            onChange={(e) => setRememberMe(e.target.checked)} 
+                            style={{ accentColor: '#4F46E5' }} 
+                          />
+                          Remember Me
+                        </label>
+                        <a 
+                          href="#forgot" 
+                          onClick={(e) => { e.preventDefault(); setFormMode('forgot'); }}
+                          style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: '600' }}
+                        >
+                          Forgot Password?
+                        </a>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    style={{
+                      backgroundColor: '#4F46E5',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '0.5rem',
+                      padding: '0.875rem',
+                      fontWeight: '700',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s',
+                      boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+                      marginTop: '0.5rem'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
+                  >
+                    {formMode === 'login' ? 'Login to Dashboard' : 'Send Reset Link'}
+                  </button>
+
+                  {formMode === 'forgot' && (
+                    <div style={{ textAlign: 'center', marginTop: '0.25rem' }}>
+                      <a
+                        href="#back"
+                        onClick={(e) => { e.preventDefault(); setFormMode('login'); }}
+                        style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: '600', fontSize: '0.8125rem' }}
+                      >
+                        Back to Login
+                      </a>
+                    </div>
+                  )}
+
+                </form>
+              )}
             </div>
           </div>
 
