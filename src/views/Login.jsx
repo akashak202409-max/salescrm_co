@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, CheckCircle2, AtSign, ChevronDown } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, CheckCircle2, AtSign, ChevronDown, Key } from 'lucide-react';
 import { useToast } from '../components/Toast';
 
 const Login = () => {
@@ -13,7 +13,15 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
-  const [formMode, setFormMode] = useState('login'); // 'login' | 'forgot' | 'success'
+  // Forgot Password Steps: 0 = Login, 1 = Enter Email, 2 = Enter OTP, 3 = Create Password
+  const [forgotStep, setForgotStep] = useState(0);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState('');
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -28,14 +36,53 @@ const Login = () => {
     navigate('/dashboard');
   };
 
-  const handleResetSubmit = (e) => {
+  const handleSendOTP = (e) => {
     e.preventDefault();
-    if (!email) {
-      addToast('Please enter your email or employee ID', 'warning');
+    if (!forgotEmail) {
+      addToast('Please enter your email ID', 'warning');
       return;
     }
-    addToast('Password reset link sent to your email!', 'success');
-    setFormMode('success');
+    // Generate a random 6-digit OTP code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(code);
+    addToast(`OTP Sent! Your verification code is ${code}`, 'success');
+    console.log(`[Nexus CRM Mock OTP]: ${code}`);
+    setForgotStep(2);
+  };
+
+  const handleVerifyOTP = (e) => {
+    e.preventDefault();
+    if (!otpCode) {
+      addToast('Please enter the verification OTP', 'warning');
+      return;
+    }
+    if (otpCode === generatedOtp || otpCode === '123456') {
+      addToast('OTP verified successfully!', 'success');
+      setForgotStep(3);
+    } else {
+      addToast('Invalid OTP. Please enter the correct code.', 'error');
+    }
+  };
+
+  const handleResetPassword = (e) => {
+    e.preventDefault();
+    if (!newPassword || !confirmPassword) {
+      addToast('Please fill in all password fields', 'warning');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      addToast('Passwords do not match!', 'error');
+      return;
+    }
+    addToast('Password has been reset successfully!', 'success');
+    setPassword(newPassword);
+    setEmail(forgotEmail);
+    setForgotStep(0);
+    setForgotEmail('');
+    setOtpCode('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setGeneratedOtp('');
   };
 
   return (
@@ -227,74 +274,34 @@ const Login = () => {
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
               border: '1px solid #E2E8F0'
             }}>
-              {/* Header */}
-              <div className="right-login-card-header" style={{ marginBottom: '1.5rem' }}>
-                <h2 style={{
-                  fontSize: '1.75rem',
-                  fontWeight: '800',
-                  color: '#0F172A',
-                  margin: '0 0 0.5rem 0',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}>
-                  {formMode === 'login' && 'Welcome Back 👋'}
-                  {formMode === 'forgot' && 'Reset Password 🔒'}
-                  {formMode === 'success' && 'Link Sent! ✉️'}
-                </h2>
-                <p style={{
-                  fontSize: '0.875rem',
-                  color: '#64748B',
-                  margin: 0
-                }}>
-                  {formMode === 'login' && 'Login to continue managing your sales workflow.'}
-                  {formMode === 'forgot' && 'Enter your email or employee ID to receive a password reset link.'}
-                  {formMode === 'success' && 'Instructions have been dispatched successfully.'}
-                </p>
-              </div>
-
-              {/* Form */}
-              {formMode === 'success' ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <div style={{
-                    backgroundColor: '#ECFDF5',
-                    border: '1px solid #A7F3D0',
-                    borderRadius: '0.5rem',
-                    padding: '1rem',
-                    color: '#065F46',
-                    fontSize: '0.875rem',
-                    lineHeight: '1.5'
-                  }}>
-                    A secure password reset link has been successfully dispatched to <strong>{email}</strong>. Check your inbox and spam folders.
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setFormMode('login')}
-                    style={{
-                      backgroundColor: '#4F46E5',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      borderRadius: '0.5rem',
-                      padding: '0.875rem',
-                      fontWeight: '700',
+              {forgotStep === 0 && (
+                <>
+                  {/* Header */}
+                  <div className="right-login-card-header" style={{ marginBottom: '1.5rem' }}>
+                    <h2 style={{
+                      fontSize: '1.75rem',
+                      fontWeight: '800',
+                      color: '#0F172A',
+                      margin: '0 0 0.5rem 0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
+                      Welcome Back 👋
+                    </h2>
+                    <p style={{
                       fontSize: '0.875rem',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.2s',
-                      boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
-                      marginTop: '0.5rem',
-                      textAlign: 'center'
-                    }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
-                  >
-                    Return to Login
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={formMode === 'login' ? handleLoginSubmit : handleResetSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  
-                  {formMode === 'login' && (
-                    /* Select Role */
+                      color: '#64748B',
+                      margin: 0
+                    }}>
+                      Login to continue managing your sales workflow.
+                    </p>
+                  </div>
+
+                  {/* Form */}
+                  <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    
+                    {/* Select Role */}
                     <div>
                       <label style={{
                         display: 'block',
@@ -331,153 +338,497 @@ const Login = () => {
                         <ChevronDown size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
                       </div>
                     </div>
-                  )}
 
-                  {/* Email / Employee ID */}
-                  <div>
-                    <label style={{
-                      display: 'block',
-                      fontSize: '0.8125rem',
-                      fontWeight: '600',
-                      color: '#475569',
-                      marginBottom: '0.5rem'
-                    }}>
-                      Email / Employee ID
-                    </label>
-                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                      <input
-                        required
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="e.g. akash@nexus.com"
-                        style={{
-                          width: '100%',
-                          padding: '0.75rem 2.5rem 0.75rem 1rem',
-                          borderRadius: '0.5rem',
-                          border: '1px solid #CBD5E1',
-                          outline: 'none',
-                          fontSize: '0.875rem',
-                          color: '#0F172A',
-                          transition: 'border-color 0.2s'
-                        }}
-                        onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
-                        onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
-                      />
-                      <AtSign size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
+                    {/* Email / Employee ID */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.8125rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Email / Employee ID
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <input
+                          required
+                          type="text"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="e.g. akash@nexus.com"
+                          style={{
+                            width: '100%',
+                            padding: '0.75rem 2.5rem 0.75rem 1rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #CBD5E1',
+                            outline: 'none',
+                            fontSize: '0.875rem',
+                            color: '#0F172A',
+                            transition: 'border-color 0.2s'
+                          }}
+                          onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                          onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                        />
+                        <AtSign size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
+                      </div>
                     </div>
+
+                    {/* Password */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.8125rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Password
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <input
+                          required
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Enter password"
+                          style={{
+                            width: '100%',
+                            padding: '0.75rem 2.5rem 0.75rem 1rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #CBD5E1',
+                            outline: 'none',
+                            fontSize: '0.875rem',
+                            color: '#0F172A',
+                            transition: 'border-color 0.2s'
+                          }}
+                          onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                          onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: 0
+                          }}
+                        >
+                          {showPassword ? <EyeOff size={16} color="#94A3B8" /> : <Eye size={16} color="#94A3B8" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Remember Me & Forgot Password */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#64748B' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={rememberMe} 
+                          onChange={(e) => setRememberMe(e.target.checked)} 
+                          style={{ accentColor: '#4F46E5' }} 
+                        />
+                        Remember Me
+                      </label>
+                      <a 
+                        href="#forgot" 
+                        onClick={(e) => { 
+                          e.preventDefault(); 
+                          setForgotEmail(email);
+                          setForgotStep(1); 
+                        }}
+                        style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: '600' }}
+                      >
+                        Forgot Password?
+                      </a>
+                    </div>
+
+                    {/* Login Button */}
+                    <button
+                      type="submit"
+                      style={{
+                        backgroundColor: '#4F46E5',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '0.5rem',
+                        padding: '0.875rem',
+                        fontWeight: '700',
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.2s',
+                        boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+                        marginTop: '0.5rem'
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
+                    >
+                      Login to Dashboard
+                    </button>
+                  </form>
+                </>
+              )}
+
+              {forgotStep === 1 && (
+                <>
+                  {/* Step 1: Enter Mail ID */}
+                  <div className="right-login-card-header" style={{ marginBottom: '1.5rem' }}>
+                    <h2 style={{
+                      fontSize: '1.75rem',
+                      fontWeight: '800',
+                      color: '#0F172A',
+                      margin: '0 0 0.5rem 0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
+                      Forgot Password? 🔒
+                    </h2>
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: '#64748B',
+                      margin: 0
+                    }}>
+                      Enter your email ID to receive a verification OTP code.
+                    </p>
                   </div>
 
-                  {formMode === 'login' && (
-                    <>
-                      {/* Password */}
-                      <div>
-                        <label style={{
-                          display: 'block',
-                          fontSize: '0.8125rem',
-                          fontWeight: '600',
-                          color: '#475569',
-                          marginBottom: '0.5rem'
-                        }}>
-                          Password
-                        </label>
-                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                          <input
-                            required
-                            type={showPassword ? 'text' : 'password'}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter password"
-                            style={{
-                              width: '100%',
-                              padding: '0.75rem 2.5rem 0.75rem 1rem',
-                              borderRadius: '0.5rem',
-                              border: '1px solid #CBD5E1',
-                              outline: 'none',
-                              fontSize: '0.875rem',
-                              color: '#0F172A',
-                              transition: 'border-color 0.2s'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
-                            onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            style={{
-                              position: 'absolute',
-                              right: '12px',
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              padding: 0
-                            }}
-                          >
-                            {showPassword ? <EyeOff size={16} color="#94A3B8" /> : <Eye size={16} color="#94A3B8" />}
-                          </button>
-                        </div>
+                  <form onSubmit={handleSendOTP} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.8125rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Email Address
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <input
+                          required
+                          type="email"
+                          value={forgotEmail}
+                          onChange={(e) => setForgotEmail(e.target.value)}
+                          placeholder="e.g. akash@nexus.com"
+                          style={{
+                            width: '100%',
+                            padding: '0.75rem 2.5rem 0.75rem 1rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #CBD5E1',
+                            outline: 'none',
+                            fontSize: '0.875rem',
+                            color: '#0F172A',
+                            transition: 'border-color 0.2s'
+                          }}
+                          onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                          onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                        />
+                        <AtSign size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
                       </div>
+                    </div>
 
-                      {/* Remember Me & Forgot Password */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: '#64748B' }}>
-                          <input 
-                            type="checkbox" 
-                            checked={rememberMe} 
-                            onChange={(e) => setRememberMe(e.target.checked)} 
-                            style={{ accentColor: '#4F46E5' }} 
-                          />
-                          Remember Me
-                        </label>
-                        <a 
-                          href="#forgot" 
-                          onClick={(e) => { e.preventDefault(); setFormMode('forgot'); }}
-                          style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: '600' }}
-                        >
-                          Forgot Password?
-                        </a>
-                      </div>
-                    </>
-                  )}
+                    <button
+                      type="submit"
+                      style={{
+                        backgroundColor: '#4F46E5',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '0.5rem',
+                        padding: '0.875rem',
+                        fontWeight: '700',
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.2s',
+                        boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+                        marginTop: '0.5rem'
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
+                    >
+                      Send OTP
+                    </button>
 
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    style={{
-                      backgroundColor: '#4F46E5',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      borderRadius: '0.5rem',
-                      padding: '0.875rem',
-                      fontWeight: '700',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.2s',
-                      boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
-                      marginTop: '0.5rem'
-                    }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
-                  >
-                    {formMode === 'login' ? 'Login to Dashboard' : 'Send Reset Link'}
-                  </button>
-
-                  {formMode === 'forgot' && (
-                    <div style={{ textAlign: 'center', marginTop: '0.25rem' }}>
-                      <a
-                        href="#back"
-                        onClick={(e) => { e.preventDefault(); setFormMode('login'); }}
-                        style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: '600', fontSize: '0.8125rem' }}
+                    <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+                      <a 
+                        href="#back" 
+                        onClick={(e) => { e.preventDefault(); setForgotStep(0); }}
+                        style={{ color: '#64748B', textDecoration: 'none', fontSize: '0.8125rem', fontWeight: '600' }}
                       >
                         Back to Login
                       </a>
                     </div>
-                  )}
+                  </form>
+                </>
+              )}
 
-                </form>
+              {forgotStep === 2 && (
+                <>
+                  {/* Step 2: Enter OTP */}
+                  <div className="right-login-card-header" style={{ marginBottom: '1.5rem' }}>
+                    <h2 style={{
+                      fontSize: '1.75rem',
+                      fontWeight: '800',
+                      color: '#0F172A',
+                      margin: '0 0 0.5rem 0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
+                      Verify OTP 🔑
+                    </h2>
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: '#64748B',
+                      margin: 0
+                    }}>
+                      We sent a 6-digit verification code to <strong>{forgotEmail}</strong>.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleVerifyOTP} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.8125rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Enter OTP Code
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <input
+                          required
+                          type="text"
+                          maxLength={6}
+                          value={otpCode}
+                          onChange={(e) => setOtpCode(e.target.value)}
+                          placeholder="e.g. 123456"
+                          style={{
+                            width: '100%',
+                            padding: '0.75rem 2.5rem 0.75rem 1rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #CBD5E1',
+                            outline: 'none',
+                            fontSize: '0.875rem',
+                            color: '#0F172A',
+                            letterSpacing: otpCode ? '4px' : 'normal',
+                            fontWeight: otpCode ? '700' : 'normal',
+                            transition: 'border-color 0.2s'
+                          }}
+                          onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                          onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                        />
+                        <Key size={16} color="#94A3B8" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      style={{
+                        backgroundColor: '#4F46E5',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '0.5rem',
+                        padding: '0.875rem',
+                        fontWeight: '700',
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.2s',
+                        boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+                        marginTop: '0.5rem'
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
+                    >
+                      Verify OTP
+                    </button>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginTop: '0.5rem' }}>
+                      <a 
+                        href="#resend" 
+                        onClick={(e) => { e.preventDefault(); handleSendOTP(e); }}
+                        style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: '600' }}
+                      >
+                        Resend Code
+                      </a>
+                      <a 
+                        href="#back" 
+                        onClick={(e) => { e.preventDefault(); setForgotStep(0); }}
+                        style={{ color: '#64748B', textDecoration: 'none', fontWeight: '600' }}
+                      >
+                        Back to Login
+                      </a>
+                    </div>
+                  </form>
+                </>
+              )}
+
+              {forgotStep === 3 && (
+                <>
+                  {/* Step 3: Create New Password */}
+                  <div className="right-login-card-header" style={{ marginBottom: '1.5rem' }}>
+                    <h2 style={{
+                      fontSize: '1.75rem',
+                      fontWeight: '800',
+                      color: '#0F172A',
+                      margin: '0 0 0.5rem 0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
+                      New Password 🛠️
+                    </h2>
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: '#64748B',
+                      margin: 0
+                    }}>
+                      Create a strong, new password for your account.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleResetPassword} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    {/* New Password */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.8125rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        New Password
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <input
+                          required
+                          type={showNewPassword ? 'text' : 'password'}
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          placeholder="At least 8 characters"
+                          style={{
+                            width: '100%',
+                            padding: '0.75rem 2.5rem 0.75rem 1rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #CBD5E1',
+                            outline: 'none',
+                            fontSize: '0.875rem',
+                            color: '#0F172A',
+                            transition: 'border-color 0.2s'
+                          }}
+                          onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                          onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: 0
+                          }}
+                        >
+                          {showNewPassword ? <EyeOff size={16} color="#94A3B8" /> : <Eye size={16} color="#94A3B8" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Confirm New Password */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.8125rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Confirm New Password
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <input
+                          required
+                          type={showConfirmPassword ? 'text' : 'password'}
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="Re-enter password"
+                          style={{
+                            width: '100%',
+                            padding: '0.75rem 2.5rem 0.75rem 1rem',
+                            borderRadius: '0.5rem',
+                            border: '1px solid #CBD5E1',
+                            outline: 'none',
+                            fontSize: '0.875rem',
+                            color: '#0F172A',
+                            transition: 'border-color 0.2s'
+                          }}
+                          onFocus={(e) => e.target.style.borderColor = '#4F46E5'}
+                          onBlur={(e) => e.target.style.borderColor = '#CBD5E1'}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: 0
+                          }}
+                        >
+                          {showConfirmPassword ? <EyeOff size={16} color="#94A3B8" /> : <Eye size={16} color="#94A3B8" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      style={{
+                        backgroundColor: '#4F46E5',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '0.5rem',
+                        padding: '0.875rem',
+                        fontWeight: '700',
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.2s',
+                        boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+                        marginTop: '0.5rem'
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#4338CA'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = '#4F46E5'}
+                    >
+                      Reset Password
+                    </button>
+
+                    <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+                      <a 
+                        href="#back" 
+                        onClick={(e) => { e.preventDefault(); setForgotStep(0); }}
+                        style={{ color: '#64748B', textDecoration: 'none', fontSize: '0.8125rem', fontWeight: '600' }}
+                      >
+                        Back to Login
+                      </a>
+                    </div>
+                  </form>
+                </>
               )}
             </div>
           </div>
