@@ -27,15 +27,48 @@ const Login = () => {
   };
 
   return (
-    <div style={{
+    <div className="login-page-wrapper" style={{
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: '#F8FAFC',
       fontFamily: "'Inter', sans-serif"
     }}>
+      <style>{`
+        @media (min-width: 1024px) {
+          .login-page-wrapper {
+            height: 100vh !important;
+            min-height: 100vh !important;
+            overflow: hidden !important;
+          }
+          .login-container {
+            padding: 1rem 1.5rem !important;
+            max-height: calc(100vh - 60px) !important;
+          }
+          .login-grid {
+            gap: 2.5rem !important;
+          }
+          .left-hero-card {
+            padding: 1.75rem 2.25rem !important;
+            gap: 1.15rem !important;
+          }
+          .hero-title {
+            font-size: 2rem !important;
+          }
+          .hero-image-container {
+            aspect-ratio: 1.45 !important;
+            max-height: 280px !important;
+          }
+          .right-login-card {
+            padding: 2rem !important;
+          }
+          .right-login-card-header {
+            margin-bottom: 1.25rem !important;
+          }
+        }
+      `}</style>
       {/* Main Container */}
-      <div style={{
+      <div className="login-container" style={{
         flex: 1,
         display: 'flex',
         alignItems: 'center',
@@ -45,7 +78,7 @@ const Login = () => {
         margin: '0 auto',
         width: '100%'
       }}>
-        <div style={{
+        <div className="login-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
           gap: '2.5rem',
@@ -54,14 +87,14 @@ const Login = () => {
         }}>
           
           {/* Left Panel: Hero Card */}
-          <div style={{
+          <div className="left-hero-card" style={{
             background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
             border: '1px solid rgba(191, 219, 254, 0.4)',
             borderRadius: '1.5rem',
-            padding: '2.5rem',
+            padding: '2rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '1.75rem',
+            gap: '1.25rem',
             boxShadow: '0 4px 20px -2px rgba(191, 219, 254, 0.3)'
           }}>
             {/* Logo */}
@@ -88,7 +121,7 @@ const Login = () => {
 
             {/* Title & Copy */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <h1 style={{
+              <h1 className="hero-title" style={{
                 fontSize: '2.25rem',
                 fontWeight: '800',
                 color: '#1E1B4B',
@@ -109,13 +142,13 @@ const Login = () => {
             </div>
 
             {/* Dashboard Mockup Image */}
-            <div style={{
+            <div className="hero-image-container" style={{
               position: 'relative',
               borderRadius: '1rem',
               overflow: 'hidden',
               boxShadow: '0 10px 30px -5px rgba(30, 27, 75, 0.15)',
               border: '1px solid rgba(255, 255, 255, 0.8)',
-              aspectRatio: '1.1',
+              aspectRatio: '1.45',
               backgroundColor: '#1E1B4B'
             }}>
               <img 
@@ -134,8 +167,8 @@ const Login = () => {
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
-              gap: '1rem',
-              marginTop: '0.5rem'
+              gap: '0.75rem',
+              marginTop: '0.25rem'
             }}>
               {[
                 'Lead Tracking',
@@ -173,17 +206,17 @@ const Login = () => {
             alignItems: 'center',
             width: '100%'
           }}>
-            <div style={{
+            <div className="right-login-card" style={{
               width: '100%',
               maxWidth: '460px',
               backgroundColor: '#FFFFFF',
               borderRadius: '1.25rem',
-              padding: '2.5rem',
+              padding: '2rem',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
               border: '1px solid #E2E8F0'
             }}>
               {/* Header */}
-              <div style={{ marginBottom: '2rem' }}>
+              <div className="right-login-card-header" style={{ marginBottom: '1.5rem' }}>
                 <h2 style={{
                   fontSize: '1.75rem',
                   fontWeight: '800',
