@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Bell, Shield, PaintBucket, Briefcase, Save } from 'lucide-react';
+import { User, Bell, Shield, PaintBucket, Briefcase, Save, LogOut } from 'lucide-react';
 import { useToast } from '../components/Toast';
 
 const SettingsSection = ({ title, icon: Icon, children }) => (
@@ -74,6 +74,44 @@ const Settings = () => {
            </select>
         </div>
         <Toggle label="Auto-Assign Leads" description="Automatically assign incoming leads based on manager availability." defaultChecked={false} />
+      </SettingsSection>
+
+      <SettingsSection title="Account & Session" icon={Shield}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <p style={{ margin: 0, fontWeight: '500', fontSize: '0.875rem' }}>Active Session</p>
+            <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>You are currently logged in as akash@constructioncrm.com</p>
+          </div>
+          <button 
+            type="button"
+            className="btn" 
+            style={{ 
+              backgroundColor: '#FEF2F2', 
+              color: '#DC2626', 
+              border: '1px solid #FCA5A5',
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem',
+              padding: '0.625rem 1.25rem',
+              borderRadius: 'var(--radius-md)',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            onClick={() => addToast('Logging out of your account...', 'info')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#FEE2E2';
+              e.currentTarget.style.borderColor = '#EF4444';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#FEF2F2';
+              e.currentTarget.style.borderColor = '#FCA5A5';
+            }}
+          >
+            <LogOut size={16} /> Logout
+          </button>
+        </div>
       </SettingsSection>
     </div>
   );
