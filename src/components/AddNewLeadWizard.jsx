@@ -149,6 +149,13 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                   <option value="John Doe">John Doe</option>
                 </select>
               </div>
+              <div>
+                <label style={labelStyle}>Project Value</label>
+                <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: '1rem', color: '#64748B', fontWeight: '500' }}>₹</span>
+                  <input type="number" placeholder="Enter project value" style={{ ...inputStyle, paddingLeft: '2rem' }} value={formData.projectValue || ''} onChange={e => handleChange('projectValue', e.target.value ? parseInt(e.target.value, 10) : '')} />
+                </div>
+              </div>
             </div>
             
 
