@@ -910,30 +910,6 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
              <div style={{ marginBottom: '2rem' }}>
                <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase' }}>ROOF, WALL & FLOORING</h4>
                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                 <div>
-                   <label style={labelStyle}>Roof Type</label>
-                   <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: '#F8FAFC', padding: '0.25rem', borderRadius: '8px', border: '1px solid #E2E8F0', width: 'fit-content' }}>
-                     {['GI', 'PUF', 'Standing Seam'].map(t => (
-                       <button key={t} type="button" onClick={() => handleChange('roofType', t)} style={{ ...toggleBtnStyle, ...(formData.roofType === t ? toggleBtnActiveStyle : {}) }}>{t}</button>
-                     ))}
-                   </div>
-                 </div>
-                 <div>
-                   <label style={labelStyle}>Cladding Type</label>
-                   <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: '#F8FAFC', padding: '0.25rem', borderRadius: '8px', border: '1px solid #E2E8F0', width: 'fit-content' }}>
-                     {['GI', 'PUF', 'ACP', 'Brick'].map(t => (
-                       <button key={t} type="button" onClick={() => handleChange('claddingType', t)} style={{ ...toggleBtnStyle, ...(formData.claddingType === t ? toggleBtnActiveStyle : {}) }}>{t}</button>
-                     ))}
-                   </div>
-                 </div>
-                 <div>
-                   <label style={labelStyle}>Floor Type</label>
-                   <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: '#F8FAFC', padding: '0.25rem', borderRadius: '8px', border: '1px solid #E2E8F0', width: 'fit-content' }}>
-                     {['Normal', 'Heavy Duty', 'FM2', 'Epoxy'].map(t => (
-                       <button key={t} type="button" onClick={() => handleChange('floorType', t)} style={{ ...toggleBtnStyle, ...(formData.floorType === t ? toggleBtnActiveStyle : {}) }}>{t}</button>
-                     ))}
-                   </div>
-                 </div>
                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#F8FAFC', padding: '1rem', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
                    <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#334155' }}>Heat Insulation Required?</span>
                    <ToggleSwitch checked={formData.heatInsulation} onChange={() => handleChange('heatInsulation', !formData.heatInsulation)} />
