@@ -31,7 +31,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
     // Basic Info
     name: '', companyName: '', phone: '', email: '',
     source: 'WEBSITE ENQUIRY', projectType: 'PEB Building', customProjectType: '',
-    projectLocation: '', assignedExecutive: 'Sarah Smith', 
+    projectLocation: '', assignedExecutive: 'Sarah Smith', projectValue: '',
     priority: 'Medium', nextFollowUp: '', status: 'NEW',
     
     // Project Details
