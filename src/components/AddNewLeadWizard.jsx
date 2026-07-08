@@ -31,6 +31,11 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
     // Basic Info
     name: '', companyName: '', phone: '', email: '',
     source: 'WEBSITE ENQUIRY', projectType: 'PEB Building', customProjectType: '',
+    // Step 2 Tensile additions
+    fabricGsm: '', customFabricGsm: '',
+    fabricThickness: '', customFabricThickness: '',
+    coatingType: [], expectedWarranty: '',
+
     projectLocation: '', assignedExecutive: 'Sarah Smith', projectValue: '',
     priority: 'Medium', nextFollowUp: '', status: 'NEW',
     
