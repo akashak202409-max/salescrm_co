@@ -1304,6 +1304,7 @@ const LeadManagement = () => {
                     <option value="Quotation Send" style={{ color: 'var(--text-main)' }}>QUOTATION SEND</option>
                     <option value="Negotiation" style={{ color: 'var(--text-main)' }}>NEGOTIATION</option>
                     <option value="Order Confirmed" style={{ color: 'var(--text-main)' }}>ORDER CONFIRMED</option>
+                    <option value="Project Filing" style={{ color: 'var(--text-main)' }}>PROJECT FILING</option>
                     <option value="Junk" style={{ color: 'var(--text-main)' }}>JUNK</option>
                   </select>
                 </th>
@@ -1438,6 +1439,7 @@ const LeadManagement = () => {
                     <option value="QUOTATION SEND">QUOTATION SEND</option>
                     <option value="NEGOTIATION">NEGOTIATION</option>
                     <option value="ORDER CONFIRMED">ORDER CONFIRMED</option>
+                    <option value="PROJECT FILING">PROJECT FILING</option>
                     <option value="JUNK">JUNK</option>
                   </select>
                 </td>
