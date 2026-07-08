@@ -186,10 +186,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
               </div>
               <div>
                 <label style={labelStyle}>Assigned Executive <span style={{ color: 'red' }}>*</span></label>
-                <select style={inputStyle} value={formData.assignedExecutive} onChange={e => handleChange('assignedExecutive', e.target.value)}>
-                  <option value="Sarah Smith">Sarah Smith</option>
-                  <option value="John Doe">John Doe</option>
-                </select>
+                <input type="text" placeholder="Enter executive name" style={inputStyle} value={formData.assignedExecutive} onChange={e => handleChange('assignedExecutive', e.target.value)} />
               </div>
               <div>
                 <label style={labelStyle}>Project Value</label>
