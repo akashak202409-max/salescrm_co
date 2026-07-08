@@ -1839,3 +1839,25 @@ const toggleBtnStyle = {
 const toggleBtnActiveStyle = {
   backgroundColor: '#FFFFFF', color: '#1E293B', boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
 };
+
+
+const StepperInput = ({ value, onChange }) => (
+  <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0', width: 'fit-content', overflow: 'hidden' }}>
+    <button type="button" onClick={() => onChange(Math.max(0, value - 1))} style={{ padding: '0.5rem 0.75rem', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontWeight: 'bold', color: '#64748B' }}>-</button>
+    <div style={{ padding: '0.5rem 1rem', borderLeft: '1px solid #E2E8F0', borderRight: '1px solid #E2E8F0', fontWeight: '600', color: '#334155' }}>{value}</div>
+    <button type="button" onClick={() => onChange(value + 1)} style={{ padding: '0.5rem 0.75rem', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontWeight: 'bold', color: '#64748B' }}>+</button>
+  </div>
+);
+
+const MultiSelectPill = ({ label, selected, onClick }) => (
+  <button type="button" onClick={onClick} style={{
+    padding: '0.5rem 1rem', borderRadius: '8px',
+    border: `1px solid ${selected ? '#4F46E5' : '#E2E8F0'}`,
+    backgroundColor: selected ? '#EEF2FF' : '#FFFFFF', color: selected ? '#4F46E5' : '#475569',
+    fontWeight: '600', fontSize: '0.8125rem', cursor: 'pointer', outline: 'none',
+    transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem'
+  }}>
+    {selected && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+    {label}
+  </button>
+);
