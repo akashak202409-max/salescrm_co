@@ -256,6 +256,7 @@ const API_URL = 'http://localhost:5000/api/leads';
 const LeadManagement = () => {
   const [leads, setLeads] = useState([]);
   const [leadsLoaded, setLeadsLoaded] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState(null);
 
   // Load leads from backend API on mount (seed with initial data if DB empty)
   useEffect(() => {
@@ -1492,7 +1493,7 @@ const LeadManagement = () => {
                     <button title="Edit" onClick={() => openEditModal(lead)} style={{ background: '#E0E7FF', border: 'none', color: 'var(--primary-color)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                       <Edit2 size={12} />
                     </button>
-                    <button title="Delete" onClick={() => { fetch(`${API_URL}/${lead.id}`, { method: 'DELETE' }).catch(err => console.error('Failed to delete lead:', err)); setLeads(leads.filter(l => l.id !== lead.id)); }} style={{ background: '#FEE2E2', border: 'none', color: 'var(--danger-color, #991B1B)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    <button title="Delete" onClick={(e) => { e.stopPropagation(); setLeadToDelete(lead); }} style={{ background: '#FEE2E2', border: 'none', color: 'var(--danger-color, #991B1B)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', outline: 'none' }}>
                       <Trash2 size={12} />
                     </button>
                   </div>
@@ -1911,6 +1912,45 @@ const LeadManagement = () => {
         isOpen={!!selectedLeadForTimeline}
         onClose={() => setSelectedLeadForTimeline(null)}
       />
+
+      {/* Delete Confirmation Modal */}
+      {leadToDelete && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.4)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 9999, padding: '1rem'
+        }}>
+          <div style={{
+            backgroundColor: '#FFFFFF', padding: '2rem', borderRadius: '16px',
+            width: '100%', maxWidth: '400px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            animation: 'fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '50%', backgroundColor: '#FEE2E2',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 1.5rem auto'
+            }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1E293B', marginBottom: '0.5rem', letterSpacing: '-0.025em' }}>Delete Lead</h3>
+            <p style={{ color: '#64748B', fontSize: '0.875rem', lineHeight: '1.5', marginBottom: '2rem' }}>
+              Are you sure you want to delete lead <strong style={{ color: '#1E293B' }}>{leadToDelete.id}</strong>? This action cannot be undone.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button onClick={() => setLeadToDelete(null)} style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', color: '#475569', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', outline: 'none' }} onMouseOver={e => e.currentTarget.style.backgroundColor = '#F8FAFC'} onMouseOut={e => e.currentTarget.style.backgroundColor = '#FFFFFF'}>Cancel</button>
+              <button onClick={() => {
+                fetch(`${API_URL}/${leadToDelete.id}`, { method: 'DELETE' }).catch(err => console.error('Failed to delete lead:', err));
+                setLeads(leads.filter(l => l.id !== leadToDelete.id));
+                setLeadToDelete(null);
+              }} style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: 'none', backgroundColor: '#DC2626', color: '#FFFFFF', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', outline: 'none', boxShadow: '0 4px 6px -1px rgba(220, 38, 38, 0.2), 0 2px 4px -1px rgba(220, 38, 38, 0.1)' }} onMouseOver={e => e.currentTarget.style.backgroundColor = '#B91C1C'} onMouseOut={e => e.currentTarget.style.backgroundColor = '#DC2626'}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
