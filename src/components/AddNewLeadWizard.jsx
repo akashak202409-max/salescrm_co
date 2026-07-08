@@ -883,22 +883,24 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
       case 3:
         return (
           <div className="step-content animate-fade-in">
-             <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '1.5rem', color: '#1E293B' }}>Site & Dimensions</h3>
-             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
-               <UnitInput label="LENGTH" unit="ft" value={formData.length} onChange={v => handleChange('length', v)} />
-               <UnitInput label="WIDTH" unit="ft" value={formData.width} onChange={v => handleChange('width', v)} />
-               <UnitInput label="TOTAL AREA" unit="sq.ft" value={formData.totalArea} onChange={v => handleChange('totalArea', v)} />
+             <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '1.5rem', color: '#1E293B' }}>Site Dimensions</h3>
+             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+               <UnitInput label="LENGTH" placeholder="Enter length" unit="ft" value={formData.length} onChange={v => handleChange('length', v)} />
+               <UnitInput label="WIDTH" placeholder="Enter width" unit="ft" value={formData.width} onChange={v => handleChange('width', v)} />
                
-               <UnitInput label="CLEAR HEIGHT" unit="ft" value={formData.clearHeight} onChange={v => handleChange('clearHeight', v)} />
-               <UnitInput label="RIDGE HEIGHT" unit="ft" value={formData.ridgeHeight} onChange={v => handleChange('ridgeHeight', v)} />
-               <UnitInput label="BUILT-UP AREA" unit="sq.ft" value={formData.builtUpArea} onChange={v => handleChange('builtUpArea', v)} />
+               <UnitInput label="TOTAL AREA" placeholder="Enter total area" unit="sq.ft" value={formData.totalArea} onChange={v => handleChange('totalArea', v)} />
+               <UnitInput label="BUILT-UP AREA" placeholder="Enter built-up area" unit="sq.ft" value={formData.builtUpArea} onChange={v => handleChange('builtUpArea', v)} />
                
-               <UnitInput label="BAY SPACING" unit="meters" value={formData.baySpacing} onChange={v => handleChange('baySpacing', v)} />
+               <UnitInput label="CLEAR HEIGHT" placeholder="Enter clear height" unit="ft" value={formData.clearHeight} onChange={v => handleChange('clearHeight', v)} />
+               <UnitInput label="RIDGE HEIGHT" placeholder="Enter ridge height" unit="ft" value={formData.ridgeHeight} onChange={v => handleChange('ridgeHeight', v)} />
+               
+               <UnitInput label="BAY SPACING" placeholder="Enter bay spacing" unit="meters" value={formData.baySpacing} onChange={v => handleChange('baySpacing', v)} />
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                  <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>NUMBER OF FLOORS</label>
-                 <input type="number" style={inputStyle} value={formData.numberOfFloors} onChange={e => handleChange('numberOfFloors', e.target.value)} />
+                 <input type="number" placeholder="Enter number of floors" style={inputStyle} value={formData.numberOfFloors} onChange={e => handleChange('numberOfFloors', e.target.value)} />
                </div>
-               <UnitInput label="MEZZANINE AREA" unit="sq.ft" value={formData.mezzanineArea} onChange={v => handleChange('mezzanineArea', v)} />
+               
+               <UnitInput label="MEZZANINE AREA" placeholder="Enter mezzanine area" unit="sq.ft" value={formData.mezzanineArea} onChange={v => handleChange('mezzanineArea', v)} />
              </div>
           </div>
         );
@@ -1561,11 +1563,11 @@ const SelectPill = ({ label, selected, onClick }) => (
   </button>
 );
 
-const UnitInput = ({ label, unit, value, onChange }) => (
+const UnitInput = ({ label, unit, value, onChange, placeholder }) => (
   <div style={{ display: 'flex', flexDirection: 'column' }}>
     <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{label}</label>
     <div style={{ position: 'relative' }}>
-      <input type="text" style={{ ...inputStyle, paddingRight: '3rem' }} value={value} onChange={e => onChange(e.target.value)} />
+      <input type="text" placeholder={placeholder} style={{ ...inputStyle, paddingRight: '3rem' }} value={value} onChange={e => onChange(e.target.value)} />
       <span style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', fontSize: '0.75rem', color: '#94A3B8', fontWeight: '600' }}>{unit}</span>
     </div>
   </div>
