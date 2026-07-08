@@ -36,7 +36,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
     
     // Project Details
     structureType: 'Clear Span', siteCondition: 'Flat', soilTestDone: 'Done',
-    projectTypeDetail: 'Industrial',
+    projectTypeDetail: 'Industrial', tensileGsm: '700 GSM',
     
     // Site Dimensions
     length: '', width: '', totalArea: '', clearHeight: '', ridgeHeight: '',
