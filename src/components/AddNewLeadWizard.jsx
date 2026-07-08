@@ -41,6 +41,17 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
     // Site Dimensions
     length: '', width: '', totalArea: '', clearHeight: '', ridgeHeight: '',
     builtUpArea: '', baySpacing: '', numberOfFloors: '1', mezzanineArea: '',
+    // New Site Dimensions (Step 3)
+    plotLength: '', plotWidth: '', plotArea: '',
+    roofHeight: '', clearanceHeight: '', roofSlope: 'Flat',
+    roofLength: '', roofWidth: '', roofArea: '',
+    numberOfBays: 4, numberOfColumns: 4,
+    eaveHeight: '', 
+    roadAccessWidth: '10-20 ft', craneAccess: false, heavyVehicleAccess: false,
+    existingStructures: [], workingSpace: 'Moderate',
+    roofDirection: 'North', sunExposure: 'Medium', windDirection: '', drainageAvailable: false,
+    additionalNotes: '', measurementFiles: [],
+
     
     // Technical Details
     roofType: 'GI', claddingType: 'GI', floorType: 'Normal', heatInsulation: false,
@@ -883,25 +894,258 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
       case 3:
         return (
           <div className="step-content animate-fade-in">
-             <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '1.5rem', color: '#1E293B' }}>Site Dimensions</h3>
-             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-               <UnitInput label="LENGTH" placeholder="Enter length" unit="ft" value={formData.length} onChange={v => handleChange('length', v)} />
-               <UnitInput label="WIDTH" placeholder="Enter width" unit="ft" value={formData.width} onChange={v => handleChange('width', v)} />
-               
-               <UnitInput label="TOTAL AREA" placeholder="Enter total area" unit="sq.ft" value={formData.totalArea} onChange={v => handleChange('totalArea', v)} />
-               <UnitInput label="BUILT-UP AREA" placeholder="Enter built-up area" unit="sq.ft" value={formData.builtUpArea} onChange={v => handleChange('builtUpArea', v)} />
-               
-               <UnitInput label="CLEAR HEIGHT" placeholder="Enter clear height" unit="ft" value={formData.clearHeight} onChange={v => handleChange('clearHeight', v)} />
-               <UnitInput label="RIDGE HEIGHT" placeholder="Enter ridge height" unit="ft" value={formData.ridgeHeight} onChange={v => handleChange('ridgeHeight', v)} />
-               
-               <UnitInput label="BAY SPACING" placeholder="Enter bay spacing" unit="meters" value={formData.baySpacing} onChange={v => handleChange('baySpacing', v)} />
-               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                 <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>NUMBER OF FLOORS</label>
-                 <input type="number" placeholder="Enter number of floors" style={inputStyle} value={formData.numberOfFloors} onChange={e => handleChange('numberOfFloors', e.target.value)} />
+             <div style={{ marginBottom: '2rem' }}>
+               <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem', color: '#1E293B' }}>Site Dimensions</h3>
+               <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Provide project measurements to generate accurate material estimation and quotations.</p>
+             </div>
+
+             <div style={{ marginBottom: '2.5rem' }}>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 1 — Overall Site Information</h4>
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                 <UnitInput label="Plot Length" placeholder="Enter length" unit="ft" value={formData.plotLength || ''} onChange={v => {
+                   handleChange('plotLength', v);
+                   if (v && formData.plotWidth) handleChange('plotArea', (parseFloat(v) * parseFloat(formData.plotWidth)).toString());
+                 }} />
+                 <UnitInput label="Plot Width" placeholder="Enter width" unit="ft" value={formData.plotWidth || ''} onChange={v => {
+                   handleChange('plotWidth', v);
+                   if (v && formData.plotLength) handleChange('plotArea', (parseFloat(v) * parseFloat(formData.plotLength)).toString());
+                 }} />
+                 <div>
+                   <label style={labelStyle}>Total Area</label>
+                   <div style={{ position: 'relative' }}>
+                     <input type="text" disabled value={formData.plotArea ? `${parseFloat(formData.plotArea).toLocaleString()} sq.ft` : ''} placeholder="Auto calculated" style={{ ...inputStyle, backgroundColor: '#F8FAFC', color: '#64748B' }} />
+                   </div>
+                 </div>
+                 <div style={{ display: 'none' }}></div> {/* Empty slot if needed */}
+                 
+                 <UnitInput label="Roof Height" placeholder="Enter height" unit="ft" value={formData.roofHeight || ''} onChange={v => handleChange('roofHeight', v)} />
+                 <UnitInput label="Clearance Height" placeholder="Ground clearance" unit="ft" value={formData.clearanceHeight || ''} onChange={v => handleChange('clearanceHeight', v)} />
                </div>
                
-               <UnitInput label="MEZZANINE AREA" placeholder="Enter mezzanine area" unit="sq.ft" value={formData.mezzanineArea} onChange={v => handleChange('mezzanineArea', v)} />
+               <div style={{ marginTop: '1.5rem' }}>
+                 <label style={labelStyle}>Roof Slope</label>
+                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                   {['Flat', '5°', '10°', '15°', '20°', 'Custom'].map(t => (
+                     <SelectPill key={t} label={t} selected={formData.roofSlope === t} onClick={() => handleChange('roofSlope', t)} />
+                   ))}
+                 </div>
+               </div>
              </div>
+
+             <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
+
+             <div style={{ marginBottom: '2.5rem' }}>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 2 — Roof Dimensions</h4>
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                 <UnitInput label="Roof Length" placeholder="Enter length" unit="ft" value={formData.roofLength || ''} onChange={v => {
+                   handleChange('roofLength', v);
+                   if (v && formData.roofWidth) handleChange('roofArea', (parseFloat(v) * parseFloat(formData.roofWidth)).toString());
+                 }} />
+                 <UnitInput label="Roof Width" placeholder="Enter width" unit="ft" value={formData.roofWidth || ''} onChange={v => {
+                   handleChange('roofWidth', v);
+                   if (v && formData.roofLength) handleChange('roofArea', (parseFloat(v) * parseFloat(formData.roofLength)).toString());
+                 }} />
+                 <div>
+                   <label style={labelStyle}>Roof Area</label>
+                   <div style={{ position: 'relative' }}>
+                     <input type="text" disabled value={formData.roofArea ? `${parseFloat(formData.roofArea).toLocaleString()} sq.ft` : ''} placeholder="Auto calculated" style={{ ...inputStyle, backgroundColor: '#F8FAFC', color: '#64748B' }} />
+                   </div>
+                 </div>
+                 <div style={{ display: 'none' }}></div> {/* Empty slot */}
+                 
+                 <div>
+                   <label style={labelStyle}>Number of Bays</label>
+                   <StepperInput value={formData.numberOfBays || 0} onChange={v => handleChange('numberOfBays', v)} />
+                 </div>
+                 <UnitInput label="Bay Spacing" placeholder="Enter spacing" unit="ft" value={formData.baySpacing || ''} onChange={v => handleChange('baySpacing', v)} />
+                 
+                 <div>
+                   <label style={labelStyle}>Number of Columns</label>
+                   <StepperInput value={formData.numberOfColumns || 0} onChange={v => handleChange('numberOfColumns', v)} />
+                 </div>
+                 <div style={{ display: 'none' }}></div> {/* Empty slot */}
+
+                 <UnitInput label="Ridge Height" placeholder="Enter ridge height" unit="ft" value={formData.ridgeHeight || ''} onChange={v => handleChange('ridgeHeight', v)} />
+                 <UnitInput label="Eave Height" placeholder="Enter eave height" unit="ft" value={formData.eaveHeight || ''} onChange={v => handleChange('eaveHeight', v)} />
+               </div>
+             </div>
+
+             <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
+
+             <div style={{ marginBottom: '2.5rem' }}>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 3 — Site Accessibility</h4>
+               
+               <div style={{ marginBottom: '1.5rem' }}>
+                 <label style={labelStyle}>Road Access Width</label>
+                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                   {['Under 10 ft', '10-20 ft', '20-30 ft', 'Above 30 ft'].map(t => (
+                     <SelectPill key={t} label={t} selected={formData.roadAccessWidth === t} onClick={() => handleChange('roadAccessWidth', t)} />
+                   ))}
+                 </div>
+               </div>
+
+               <div style={{ display: 'flex', gap: '3rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                 <div>
+                   <label style={labelStyle}>Crane Access</label>
+                   <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                     <button type="button" onClick={() => handleChange('craneAccess', true)} style={{ ...toggleBtnStyle, ...(formData.craneAccess ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                     <button type="button" onClick={() => handleChange('craneAccess', false)} style={{ ...toggleBtnStyle, ...(!formData.craneAccess ? toggleBtnActiveStyle : {}) }}>No</button>
+                   </div>
+                 </div>
+                 <div>
+                   <label style={labelStyle}>Heavy Vehicle Access</label>
+                   <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                     <button type="button" onClick={() => handleChange('heavyVehicleAccess', true)} style={{ ...toggleBtnStyle, ...(formData.heavyVehicleAccess ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                     <button type="button" onClick={() => handleChange('heavyVehicleAccess', false)} style={{ ...toggleBtnStyle, ...(!formData.heavyVehicleAccess ? toggleBtnActiveStyle : {}) }}>No</button>
+                   </div>
+                 </div>
+               </div>
+
+               <div style={{ marginBottom: '1.5rem' }}>
+                 <label style={labelStyle}>Existing Structures Nearby</label>
+                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                   {['None', 'Building', 'Trees', 'Electric Pole', 'Compound Wall', 'Underground Utilities'].map(t => {
+                     const selected = (formData.existingStructures || []).includes(t);
+                     return (
+                       <MultiSelectPill key={t} label={t} selected={selected} onClick={() => {
+                         let curr = formData.existingStructures || [];
+                         if (curr.includes(t)) {
+                           handleChange('existingStructures', curr.filter(x => x !== t));
+                         } else {
+                           handleChange('existingStructures', [...curr, t]);
+                         }
+                       }} />
+                     );
+                   })}
+                 </div>
+               </div>
+
+               <div style={{ marginBottom: '1.5rem' }}>
+                 <label style={labelStyle}>Working Space</label>
+                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                   {['Limited', 'Moderate', 'Open Area'].map(t => (
+                     <SelectPill key={t} label={t} selected={formData.workingSpace === t} onClick={() => handleChange('workingSpace', t)} />
+                   ))}
+                 </div>
+               </div>
+             </div>
+
+             <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
+
+             <div style={{ marginBottom: '2.5rem' }}>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 4 — Orientation</h4>
+               
+               <div style={{ marginBottom: '1.5rem' }}>
+                 <label style={labelStyle}>Roof Direction</label>
+                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                   {['North', 'South', 'East', 'West'].map(t => (
+                     <SelectPill key={t} label={t} selected={formData.roofDirection === t} onClick={() => handleChange('roofDirection', t)} />
+                   ))}
+                 </div>
+               </div>
+
+               <div style={{ marginBottom: '1.5rem' }}>
+                 <label style={labelStyle}>Sun Exposure</label>
+                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                   {['Low', 'Medium', 'High'].map(t => (
+                     <SelectPill key={t} label={t} selected={formData.sunExposure === t} onClick={() => handleChange('sunExposure', t)} />
+                   ))}
+                 </div>
+               </div>
+
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                 <div>
+                   <label style={labelStyle}>Wind Direction</label>
+                   <select style={inputStyle} value={formData.windDirection || ''} onChange={e => handleChange('windDirection', e.target.value)}>
+                     <option value="" disabled>Select direction</option>
+                     <option value="North">North</option>
+                     <option value="South">South</option>
+                     <option value="East">East</option>
+                     <option value="West">West</option>
+                     <option value="North-East">North-East</option>
+                     <option value="North-West">North-West</option>
+                     <option value="South-East">South-East</option>
+                     <option value="South-West">South-West</option>
+                   </select>
+                 </div>
+                 
+                 <div>
+                   <label style={labelStyle}>Drainage Available</label>
+                   <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                     <button type="button" onClick={() => handleChange('drainageAvailable', true)} style={{ ...toggleBtnStyle, ...(formData.drainageAvailable ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                     <button type="button" onClick={() => handleChange('drainageAvailable', false)} style={{ ...toggleBtnStyle, ...(!formData.drainageAvailable ? toggleBtnActiveStyle : {}) }}>No</button>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
+
+             <div style={{ marginBottom: '2.5rem' }}>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 5 — Measurement Upload</h4>
+               <label style={labelStyle}>Reference Drawings</label>
+               
+               <div style={{ border: '2px dashed #CBD5E1', borderRadius: '12px', padding: '3rem 2rem', textAlign: 'center', backgroundColor: '#F8FAFC', cursor: 'pointer', transition: 'all 0.2s', marginBottom: '1.5rem' }} onMouseOver={e => e.currentTarget.style.borderColor = '#4F46E5'} onMouseOut={e => e.currentTarget.style.borderColor = '#CBD5E1'}>
+                 <div style={{ backgroundColor: '#EEF2FF', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
+                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                 </div>
+                 <p style={{ fontSize: '1rem', fontWeight: '600', color: '#1E293B', marginBottom: '0.5rem' }}>Drag & Drop Drawings</p>
+                 <p style={{ color: '#64748B', fontSize: '0.875rem', marginBottom: '1rem' }}>or <span style={{ color: '#4F46E5', fontWeight: '600' }}>Browse Files</span></p>
+                 <p style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Supported: PDF, DWG, Image • Maximum 25 MB</p>
+               </div>
+
+               {/* Mock Uploaded Files */}
+               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                     <div style={{ backgroundColor: '#FEE2E2', padding: '0.5rem', borderRadius: '6px' }}>
+                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                     </div>
+                     <div>
+                       <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1E293B' }}>SitePlan.pdf</p>
+                       <p style={{ fontSize: '0.75rem', color: '#64748B' }}>2.4 MB</p>
+                     </div>
+                   </div>
+                   <button type="button" style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '0.5rem', color: '#94A3B8' }} onMouseOver={e => e.currentTarget.style.color = '#EF4444'} onMouseOut={e => e.currentTarget.style.color = '#94A3B8'}>
+                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                   </button>
+                 </div>
+                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                     <div style={{ backgroundColor: '#E0F2FE', padding: '0.5rem', borderRadius: '6px' }}>
+                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><circle cx="10" cy="13" r="2"></circle><path d="M14 13h4"></path><path d="M10 17h8"></path></svg>
+                     </div>
+                     <div>
+                       <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1E293B' }}>Drawing01.dwg</p>
+                       <p style={{ fontSize: '0.75rem', color: '#64748B' }}>12.1 MB</p>
+                     </div>
+                   </div>
+                   <button type="button" style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '0.5rem', color: '#94A3B8' }} onMouseOver={e => e.currentTarget.style.color = '#EF4444'} onMouseOut={e => e.currentTarget.style.color = '#94A3B8'}>
+                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                   </button>
+                 </div>
+               </div>
+             </div>
+
+             <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
+
+             <div style={{ marginBottom: '2rem' }}>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 6 — Additional Notes</h4>
+               <label style={labelStyle}>Additional Site Information</label>
+               <textarea 
+                 placeholder="Add measurement notes, special instructions, obstacles, site observations..."
+                 style={{ ...inputStyle, minHeight: '120px', resize: 'vertical' }}
+                 value={formData.additionalNotes || ''}
+                 onChange={e => handleChange('additionalNotes', e.target.value)}
+                 maxLength={500}
+               />
+               <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                 <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: '500' }}>
+                   {(formData.additionalNotes || '').length} / 500
+                 </span>
+               </div>
+             </div>
+             
           </div>
         );
       case 4:
