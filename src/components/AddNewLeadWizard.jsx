@@ -374,6 +374,60 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
 
                  {formData.customProjectType === 'Tensile Roofing' && (
                    <>
+                     <div style={{ marginBottom: '1rem' }}>
+                       <label style={labelStyle}>Fabric Material</label>
+                       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                         {['PVC', 'PTFE', 'ETFE', 'HDPE Shade Net'].map(t => (
+                           <SelectPill key={t} label={t} selected={formData.fabricMaterial === t} onClick={() => handleChange('fabricMaterial', t)} />
+                         ))}
+                       </div>
+                     </div>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                       <div>
+                         <label style={labelStyle}>Fabric GSM <span style={{ color: 'red' }}>*</span></label>
+                         <select style={inputStyle} value={formData.fabricGsm} onChange={e => handleChange('fabricGsm', e.target.value)}>
+                           <option value="" disabled>Select GSM</option>
+                           <option value="450 GSM">450 GSM</option>
+                           <option value="550 GSM">550 GSM</option>
+                           <option value="650 GSM">650 GSM</option>
+                           <option value="700 GSM">700 GSM</option>
+                           <option value="750 GSM">750 GSM</option>
+                           <option value="850 GSM">850 GSM</option>
+                           <option value="900 GSM">900 GSM</option>
+                           <option value="950 GSM">950 GSM</option>
+                           <option value="1050 GSM">1050 GSM</option>
+                           <option value="1100 GSM">1100 GSM</option>
+                           <option value="Custom">Custom</option>
+                         </select>
+                         {formData.fabricGsm === 'Custom' && (
+                           <div style={{ display: 'flex', alignItems: 'center', position: 'relative', marginTop: '0.5rem' }}>
+                             <input type="number" placeholder="Enter GSM" style={{ ...inputStyle, paddingRight: '3rem' }} value={formData.customFabricGsm} onChange={e => handleChange('customFabricGsm', e.target.value)} />
+                             <span style={{ position: 'absolute', right: '1rem', color: '#64748B', fontWeight: '500', fontSize: '0.75rem' }}>GSM</span>
+                           </div>
+                         )}
+                       </div>
+                       <div>
+                         <label style={labelStyle}>Fabric Thickness <span style={{ color: 'red' }}>*</span></label>
+                         <select style={inputStyle} value={formData.fabricThickness} onChange={e => handleChange('fabricThickness', e.target.value)}>
+                           <option value="" disabled>Select Thickness</option>
+                           <option value="0.45 mm">0.45 mm</option>
+                           <option value="0.55 mm">0.55 mm</option>
+                           <option value="0.65 mm">0.65 mm</option>
+                           <option value="0.75 mm">0.75 mm</option>
+                           <option value="0.85 mm">0.85 mm</option>
+                           <option value="0.95 mm">0.95 mm</option>
+                           <option value="1.00 mm">1.00 mm</option>
+                           <option value="1.10 mm">1.10 mm</option>
+                           <option value="Custom">Custom</option>
+                         </select>
+                         {formData.fabricThickness === 'Custom' && (
+                           <div style={{ display: 'flex', alignItems: 'center', position: 'relative', marginTop: '0.5rem' }}>
+                             <input type="number" step="0.01" placeholder="Enter thickness" style={{ ...inputStyle, paddingRight: '3rem' }} value={formData.customFabricThickness} onChange={e => handleChange('customFabricThickness', e.target.value)} />
+                             <span style={{ position: 'absolute', right: '1rem', color: '#64748B', fontWeight: '500', fontSize: '0.75rem' }}>mm</span>
+                           </div>
+                         )}
+                       </div>
+                     </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Project Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
