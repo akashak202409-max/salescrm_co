@@ -51,6 +51,19 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
     existingStructures: [], workingSpace: 'Moderate',
     roofDirection: 'North', sunExposure: 'Medium', windDirection: '', drainageAvailable: false,
     additionalNotes: '', measurementFiles: [],
+    // Extended Dynamic Site Dimensions (Step 3)
+    buildingLength: '', buildingWidth: '', columnHeight: '', craneProvision: false, mezzanineFloor: false,
+    soilType: 'Normal', foundationReady: false, groundLevel: 'Even',
+    maximumHeight: '', edgeHeight: '', structureShape: 'Cone', installationArea: 'Ground',
+    windExposure: 'Medium', rainwaterDrainage: false, obstructions: 'None',
+    roofPitch: '', existingRoofHeight: '', purlinSpacing: '', buildingHeight: '',
+    panelLength: '', panelWidth: '', sheetThickness: '', curvedFlatRoof: 'Flat', frameSpacing: '',
+    glassArea: '', glassThickness: '', panelSize: '', structuralSupportType: 'Steel', drainageSlope: '',
+    ridgeLength: '', valleyLength: '', existingTimberStructure: false,
+    numberOfSlopes: '2', existingRoofCondition: 'Good', existingStructure: 'Yes',
+    openingLength: '', openingWidth: '', maxOpeningArea: '', installationHeight: '', motorLocation: 'Left',
+    trackLength: '', sideClearance: '', controlType: 'Remote',
+
 
     
     // Technical Details
@@ -899,84 +912,313 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                <p style={{ color: '#64748B', fontSize: '0.875rem' }}>Provide project measurements to generate accurate material estimation and quotations.</p>
              </div>
 
-             <div style={{ marginBottom: '2.5rem' }}>
-               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 1 — Overall Site Information</h4>
-               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                 <UnitInput label="Plot Length" placeholder="Enter length" unit="ft" value={formData.plotLength || ''} onChange={v => {
-                   handleChange('plotLength', v);
-                   if (v && formData.plotWidth) handleChange('plotArea', (parseFloat(v) * parseFloat(formData.plotWidth)).toString());
-                 }} />
-                 <UnitInput label="Plot Width" placeholder="Enter width" unit="ft" value={formData.plotWidth || ''} onChange={v => {
-                   handleChange('plotWidth', v);
-                   if (v && formData.plotLength) handleChange('plotArea', (parseFloat(v) * parseFloat(formData.plotLength)).toString());
-                 }} />
-                 <div>
-                   <label style={labelStyle}>Total Area</label>
-                   <div style={{ position: 'relative' }}>
-                     <input type="text" disabled value={formData.plotArea ? `${parseFloat(formData.plotArea).toLocaleString()} sq.ft` : ''} placeholder="Auto calculated" style={{ ...inputStyle, backgroundColor: '#F8FAFC', color: '#64748B' }} />
+             {/* Dynamic Content based on Project Type */}
+             {formData.projectType === 'PEB Building' && (
+               <>
+                 <div style={{ marginBottom: '2.5rem' }}>
+                   <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Overall Site</h4>
+                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                     <UnitInput label="Plot Length" placeholder="Enter length" unit="ft" value={formData.plotLength || ''} onChange={v => {
+                       handleChange('plotLength', v);
+                       if (v && formData.plotWidth) handleChange('plotArea', (parseFloat(v) * parseFloat(formData.plotWidth)).toString());
+                     }} />
+                     <UnitInput label="Plot Width" placeholder="Enter width" unit="ft" value={formData.plotWidth || ''} onChange={v => {
+                       handleChange('plotWidth', v);
+                       if (v && formData.plotLength) handleChange('plotArea', (parseFloat(v) * parseFloat(formData.plotLength)).toString());
+                     }} />
+                     <div>
+                       <label style={labelStyle}>Total Area</label>
+                       <div style={{ position: 'relative' }}>
+                         <input type="text" disabled value={formData.plotArea ? `${parseFloat(formData.plotArea).toLocaleString()} sq.ft` : ''} placeholder="Auto calculated" style={{ ...inputStyle, backgroundColor: '#F8FAFC', color: '#64748B' }} />
+                       </div>
+                     </div>
+                     <div style={{ display: 'none' }}></div>
+                     <UnitInput label="Building Length" placeholder="Enter length" unit="ft" value={formData.buildingLength || ''} onChange={v => handleChange('buildingLength', v)} />
+                     <UnitInput label="Building Width" placeholder="Enter width" unit="ft" value={formData.buildingWidth || ''} onChange={v => handleChange('buildingWidth', v)} />
+                     <UnitInput label="Eave Height" placeholder="Enter eave height" unit="ft" value={formData.eaveHeight || ''} onChange={v => handleChange('eaveHeight', v)} />
+                     <UnitInput label="Ridge Height" placeholder="Enter ridge height" unit="ft" value={formData.ridgeHeight || ''} onChange={v => handleChange('ridgeHeight', v)} />
+                   </div>
+                   <div style={{ marginTop: '1.5rem' }}>
+                     <label style={labelStyle}>Roof Slope</label>
+                     <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                       {['Flat', '5°', '10°', '15°', '20°', 'Custom'].map(t => (
+                         <SelectPill key={t} label={t} selected={formData.roofSlope === t} onClick={() => handleChange('roofSlope', t)} />
+                       ))}
+                     </div>
                    </div>
                  </div>
-                 <div style={{ display: 'none' }}></div> {/* Empty slot if needed */}
                  
-                 <UnitInput label="Roof Height" placeholder="Enter height" unit="ft" value={formData.roofHeight || ''} onChange={v => handleChange('roofHeight', v)} />
-                 <UnitInput label="Clearance Height" placeholder="Ground clearance" unit="ft" value={formData.clearanceHeight || ''} onChange={v => handleChange('clearanceHeight', v)} />
-               </div>
-               
-               <div style={{ marginTop: '1.5rem' }}>
-                 <label style={labelStyle}>Roof Slope</label>
-                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                   {['Flat', '5°', '10°', '15°', '20°', 'Custom'].map(t => (
-                     <SelectPill key={t} label={t} selected={formData.roofSlope === t} onClick={() => handleChange('roofSlope', t)} />
-                   ))}
+                 <div style={{ marginBottom: '2.5rem' }}>
+                   <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Structural Layout</h4>
+                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                     <div>
+                       <label style={labelStyle}>Number of Bays</label>
+                       <StepperInput value={formData.numberOfBays || 0} onChange={v => handleChange('numberOfBays', v)} />
+                     </div>
+                     <UnitInput label="Bay Spacing" placeholder="Enter spacing" unit="ft" value={formData.baySpacing || ''} onChange={v => handleChange('baySpacing', v)} />
+                     <div>
+                       <label style={labelStyle}>Number of Columns</label>
+                       <StepperInput value={formData.numberOfColumns || 0} onChange={v => handleChange('numberOfColumns', v)} />
+                     </div>
+                     <UnitInput label="Column Height" placeholder="Enter height" unit="ft" value={formData.columnHeight || ''} onChange={v => handleChange('columnHeight', v)} />
+                     <div>
+                       <label style={labelStyle}>Crane Provision</label>
+                       <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                         <button type="button" onClick={() => handleChange('craneProvision', true)} style={{ ...toggleBtnStyle, ...(formData.craneProvision ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                         <button type="button" onClick={() => handleChange('craneProvision', false)} style={{ ...toggleBtnStyle, ...(!formData.craneProvision ? toggleBtnActiveStyle : {}) }}>No</button>
+                       </div>
+                     </div>
+                     <div>
+                       <label style={labelStyle}>Mezzanine Floor</label>
+                       <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                         <button type="button" onClick={() => handleChange('mezzanineFloor', true)} style={{ ...toggleBtnStyle, ...(formData.mezzanineFloor ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                         <button type="button" onClick={() => handleChange('mezzanineFloor', false)} style={{ ...toggleBtnStyle, ...(!formData.mezzanineFloor ? toggleBtnActiveStyle : {}) }}>No</button>
+                       </div>
+                     </div>
+                   </div>
                  </div>
-               </div>
-             </div>
+
+                 <div style={{ marginBottom: '2.5rem' }}>
+                   <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Site Condition</h4>
+                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                     <div>
+                       <label style={labelStyle}>Soil Type</label>
+                       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                         {['Normal', 'Soft', 'Hard Rock'].map(t => (
+                           <SelectPill key={t} label={t} selected={formData.soilType === t} onClick={() => handleChange('soilType', t)} />
+                         ))}
+                       </div>
+                     </div>
+                     <div>
+                       <label style={labelStyle}>Ground Level</label>
+                       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                         {['Even', 'Uneven', 'Slope'].map(t => (
+                           <SelectPill key={t} label={t} selected={formData.groundLevel === t} onClick={() => handleChange('groundLevel', t)} />
+                         ))}
+                       </div>
+                     </div>
+                     <div>
+                       <label style={labelStyle}>Foundation Ready?</label>
+                       <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                         <button type="button" onClick={() => handleChange('foundationReady', true)} style={{ ...toggleBtnStyle, ...(formData.foundationReady ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                         <button type="button" onClick={() => handleChange('foundationReady', false)} style={{ ...toggleBtnStyle, ...(!formData.foundationReady ? toggleBtnActiveStyle : {}) }}>No</button>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </>
+             )}
+
+             {formData.projectType === 'Tensile' && (
+               <>
+                 <div style={{ marginBottom: '2.5rem' }}>
+                   <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coverage Area</h4>
+                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                     <UnitInput label="Length" placeholder="Enter length" unit="ft" value={formData.length || ''} onChange={v => {
+                       handleChange('length', v);
+                       if (v && formData.width) handleChange('totalArea', (parseFloat(v) * parseFloat(formData.width)).toString());
+                     }} />
+                     <UnitInput label="Width" placeholder="Enter width" unit="ft" value={formData.width || ''} onChange={v => {
+                       handleChange('width', v);
+                       if (v && formData.length) handleChange('totalArea', (parseFloat(v) * parseFloat(formData.length)).toString());
+                     }} />
+                     <div>
+                       <label style={labelStyle}>Covered Area</label>
+                       <div style={{ position: 'relative' }}>
+                         <input type="text" disabled value={formData.totalArea ? `${parseFloat(formData.totalArea).toLocaleString()} sq.ft` : ''} placeholder="Auto calculated" style={{ ...inputStyle, backgroundColor: '#F8FAFC', color: '#64748B' }} />
+                       </div>
+                     </div>
+                     <div style={{ display: 'none' }}></div>
+                     <UnitInput label="Maximum Height" placeholder="Enter max height" unit="ft" value={formData.maximumHeight || ''} onChange={v => handleChange('maximumHeight', v)} />
+                     <UnitInput label="Edge Height" placeholder="Enter edge height" unit="ft" value={formData.edgeHeight || ''} onChange={v => handleChange('edgeHeight', v)} />
+                   </div>
+                 </div>
+                 
+                 <div style={{ marginBottom: '2.5rem' }}>
+                   <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Structure Shape</h4>
+                   <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                     {['Cone', 'Hypar', 'Arch', 'Dome', 'Pyramid', 'Custom'].map(t => (
+                       <SelectPill key={t} label={t} selected={formData.structureShape === t} onClick={() => handleChange('structureShape', t)} />
+                     ))}
+                   </div>
+                 </div>
+
+                 <div style={{ marginBottom: '2.5rem' }}>
+                   <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Installation Area</h4>
+                   <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                     {['Ground', 'Rooftop', 'Existing Building', 'Steel Structure'].map(t => (
+                       <SelectPill key={t} label={t} selected={formData.installationArea === t} onClick={() => handleChange('installationArea', t)} />
+                     ))}
+                   </div>
+                 </div>
+
+                 <div style={{ marginBottom: '2.5rem' }}>
+                   <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Site Details</h4>
+                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                     <div>
+                       <label style={labelStyle}>Wind Exposure</label>
+                       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                         {['Low', 'Medium', 'High'].map(t => (
+                           <SelectPill key={t} label={t} selected={formData.windExposure === t} onClick={() => handleChange('windExposure', t)} />
+                         ))}
+                       </div>
+                     </div>
+                     <div>
+                       <label style={labelStyle}>Rainwater Drainage</label>
+                       <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                         <button type="button" onClick={() => handleChange('rainwaterDrainage', true)} style={{ ...toggleBtnStyle, ...(formData.rainwaterDrainage ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                         <button type="button" onClick={() => handleChange('rainwaterDrainage', false)} style={{ ...toggleBtnStyle, ...(!formData.rainwaterDrainage ? toggleBtnActiveStyle : {}) }}>No</button>
+                       </div>
+                     </div>
+                     <UnitInput label="Obstructions" placeholder="Describe obstructions" unit="" value={formData.obstructions || ''} onChange={v => handleChange('obstructions', v)} />
+                   </div>
+                 </div>
+               </>
+             )}
+
+             {formData.projectType === 'Other roofing' && (
+               <>
+                 {formData.customProjectType === 'UPVC Roofing in Chennai' && (
+                   <div style={{ marginBottom: '2.5rem' }}>
+                     <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>UPVC Roofing</h4>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                       <UnitInput label="Roof Length" placeholder="Enter length" unit="ft" value={formData.roofLength || ''} onChange={v => handleChange('roofLength', v)} />
+                       <UnitInput label="Roof Width" placeholder="Enter width" unit="ft" value={formData.roofWidth || ''} onChange={v => handleChange('roofWidth', v)} />
+                       <UnitInput label="Roof Area" placeholder="Enter area" unit="sq.ft" value={formData.roofArea || ''} onChange={v => handleChange('roofArea', v)} />
+                       <UnitInput label="Roof Pitch" placeholder="Enter pitch" unit="°" value={formData.roofPitch || ''} onChange={v => handleChange('roofPitch', v)} />
+                       <UnitInput label="Existing Roof Height" placeholder="Enter height" unit="ft" value={formData.existingRoofHeight || ''} onChange={v => handleChange('existingRoofHeight', v)} />
+                       <UnitInput label="Purlin Spacing" placeholder="Enter spacing" unit="ft" value={formData.purlinSpacing || ''} onChange={v => handleChange('purlinSpacing', v)} />
+                       <UnitInput label="Building Height" placeholder="Enter building height" unit="ft" value={formData.buildingHeight || ''} onChange={v => handleChange('buildingHeight', v)} />
+                       <UnitInput label="Ridge Height" placeholder="Enter ridge height" unit="ft" value={formData.ridgeHeight || ''} onChange={v => handleChange('ridgeHeight', v)} />
+                     </div>
+                   </div>
+                 )}
+                 {formData.customProjectType === 'Polycarbonate Roofing' && (
+                   <div style={{ marginBottom: '2.5rem' }}>
+                     <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Polycarbonate Roofing</h4>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                       <UnitInput label="Panel Length" placeholder="Enter length" unit="ft" value={formData.panelLength || ''} onChange={v => handleChange('panelLength', v)} />
+                       <UnitInput label="Panel Width" placeholder="Enter width" unit="ft" value={formData.panelWidth || ''} onChange={v => handleChange('panelWidth', v)} />
+                       <UnitInput label="Covered Area" placeholder="Enter area" unit="sq.ft" value={formData.totalArea || ''} onChange={v => handleChange('totalArea', v)} />
+                       <UnitInput label="Roof Height" placeholder="Enter height" unit="ft" value={formData.roofHeight || ''} onChange={v => handleChange('roofHeight', v)} />
+                       <UnitInput label="Sheet Thickness" placeholder="Enter thickness" unit="mm" value={formData.sheetThickness || ''} onChange={v => handleChange('sheetThickness', v)} />
+                       <div>
+                         <label style={labelStyle}>Curved / Flat Roof</label>
+                         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                           {['Flat', 'Curved'].map(t => (
+                             <SelectPill key={t} label={t} selected={formData.curvedFlatRoof === t} onClick={() => handleChange('curvedFlatRoof', t)} />
+                           ))}
+                         </div>
+                       </div>
+                       <UnitInput label="Frame Spacing" placeholder="Enter spacing" unit="ft" value={formData.frameSpacing || ''} onChange={v => handleChange('frameSpacing', v)} />
+                     </div>
+                   </div>
+                 )}
+                 {formData.customProjectType === 'Glass Roofing' && (
+                   <div style={{ marginBottom: '2.5rem' }}>
+                     <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Glass Roofing</h4>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                       <UnitInput label="Glass Area" placeholder="Enter area" unit="sq.ft" value={formData.glassArea || ''} onChange={v => handleChange('glassArea', v)} />
+                       <UnitInput label="Length" placeholder="Enter length" unit="ft" value={formData.length || ''} onChange={v => handleChange('length', v)} />
+                       <UnitInput label="Width" placeholder="Enter width" unit="ft" value={formData.width || ''} onChange={v => handleChange('width', v)} />
+                       <UnitInput label="Roof Height" placeholder="Enter height" unit="ft" value={formData.roofHeight || ''} onChange={v => handleChange('roofHeight', v)} />
+                       <UnitInput label="Glass Thickness" placeholder="Enter thickness" unit="mm" value={formData.glassThickness || ''} onChange={v => handleChange('glassThickness', v)} />
+                       <UnitInput label="Panel Size" placeholder="Enter size" unit="ft" value={formData.panelSize || ''} onChange={v => handleChange('panelSize', v)} />
+                       <UnitInput label="Structural Support Type" placeholder="e.g. Steel, Aluminum" unit="" value={formData.structuralSupportType || ''} onChange={v => handleChange('structuralSupportType', v)} />
+                       <UnitInput label="Drainage Slope" placeholder="Enter slope" unit="°" value={formData.drainageSlope || ''} onChange={v => handleChange('drainageSlope', v)} />
+                     </div>
+                   </div>
+                 )}
+                 {formData.customProjectType === 'Mangalore Tile Roofing' && (
+                   <div style={{ marginBottom: '2.5rem' }}>
+                     <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mangalore Tile Roofing</h4>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                       <UnitInput label="Roof Length" placeholder="Enter length" unit="ft" value={formData.roofLength || ''} onChange={v => handleChange('roofLength', v)} />
+                       <UnitInput label="Roof Width" placeholder="Enter width" unit="ft" value={formData.roofWidth || ''} onChange={v => handleChange('roofWidth', v)} />
+                       <UnitInput label="Roof Pitch" placeholder="Enter pitch" unit="°" value={formData.roofPitch || ''} onChange={v => handleChange('roofPitch', v)} />
+                       <UnitInput label="Total Roof Area" placeholder="Enter area" unit="sq.ft" value={formData.roofArea || ''} onChange={v => handleChange('roofArea', v)} />
+                       <UnitInput label="Ridge Length" placeholder="Enter length" unit="ft" value={formData.ridgeLength || ''} onChange={v => handleChange('ridgeLength', v)} />
+                       <UnitInput label="Valley Length" placeholder="Enter length" unit="ft" value={formData.valleyLength || ''} onChange={v => handleChange('valleyLength', v)} />
+                       <div>
+                         <label style={labelStyle}>Existing Timber Structure?</label>
+                         <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
+                           <button type="button" onClick={() => handleChange('existingTimberStructure', true)} style={{ ...toggleBtnStyle, ...(formData.existingTimberStructure ? toggleBtnActiveStyle : {}) }}>Yes</button>
+                           <button type="button" onClick={() => handleChange('existingTimberStructure', false)} style={{ ...toggleBtnStyle, ...(!formData.existingTimberStructure ? toggleBtnActiveStyle : {}) }}>No</button>
+                         </div>
+                       </div>
+                       <UnitInput label="Ridge Height" placeholder="Enter height" unit="ft" value={formData.ridgeHeight || ''} onChange={v => handleChange('ridgeHeight', v)} />
+                     </div>
+                   </div>
+                 )}
+                 {formData.customProjectType === 'Shingles Roofing' && (
+                   <div style={{ marginBottom: '2.5rem' }}>
+                     <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shingles Roofing</h4>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                       <UnitInput label="Roof Area" placeholder="Enter area" unit="sq.ft" value={formData.roofArea || ''} onChange={v => handleChange('roofArea', v)} />
+                       <UnitInput label="Roof Pitch" placeholder="Enter pitch" unit="°" value={formData.roofPitch || ''} onChange={v => handleChange('roofPitch', v)} />
+                       <UnitInput label="Number of Slopes" placeholder="Enter number" unit="" value={formData.numberOfSlopes || ''} onChange={v => handleChange('numberOfSlopes', v)} />
+                       <UnitInput label="Ridge Length" placeholder="Enter length" unit="ft" value={formData.ridgeLength || ''} onChange={v => handleChange('ridgeLength', v)} />
+                       <UnitInput label="Valley Length" placeholder="Enter length" unit="ft" value={formData.valleyLength || ''} onChange={v => handleChange('valleyLength', v)} />
+                       <UnitInput label="Roof Height" placeholder="Enter height" unit="ft" value={formData.roofHeight || ''} onChange={v => handleChange('roofHeight', v)} />
+                       <UnitInput label="Existing Roof Condition" placeholder="Describe condition" unit="" value={formData.existingRoofCondition || ''} onChange={v => handleChange('existingRoofCondition', v)} />
+                     </div>
+                   </div>
+                 )}
+                 {formData.customProjectType === 'GI Roofing in Chennai' && (
+                   <div style={{ marginBottom: '2.5rem' }}>
+                     <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>GI Roofing</h4>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                       <UnitInput label="Length" placeholder="Enter length" unit="ft" value={formData.length || ''} onChange={v => handleChange('length', v)} />
+                       <UnitInput label="Width" placeholder="Enter width" unit="ft" value={formData.width || ''} onChange={v => handleChange('width', v)} />
+                       <UnitInput label="Covered Area" placeholder="Enter area" unit="sq.ft" value={formData.totalArea || ''} onChange={v => handleChange('totalArea', v)} />
+                       <UnitInput label="Roof Pitch" placeholder="Enter pitch" unit="°" value={formData.roofPitch || ''} onChange={v => handleChange('roofPitch', v)} />
+                       <UnitInput label="Purlin Spacing" placeholder="Enter spacing" unit="ft" value={formData.purlinSpacing || ''} onChange={v => handleChange('purlinSpacing', v)} />
+                       <UnitInput label="Building Height" placeholder="Enter height" unit="ft" value={formData.buildingHeight || ''} onChange={v => handleChange('buildingHeight', v)} />
+                       <UnitInput label="Ridge Height" placeholder="Enter height" unit="ft" value={formData.ridgeHeight || ''} onChange={v => handleChange('ridgeHeight', v)} />
+                       <UnitInput label="Existing Structure" placeholder="Describe structure" unit="" value={formData.existingStructure || ''} onChange={v => handleChange('existingStructure', v)} />
+                     </div>
+                   </div>
+                 )}
+                 {formData.customProjectType === 'Retractable Roofing' && (
+                   <div style={{ marginBottom: '2.5rem' }}>
+                     <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Retractable Roofing</h4>
+                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                       <UnitInput label="Opening Length" placeholder="Enter length" unit="ft" value={formData.openingLength || ''} onChange={v => handleChange('openingLength', v)} />
+                       <UnitInput label="Opening Width" placeholder="Enter width" unit="ft" value={formData.openingWidth || ''} onChange={v => handleChange('openingWidth', v)} />
+                       <UnitInput label="Maximum Opening Area" placeholder="Enter area" unit="sq.ft" value={formData.maxOpeningArea || ''} onChange={v => handleChange('maxOpeningArea', v)} />
+                       <UnitInput label="Installation Height" placeholder="Enter height" unit="ft" value={formData.installationHeight || ''} onChange={v => handleChange('installationHeight', v)} />
+                       <div>
+                         <label style={labelStyle}>Motor Location</label>
+                         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                           {['Left', 'Right', 'Center'].map(t => (
+                             <SelectPill key={t} label={t} selected={formData.motorLocation === t} onClick={() => handleChange('motorLocation', t)} />
+                           ))}
+                         </div>
+                       </div>
+                       <UnitInput label="Track Length" placeholder="Enter length" unit="ft" value={formData.trackLength || ''} onChange={v => handleChange('trackLength', v)} />
+                       <UnitInput label="Side Clearance" placeholder="Enter clearance" unit="ft" value={formData.sideClearance || ''} onChange={v => handleChange('sideClearance', v)} />
+                       <div>
+                         <label style={labelStyle}>Control Type</label>
+                         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                           {['Remote', 'Switch', 'Smart Home'].map(t => (
+                             <SelectPill key={t} label={t} selected={formData.controlType === t} onClick={() => handleChange('controlType', t)} />
+                           ))}
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 )}
+               </>
+             )}
 
              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
 
+             {/* Common Section */}
              <div style={{ marginBottom: '2.5rem' }}>
-               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 2 — Roof Dimensions</h4>
-               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                 <UnitInput label="Roof Length" placeholder="Enter length" unit="ft" value={formData.roofLength || ''} onChange={v => {
-                   handleChange('roofLength', v);
-                   if (v && formData.roofWidth) handleChange('roofArea', (parseFloat(v) * parseFloat(formData.roofWidth)).toString());
-                 }} />
-                 <UnitInput label="Roof Width" placeholder="Enter width" unit="ft" value={formData.roofWidth || ''} onChange={v => {
-                   handleChange('roofWidth', v);
-                   if (v && formData.roofLength) handleChange('roofArea', (parseFloat(v) * parseFloat(formData.roofLength)).toString());
-                 }} />
-                 <div>
-                   <label style={labelStyle}>Roof Area</label>
-                   <div style={{ position: 'relative' }}>
-                     <input type="text" disabled value={formData.roofArea ? `${parseFloat(formData.roofArea).toLocaleString()} sq.ft` : ''} placeholder="Auto calculated" style={{ ...inputStyle, backgroundColor: '#F8FAFC', color: '#64748B' }} />
-                   </div>
-                 </div>
-                 <div style={{ display: 'none' }}></div> {/* Empty slot */}
-                 
-                 <div>
-                   <label style={labelStyle}>Number of Bays</label>
-                   <StepperInput value={formData.numberOfBays || 0} onChange={v => handleChange('numberOfBays', v)} />
-                 </div>
-                 <UnitInput label="Bay Spacing" placeholder="Enter spacing" unit="ft" value={formData.baySpacing || ''} onChange={v => handleChange('baySpacing', v)} />
-                 
-                 <div>
-                   <label style={labelStyle}>Number of Columns</label>
-                   <StepperInput value={formData.numberOfColumns || 0} onChange={v => handleChange('numberOfColumns', v)} />
-                 </div>
-                 <div style={{ display: 'none' }}></div> {/* Empty slot */}
-
-                 <UnitInput label="Ridge Height" placeholder="Enter ridge height" unit="ft" value={formData.ridgeHeight || ''} onChange={v => handleChange('ridgeHeight', v)} />
-                 <UnitInput label="Eave Height" placeholder="Enter eave height" unit="ft" value={formData.eaveHeight || ''} onChange={v => handleChange('eaveHeight', v)} />
-               </div>
-             </div>
-
-             <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
-
-             <div style={{ marginBottom: '2.5rem' }}>
-               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 3 — Site Accessibility</h4>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Common Section — Site Accessibility</h4>
                
                <div style={{ marginBottom: '1.5rem' }}>
-                 <label style={labelStyle}>Road Access Width</label>
+                 <label style={labelStyle}>Road Width</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                    {['Under 10 ft', '10-20 ft', '20-30 ft', 'Above 30 ft'].map(t => (
                      <SelectPill key={t} label={t} selected={formData.roadAccessWidth === t} onClick={() => handleChange('roadAccessWidth', t)} />
@@ -1002,7 +1244,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                </div>
 
                <div style={{ marginBottom: '1.5rem' }}>
-                 <label style={labelStyle}>Existing Structures Nearby</label>
+                 <label style={labelStyle}>Existing Obstructions</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                    {['None', 'Building', 'Trees', 'Electric Pole', 'Compound Wall', 'Underground Utilities'].map(t => {
                      const selected = (formData.existingStructures || []).includes(t);
@@ -1033,10 +1275,10 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
 
              <div style={{ marginBottom: '2.5rem' }}>
-               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 4 — Orientation</h4>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Orientation</h4>
                
                <div style={{ marginBottom: '1.5rem' }}>
-                 <label style={labelStyle}>Roof Direction</label>
+                 <label style={labelStyle}>Direction</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                    {['North', 'South', 'East', 'West'].map(t => (
                      <SelectPill key={t} label={t} selected={formData.roofDirection === t} onClick={() => handleChange('roofDirection', t)} />
@@ -1068,22 +1310,13 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <option value="South-West">South-West</option>
                    </select>
                  </div>
-                 
-                 <div>
-                   <label style={labelStyle}>Drainage Available</label>
-                   <div style={{ display: 'inline-flex', backgroundColor: '#F8FAFC', borderRadius: '8px', padding: '0.25rem', border: '1px solid #E2E8F0' }}>
-                     <button type="button" onClick={() => handleChange('drainageAvailable', true)} style={{ ...toggleBtnStyle, ...(formData.drainageAvailable ? toggleBtnActiveStyle : {}) }}>Yes</button>
-                     <button type="button" onClick={() => handleChange('drainageAvailable', false)} style={{ ...toggleBtnStyle, ...(!formData.drainageAvailable ? toggleBtnActiveStyle : {}) }}>No</button>
-                   </div>
-                 </div>
                </div>
              </div>
 
              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
 
              <div style={{ marginBottom: '2.5rem' }}>
-               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 5 — Measurement Upload</h4>
-               <label style={labelStyle}>Reference Drawings</label>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reference Drawings</h4>
                
                <div style={{ border: '2px dashed #CBD5E1', borderRadius: '12px', padding: '3rem 2rem', textAlign: 'center', backgroundColor: '#F8FAFC', cursor: 'pointer', transition: 'all 0.2s', marginBottom: '1.5rem' }} onMouseOver={e => e.currentTarget.style.borderColor = '#4F46E5'} onMouseOut={e => e.currentTarget.style.borderColor = '#CBD5E1'}>
                  <div style={{ backgroundColor: '#EEF2FF', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
@@ -1091,7 +1324,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                  </div>
                  <p style={{ fontSize: '1rem', fontWeight: '600', color: '#1E293B', marginBottom: '0.5rem' }}>Drag & Drop Drawings</p>
                  <p style={{ color: '#64748B', fontSize: '0.875rem', marginBottom: '1rem' }}>or <span style={{ color: '#4F46E5', fontWeight: '600' }}>Browse Files</span></p>
-                 <p style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Supported: PDF, DWG, Image • Maximum 25 MB</p>
+                 <p style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Upload PDF, DWG, Image • Maximum 25 MB</p>
                </div>
 
                {/* Mock Uploaded Files */}
@@ -1110,28 +1343,13 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                    </button>
                  </div>
-                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                     <div style={{ backgroundColor: '#E0F2FE', padding: '0.5rem', borderRadius: '6px' }}>
-                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><circle cx="10" cy="13" r="2"></circle><path d="M14 13h4"></path><path d="M10 17h8"></path></svg>
-                     </div>
-                     <div>
-                       <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1E293B' }}>Drawing01.dwg</p>
-                       <p style={{ fontSize: '0.75rem', color: '#64748B' }}>12.1 MB</p>
-                     </div>
-                   </div>
-                   <button type="button" style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '0.5rem', color: '#94A3B8' }} onMouseOver={e => e.currentTarget.style.color = '#EF4444'} onMouseOut={e => e.currentTarget.style.color = '#94A3B8'}>
-                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                   </button>
-                 </div>
                </div>
              </div>
 
              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '2.5rem 0' }} />
 
              <div style={{ marginBottom: '2rem' }}>
-               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SECTION 6 — Additional Notes</h4>
-               <label style={labelStyle}>Additional Site Information</label>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Additional Notes</h4>
                <textarea 
                  placeholder="Add measurement notes, special instructions, obstacles, site observations..."
                  style={{ ...inputStyle, minHeight: '120px', resize: 'vertical' }}
