@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Save, CheckCircle2, Building, ClipboardList, Calendar, IndianRupee, PenTool, Plus, Edit2, ChevronLeft } from 'lucide-react';
+import { Save, X, CheckCircle2, Building, ClipboardList, Calendar, IndianRupee, PenTool, Plus, Edit2, ChevronLeft } from 'lucide-react';
 
 const dummyProjects = [
   {
@@ -87,7 +87,7 @@ const emptyForm = {
   
   startDate: '', completionDate: '', leadTime: '',
   
-  quotedPrice: '', paymentSchedule: 'agreed', alternateTerms: '',
+  quotedPrice: '', paymentTerms: [{ term: '', percentage: '', value: '' }],
   
   engineerVisit: false, engineerSign: '',
   salespersonDeclaration: false, salespersonSign: ''
@@ -142,6 +142,22 @@ const ProjectFiling = () => {
       setProjects([{ ...formData, id: newId }, ...projects]);
     }
     setView('list');
+  };
+
+  const handlePaymentTermChange = (index, field, value) => {
+    const newTerms = [...(formData.paymentTerms || [])];
+    newTerms[index] = { ...newTerms[index], [field]: value };
+    setFormData(prev => ({ ...prev, paymentTerms: newTerms }));
+  };
+
+  const addPaymentTerm = () => {
+    setFormData(prev => ({ ...prev, paymentTerms: [...(prev.paymentTerms || []), { term: '', percentage: '', value: '' }] }));
+  };
+
+  const removePaymentTerm = (index) => {
+    const newTerms = [...(formData.paymentTerms || [])];
+    newTerms.splice(index, 1);
+    setFormData(prev => ({ ...prev, paymentTerms: newTerms }));
   };
 
   const sectionStyle = {
@@ -400,26 +416,41 @@ const ProjectFiling = () => {
                   <label style={labelStyle}>Quoted Price *</label>
                   <input required name="quotedPrice" value={formData.quotedPrice} onChange={handleChange} style={inputStyle} placeholder="₹ Amount" />
                 </div>
-                <div style={inputGroupStyle}>
-                  <label style={labelStyle}>Payment Schedule</label>
-                  <select name="paymentSchedule" value={formData.paymentSchedule} onChange={handleChange} style={inputStyle}>
-                    <option value="agreed">Agreed Standard terms (50/40/10)</option>
-                    <option value="no">No / Custom terms</option>
-                  </select>
+              </div>
+              
+              <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <label style={labelStyle}>Payment Terms Schedule</label>
+                  <button type="button" onClick={addPaymentTerm} style={{ backgroundColor: '#EEF2FF', color: '#4F46E5', border: 'none', padding: '0.4rem 0.75rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <Plus size={14} /> Add Milestone
+                  </button>
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {(formData.paymentTerms || []).map((pt, idx) => (
+                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.5fr auto', gap: '1rem', alignItems: 'end', backgroundColor: '#F8FAFC', padding: '1rem', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                      <div>
+                        <label style={{...labelStyle, fontSize: '0.7rem'}}>Term / Milestone</label>
+                        <input type="text" placeholder="e.g. Advance Payment" style={inputStyle} value={pt.term} onChange={e => handlePaymentTermChange(idx, 'term', e.target.value)} />
+                      </div>
+                      <div>
+                        <label style={{...labelStyle, fontSize: '0.7rem'}}>Percentage (%)</label>
+                        <input type="number" placeholder="%" style={inputStyle} value={pt.percentage} onChange={e => handlePaymentTermChange(idx, 'percentage', e.target.value)} />
+                      </div>
+                      <div>
+                        <label style={{...labelStyle, fontSize: '0.7rem'}}>Value (₹)</label>
+                        <input type="number" placeholder="₹ Amount" style={inputStyle} value={pt.value} onChange={e => handlePaymentTermChange(idx, 'value', e.target.value)} />
+                      </div>
+                      {idx > 0 && (
+                        <button type="button" onClick={() => removePaymentTerm(idx)} style={{ background: '#FEE2E2', border: 'none', color: '#DC2626', width: '36px', height: '36px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginBottom: '2px' }}>
+                          <X size={16} />
+                        </button>
+                      )}
+                      {idx === 0 && <div style={{ width: '36px' }}></div>}
+                    </div>
+                  ))}
                 </div>
               </div>
-              {formData.paymentSchedule === 'no' && (
-                <div style={{ ...inputGroupStyle, padding: '1rem', backgroundColor: '#fff7ed', borderLeft: '4px solid #f97316', borderRadius: '4px' }}>
-                  <label style={{ ...labelStyle, color: '#c2410c' }}>If not applicable, mention alternate payment terms:</label>
-                  <textarea 
-                    name="alternateTerms" 
-                    value={formData.alternateTerms} 
-                    onChange={handleChange} 
-                    style={{ ...inputStyle, minHeight: '100px', backgroundColor: 'white', resize: 'vertical' }} 
-                    placeholder="e.g. 10% Advance with PO, 30% After Drawing Approval, 40% After Structure work complete, 20% After completion" 
-                  />
-                </div>
-              )}
             </div>
 
             {/* 5 & 6. Declarations */}
