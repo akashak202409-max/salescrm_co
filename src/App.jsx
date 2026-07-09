@@ -5,6 +5,7 @@ import DashboardLayout from './components/DashboardLayout';
 import DashboardHome from './views/DashboardHome';
 import LeadManagement from './views/LeadManagement';
 import Appointments from './views/Appointments';
+import Pipeline from './views/Pipeline';
 import Quotations from './views/Quotations';
 import ProjectFiling from './views/ProjectFiling';
 import Payments from './views/Payments';
@@ -32,6 +33,7 @@ function App() {
             <Route path="dashboard" element={<DashboardHome />} />
             <Route path="leads" element={<LeadManagement />} />
             <Route path="appointments" element={<Appointments />} />
+            <Route path="pipeline" element={<Pipeline />} />
             <Route path="quotations" element={<Quotations />} />
             <Route path="projects" element={<ProjectFiling />} />
             <Route path="payments" element={<Payments />} />
