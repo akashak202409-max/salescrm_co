@@ -977,14 +977,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                  </div>
                </div>
 
-               <div style={{ marginBottom: '1.5rem' }}>
-                 <label style={labelStyle}>Budget Range</label>
-                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                   {['Below ₹5 Lakhs', '₹5-10 Lakhs', '₹10-25 Lakhs', '₹25-50 Lakhs', 'Above ₹50 Lakhs'].map(t => (
-                     <SelectPill key={t} label={t} selected={formData.budgetRange === t} onClick={() => handleChange('budgetRange', t)} />
-                   ))}
-                 </div>
-               </div>
+
 
                <div style={{ marginBottom: '1.5rem' }}>
                  <label style={labelStyle}>Expected Start Date</label>
