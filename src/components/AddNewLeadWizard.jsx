@@ -8,7 +8,7 @@ const steps = [
   { id: 4, label: 'Technical Details' },
   { id: 5, label: 'Quotations' },
   { id: 6, label: 'Project Filing' },
-  { id: 7, label: 'Attachments' },
+  { id: 7, label: 'Order confirmed' },
   { id: 8, label: 'Review' },
 ];
 
@@ -2335,27 +2335,91 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
         );
       case 7:
         return (
-          <div className="step-content animate-fade-in">
-            <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '1.5rem', color: '#1E293B' }}>Project Attachments</h3>
-            <div style={{
-              border: '2px dashed #6366F1', borderRadius: '12px', padding: '4rem 2rem',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              backgroundColor: '#F5F3FF', textAlign: 'center'
-            }}>
-              <UploadCloud size={48} color="#6366F1" style={{ marginBottom: '1rem' }} />
-              <h4 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1E293B', marginBottom: '0.5rem' }}>Drag and drop files here</h4>
-              <p style={{ fontSize: '0.875rem', color: '#64748B', marginBottom: '1.5rem', maxWidth: '400px' }}>
-                Supports Site Photos, CAD drawings, BOQ spreadsheets, Soil reports, and PDFs up to 50MB
+          <div className="step-content animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', height: '100%' }}>
+            
+            {/* Left Column - Attachments */}
+            <div>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '1.5rem', color: '#1E293B' }}>Project Attachments</h3>
+              <div style={{
+                border: '1px dashed #CBD5E1', borderRadius: '12px', padding: '4rem 2rem',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                backgroundColor: '#F8FAFC', textAlign: 'center'
+              }}>
+                <UploadCloud size={48} color="#94A3B8" style={{ marginBottom: '1rem' }} />
+                <h4 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#334155', marginBottom: '0.5rem' }}>Drag and drop files here</h4>
+                <p style={{ fontSize: '0.875rem', color: '#94A3B8', marginBottom: '1.5rem', maxWidth: '400px' }}>
+                  Supports Site Photos, CAD drawings, BOQ spreadsheets, Soil reports, and PDFs up to 50MB
+                </p>
+                <button type="button" style={{
+                  backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', padding: '0.75rem 1.5rem',
+                  borderRadius: '8px', fontWeight: '600', color: '#475569', cursor: 'pointer',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                }}>Select Files (Simulate Upload)</button>
+              </div>
+              <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94A3B8', marginTop: '2rem' }}>
+                No files uploaded yet. Click above to simulate an upload.
               </p>
-              <button type="button" style={{
-                backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', padding: '0.75rem 1.5rem',
-                borderRadius: '8px', fontWeight: '600', color: '#475569', cursor: 'pointer',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-              }}>Select Files (Simulate Upload)</button>
             </div>
-            <p style={{ textAlign: 'center', fontSize: '0.875rem', color: '#94A3B8', marginTop: '1.5rem' }}>
-              No files uploaded yet. Click above to simulate an upload.
-            </p>
+
+            {/* Right Column - Sidebar Widgets */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', borderLeft: '1px solid #E2E8F0', paddingLeft: '2rem' }}>
+              
+              {/* Lead Score Card */}
+              <div style={{ border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'flex', gap: '1.5rem', alignItems: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+                <div style={{ width: '60px', height: '60px', borderRadius: '50%', border: '4px solid #F1F5F9', borderTopColor: '#4F46E5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: '800', color: '#1E293B', flexShrink: 0 }}>
+                  40
+                </div>
+                <div>
+                  <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1rem', fontWeight: '700', color: '#1E293B' }}>Lead Score</h4>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B', lineHeight: '1.4' }}>Calculated dynamically based on completed detail fields.</p>
+                </div>
+              </div>
+
+              {/* Assignments & Reminders */}
+              <div style={{ border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.875rem', color: '#64748B' }}>Assigned Executive</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1E293B' }}>Sarah Smith</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.875rem', color: '#64748B' }}>Last Follow-up</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1E293B' }}>Never</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.875rem', color: '#64748B' }}>Next Reminder</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1E293B' }}>None Set</span>
+                </div>
+              </div>
+
+              {/* Recent Notes */}
+              <div style={{ border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+                <h4 style={{ margin: 0, fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Recent Notes</h4>
+                <div style={{ backgroundColor: '#F8FAFC', padding: '1rem', borderRadius: '8px', border: '1px dashed #E2E8F0', textAlign: 'center' }}>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#94A3B8', fontStyle: 'italic' }}>No notes added. Type below and press Enter to save.</p>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <input type="text" placeholder="Add a fast note..." style={{ flex: 1, padding: '0.6rem 1rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
+                  <button type="button" style={{ width: '36px', height: '36px', borderRadius: '8px', border: '1px solid #E2E8F0', backgroundColor: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748B' }}>
+                    <Plus size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Activity Timeline */}
+              <div style={{ border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+                <h4 style={{ margin: 0, fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Activity Timeline</h4>
+                <div style={{ position: 'relative', paddingLeft: '1rem' }}>
+                   <div style={{ display: 'flex', gap: '1rem', position: 'relative' }}>
+                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#4F46E5', flexShrink: 0, zIndex: 1, position: 'absolute', left: '-11px', top: '6px' }}></div>
+                     <div>
+                       <h5 style={{ margin: '0 0 0.25rem 0', fontSize: '0.875rem', fontWeight: '700', color: '#475569' }}>Lead Form initialized</h5>
+                       <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>Just Now</span>
+                     </div>
+                   </div>
+                </div>
+              </div>
+
+            </div>
           </div>
         );
       case 8:
