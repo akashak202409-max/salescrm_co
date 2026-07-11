@@ -595,10 +595,10 @@ const LeadManagement = () => {
     const lead = leads.find(l => l.id === id);
     if (!lead || lead.status === newStatus) return;
 
-    if (newStatus === 'APPT FIXED') {
+    if (newStatus === 'Appointment Fixed') {
       setActiveApptLeadId(id);
       setIsApptModalOpen(true);
-    } else if (newStatus === 'QUOTATION SEND') {
+    } else if (newStatus === 'Quotation Sent') {
       setGenQuoteLeadId(id);
       setGenQuoteDetails({
         leadId: lead.id,
@@ -610,7 +610,7 @@ const LeadManagement = () => {
         file: null
       });
       setIsGenQuoteModalOpen(true);
-    } else if (newStatus === 'NEW') {
+    } else if (newStatus === 'New Lead') {
       const formattedTime = getFormattedTimestamp();
       setLeads(leads.map(l => {
         if (l.id === id) {
