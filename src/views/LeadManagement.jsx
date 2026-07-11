@@ -478,13 +478,13 @@ const LeadManagement = () => {
   const [isGenQuoteModalOpen, setIsGenQuoteModalOpen] = useState(false);
   const [genQuoteLeadId, setGenQuoteLeadId] = useState(null);
   const [genQuoteDetails, setGenQuoteDetails] = useState({
-    leadId: '',
-    client: '',
-    project: '',
-    approvalStatus: 'Pending',
-    quotationStatus: 'In Preparation',
-    quotationType: 'Initial',
-    file: null
+    leadId: '', client: '', project: '', approvalStatus: '', quotationStatus: '', quotationType: '', file: null
+  });
+
+  const [isProjectFileModalOpen, setIsProjectFileModalOpen] = useState(false);
+  const [projectFileLeadId, setProjectFileLeadId] = useState(null);
+  const [projectFileDetails, setProjectFileDetails] = useState({
+    leadId: '', clientName: '', projectLocation: '', projectType: '', mobile: ''
   });
 
   const addToast = useToast();
@@ -610,6 +610,16 @@ const LeadManagement = () => {
         file: null
       });
       setIsGenQuoteModalOpen(true);
+    } else if (newStatus === 'Project Filing') {
+      setProjectFileLeadId(id);
+      setProjectFileDetails({
+        leadId: lead.id,
+        clientName: lead.name || '',
+        projectLocation: lead.projectLocation || '',
+        projectType: lead.projectType || '',
+        mobile: lead.phone || ''
+      });
+      setIsProjectFileModalOpen(true);
     } else if (newStatus === 'New Lead') {
       const formattedTime = getFormattedTimestamp();
       setLeads(leads.map(l => {
