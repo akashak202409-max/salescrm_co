@@ -481,6 +481,9 @@ const LeadManagement = () => {
   const [genQuoteDetails, setGenQuoteDetails] = useState({
     leadId: '', client: '', project: '', approvalStatus: '', quotationStatus: '', quotationType: '', file: null
   });
+  const [isProjectFileModalOpen, setIsProjectFileModalOpen] = useState(false);
+  const [projectFileLeadId, setProjectFileLeadId] = useState(null);
+
 
 
 
@@ -1979,6 +1982,37 @@ const LeadManagement = () => {
           </div>
         </div>
       )}
+
+    
+      {/* --- NEW PROJECT FILE MODAL --- */}
+      <NewHandoverFormModal
+        isOpen={isProjectFileModalOpen}
+        onClose={() => {
+          setIsProjectFileModalOpen(false);
+          setProjectFileLeadId(null);
+        }}
+        lead={leads.find(l => l.id === projectFileLeadId)}
+        onSubmit={(data) => {
+          const formattedTime = getFormattedTimestamp();
+          setLeads(leads.map(l => {
+            if (l.id === projectFileLeadId) {
+              return { 
+                ...l, 
+                status: 'Project Filing',
+                history: [...(l.history || []), {
+                  timestamp: formattedTime,
+                  message: `Project Handover Submitted`,
+                  remark: ''
+                }]
+              };
+            }
+            return l;
+          }));
+          addToast('Project Handover Form Submitted!', 'success');
+          setIsProjectFileModalOpen(false);
+          setProjectFileLeadId(null);
+        }}
+      />
 
     </div>
   );
