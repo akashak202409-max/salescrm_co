@@ -794,6 +794,25 @@ const LeadManagement = () => {
     });
   };
 
+  const updateLeadFollowUp = (id, newFollowUp) => {
+    const formattedTime = getFormattedTimestamp();
+    setLeads(leads.map(l => {
+      if (l.id === id) {
+        return { 
+          ...l, 
+          followUp: newFollowUp,
+          history: [...(l.history || []), {
+            timestamp: formattedTime,
+            message: `Updated Follow-Up to: ${newFollowUp}`,
+            remark: ''
+          }]
+        };
+      }
+      return l;
+    }));
+    addToast('Follow-Up date updated!', 'success');
+  };
+
   const updateLeadManager = (id, newManager) => {
     const formattedTime = getFormattedTimestamp();
     setLeads(leads.map(l => {
@@ -1454,7 +1473,29 @@ const LeadManagement = () => {
                     <option value="Alex Wong">Alex Wong</option>
                   </select>
                 </td>
-                <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>{lead.followUp}</td>
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
+                  <input 
+                    type="text" 
+                    value={lead.followUp || ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setLeads(leads.map(l => l.id === lead.id ? { ...l, followUp: val } : l));
+                    }}
+                    onBlur={(e) => updateLeadFollowUp(lead.id, e.target.value)}
+                    placeholder="Set date..."
+                    style={{
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: '4px',
+                      border: '1px solid var(--border-color)',
+                      fontSize: '0.8125rem',
+                      backgroundColor: 'var(--surface-color)',
+                      color: 'var(--text-main)',
+                      width: '100px',
+                      textAlign: 'center',
+                      outline: 'none'
+                    }}
+                  />
+                </td>
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
                     <button 
