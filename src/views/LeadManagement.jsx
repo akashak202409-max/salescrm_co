@@ -608,25 +608,8 @@ const LeadManagement = () => {
       });
       setIsGenQuoteModalOpen(true);
     } else if (newStatus === 'Project Filing') {
-      const formattedTime = getFormattedTimestamp();
-      setLeads(leads.map(l => {
-        if (l.id === id) {
-          return { 
-            ...l, 
-            status: 'Project Filing',
-            history: [...(l.history || []), {
-              timestamp: formattedTime,
-              message: `Initiated Project Filing`,
-              remark: ''
-            }]
-          };
-        }
-        return l;
-      }));
-      
-      // Navigate to Project Filing and open the form with the lead data
-      navigate('/projects', { state: { openForm: true, lead: lead } });
-      
+      setProjectFileLeadId(id);
+      setIsProjectFileModalOpen(true);
     } else if (newStatus === 'New Lead') {
       const formattedTime = getFormattedTimestamp();
       setLeads(leads.map(l => {
