@@ -134,7 +134,7 @@ const initialLeadsData = [
     phone: '+91 95432 10987',
     source: 'Website Enquiry',
     budget: '₹400k',
-    status: 'Negotiation',
+    status: 'Quotation Sent',
     manager: 'John Doe',
     followUp: 'Next Week',
     priority: 'High',
@@ -541,8 +541,6 @@ const LeadManagement = () => {
         matchesStatus = statusLower.includes('appointment') || statusLower.includes('appt');
       } else if (statusFilter === 'Quotation Send') {
         matchesStatus = statusLower.includes('quot');
-      } else if (statusFilter === 'Negotiation') {
-        matchesStatus = statusLower.includes('negot');
       } else if (statusFilter === 'Order Confirmed') {
         matchesStatus = statusLower.includes('order');
       } else if (statusFilter === 'Junk') {
@@ -1168,17 +1166,7 @@ const LeadManagement = () => {
             isSelected={statusFilter === 'Quotation Send'}
             onClick={() => toggleFilter('Quotation Send')}
           />
-          <LeadOverviewCard 
-            title="Negotiation" 
-            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('negot')).length} 
-            subtitle="In discussion" 
-            icon={FileSignature} 
-            color="#D97706" 
-            bg="#FFFBEB" 
-            borderColor="#FDE68A" 
-            isSelected={statusFilter === 'Negotiation'}
-            onClick={() => toggleFilter('Negotiation')}
-          />
+          
           <LeadOverviewCard 
             title="Order Confirmed" 
             value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('order')).length} 
@@ -1304,7 +1292,7 @@ const LeadManagement = () => {
                     <option value="Cold" style={{ color: 'var(--text-main)' }}>COLD</option>
                     <option value="Appt. Fixed" style={{ color: 'var(--text-main)' }}>APPT FIXED</option>
                     <option value="Quotation Send" style={{ color: 'var(--text-main)' }}>QUOTATION SEND</option>
-                    <option value="Negotiation" style={{ color: 'var(--text-main)' }}>NEGOTIATION</option>
+                    
                     <option value="Order Confirmed" style={{ color: 'var(--text-main)' }}>ORDER CONFIRMED</option>
                     <option value="Project Filing" style={{ color: 'var(--text-main)' }}>PROJECT FILING</option>
                     <option value="Junk" style={{ color: 'var(--text-main)' }}>JUNK</option>
