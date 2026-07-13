@@ -185,7 +185,7 @@ const ProjectFiling = () => {
   const labelStyle = { display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' };
   const inputStyle = { width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #cbd5e1', backgroundColor: '#f8fafc', fontSize: '0.95rem', color: '#0f172a', outline: 'none', transition: 'border-color 0.2s ease, box-shadow 0.2s ease' };
   
-  const grid2Col = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' };
+  const grid2Col = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' };
   const grid3Col = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' };
 
   return (
@@ -355,7 +355,7 @@ const ProjectFiling = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginTop: '1rem', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem', marginTop: '1rem', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: '500', color: '#1e293b' }}>
                   <input type="checkbox" name="design3D" checked={formData.design3D} onChange={handleChange} style={{ width: '18px', height: '18px' }} />
                   3D Design
@@ -428,7 +428,7 @@ const ProjectFiling = () => {
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {(formData.paymentTerms || []).map((pt, idx) => (
-                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.5fr auto', gap: '1rem', alignItems: 'end', backgroundColor: '#F8FAFC', padding: '1rem', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '1rem', alignItems: 'end', backgroundColor: '#F8FAFC', padding: '1rem', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
                       <div>
                         <label style={{...labelStyle, fontSize: '0.7rem'}}>Term / Milestone</label>
                         <input type="text" placeholder="e.g. Advance Payment" style={inputStyle} value={pt.term} onChange={e => handlePaymentTermChange(idx, 'term', e.target.value)} />
