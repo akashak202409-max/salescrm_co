@@ -10,7 +10,8 @@ export default function RecordPaymentModal({ isOpen, onClose, onSave }) {
     method: 'Bank Transfer',
     transactionId: '',
     paymentDate: new Date().toISOString().split('T')[0],
-    notes: ''
+    notes: '',
+    whom: ''
   });
 
   if (!isOpen) return null;
@@ -158,10 +159,21 @@ export default function RecordPaymentModal({ isOpen, onClose, onSave }) {
               <div>
                 <label style={labelStyle}>Payment Date</label>
                 <div style={{ position: 'relative' }}>
-                  <Calendar size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
+                  <Calendar size={16} color="#64748B" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
                   <input type="date" name="paymentDate" value={formData.paymentDate} onChange={handleChange} style={{ ...inputStyle, paddingLeft: '2.5rem' }} />
                 </div>
               </div>
+              {formData.method === 'Cash' && (
+                <div>
+                  <label style={labelStyle}>Whom</label>
+                  <select name="whom" value={formData.whom} onChange={handleChange} style={inputStyle}>
+                    <option value="">Select receiver</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Executive">Executive</option>
+                  </select>
+                </div>
+              )}
             </div>
           </div>
 
