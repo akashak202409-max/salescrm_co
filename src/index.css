@@ -1,6 +1,6 @@
 :root {
-  --primary-color: #312E81; /* Deep Indigo */
-  --secondary-color: #4F46E5; /* Blue */
+  --primary-color: #1E1B4B; /* Very Dark Indigo / Navy */
+  --secondary-color: #312E81; /* Slightly lighter shade for hover/accents */
   --success-color: #22C55E; /* Green */
   --warning-color: #F59E0B; /* Orange */
   --background-light: #F8FAFC; /* Light gray */
