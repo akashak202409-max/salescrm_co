@@ -392,11 +392,19 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
 
                  {formData.customProjectType === 'Tensile Roofing' && (
                    <>
-                     <div style={{ marginBottom: '1rem' }}>
+                     <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Fabric Material</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                          {['PVC', 'PTFE', 'ETFE', 'HDPE Shade Net'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.fabricMaterial === t} onClick={() => handleChange('fabricMaterial', t)} />
+                         ))}
+                       </div>
+                     </div>
+                     <div style={{ marginBottom: '1.5rem' }}>
+                       <label style={labelStyle}>TENSILE FABRIC GSM</label>
+                       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                         {['650 GSM', '700 GSM', '750 GSM', '800 GSM', '850 GSM', '900 GSM', '950 GSM', '1000 GSM', '1050 GSM', '1100 GSM', '1200 GSM', '1300 GSM', '1400 GSM', '1500 GSM', 'Custom GSM'].map(t => (
+                           <SelectPill key={t} label={t} selected={formData.tensileFabricGsm === t} onClick={() => handleChange('tensileFabricGsm', t)} />
                          ))}
                        </div>
                      </div>
