@@ -253,6 +253,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                   <option value="Order Confirmed">ORDER CONFIRMED</option>
                   <option value="Project Filing">PROJECT FILING</option>
                   <option value="Junk">JUNK</option>
+                  <option value="Lost">LOST</option>
                 </select>
               </div>
             </div>

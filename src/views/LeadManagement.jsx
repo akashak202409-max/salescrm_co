@@ -1314,6 +1314,7 @@ const LeadManagement = () => {
                     <option value="Order Confirmed" style={{ color: 'var(--text-main)' }}>ORDER CONFIRMED</option>
                     <option value="Project Filing" style={{ color: 'var(--text-main)' }}>PROJECT FILING</option>
                     <option value="Junk" style={{ color: 'var(--text-main)' }}>JUNK</option>
+                    <option value="Lost" style={{ color: 'var(--text-main)' }}>LOST</option>
                   </select>
                 </th>
                  <th style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
@@ -1449,6 +1450,7 @@ const LeadManagement = () => {
                     <option value="Order Confirmed">ORDER CONFIRMED</option>
                     <option value="Project Filing">PROJECT FILING</option>
                     <option value="Junk">JUNK</option>
+                    <option value="Lost">LOST</option>
                   </select>
                 </td>
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
