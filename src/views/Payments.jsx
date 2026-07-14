@@ -38,6 +38,14 @@ export default function Payments() {
   const [search, setSearch] = useState('');
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
+
+  const filteredPayments = payments.filter(payment => {
+    const matchStatus = !statusFilter || payment.status === statusFilter;
+    const matchDate = !dateFilter || payment.dueDate === dateFilter;
+    return matchStatus && matchDate;
+  });
 
   const handleDateChange = (id, newDate) => {
     setPayments(payments.map(p => p.id === id ? { ...p, dueDate: newDate } : p));
@@ -85,12 +93,35 @@ export default function Payments() {
         
         {/* Table Filters Header */}
         <div style={{ padding: '1.5rem', borderBottom: '1px solid #E2E8F0', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
-           <select style={{ padding: '0.6rem 2rem 0.6rem 1rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none', backgroundColor: '#F8FAFC' }}>
-             <option>Filter by Status</option>
+           <select 
+             value={statusFilter} 
+             onChange={(e) => setStatusFilter(e.target.value)}
+             style={{ padding: '0.6rem 2rem 0.6rem 1rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none', backgroundColor: '#F8FAFC' }}
+           >
+             <option value="">Filter by Status</option>
+             <option value="Paid">Paid</option>
+             <option value="Pending">Pending</option>
+             <option value="Partially Paid">Partially Paid</option>
+             <option value="Overdue">Overdue</option>
            </select>
-           <button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', color: '#475569', fontWeight: '600', cursor: 'pointer', fontSize: '0.875rem' }}>
-             <Calendar size={16} /> Date Range
-           </button>
+           
+           <div style={{ position: 'relative', display: 'flex', alignItems: 'center', backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.6rem 1rem', color: '#475569', fontSize: '0.875rem' }}>
+             <Calendar size={16} style={{ marginRight: '0.5rem' }} />
+             <input 
+               type="date" 
+               value={dateFilter} 
+               onChange={(e) => setDateFilter(e.target.value)} 
+               style={{ border: 'none', outline: 'none', backgroundColor: 'transparent', color: '#475569', fontFamily: 'inherit', fontSize: 'inherit' }} 
+             />
+             {dateFilter && (
+               <button 
+                 onClick={() => setDateFilter('')} 
+                 style={{ marginLeft: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8', display: 'flex', alignItems: 'center' }}
+               >
+                 <X size={14} />
+               </button>
+             )}
+           </div>
         </div>
 
         {/* The Data Table */}
@@ -113,7 +144,7 @@ export default function Payments() {
               </tr>
             </thead>
             <tbody>
-              {payments.map((payment) => (
+              {filteredPayments.map((payment) => (
                 <tr 
                   key={payment.id} 
                   style={{ borderBottom: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', transition: 'background-color 0.2s', cursor: 'pointer' }}
