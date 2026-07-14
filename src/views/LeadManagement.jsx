@@ -39,7 +39,7 @@ const initialLeadsData = [
     budget: '₹100k',
     status: 'New Lead',
     manager: 'Unassigned',
-    followUp: 'No Date',
+    followUp: '',
     priority: 'Medium',
     notes: 'Sample reference lead.',
     history: [
@@ -57,7 +57,7 @@ const initialLeadsData = [
     budget: '₹500k',
     status: 'Hot',
     manager: 'John Doe',
-    followUp: 'Tomorrow',
+    followUp: '2026-07-15',
     priority: 'High',
     notes: 'Interested in large tensile structure.',
     history: []
@@ -73,7 +73,7 @@ const initialLeadsData = [
     budget: '₹150k',
     status: 'Warm',
     manager: 'Jane Smith',
-    followUp: 'Next Week',
+    followUp: '2026-07-21',
     priority: 'Medium',
     notes: 'Requires warehouse shed.',
     history: []
@@ -89,7 +89,7 @@ const initialLeadsData = [
     budget: '₹200k',
     status: 'Cold',
     manager: 'Unassigned',
-    followUp: 'No Date',
+    followUp: '',
     priority: 'Low',
     notes: 'Checking prices only.',
     history: []
@@ -105,7 +105,7 @@ const initialLeadsData = [
     budget: '₹800k',
     status: 'Appointment Fixed',
     manager: 'Mike Johnson',
-    followUp: 'Today',
+    followUp: '2026-07-14',
     priority: 'High',
     notes: 'Site visit scheduled.',
     history: []
@@ -121,7 +121,7 @@ const initialLeadsData = [
     budget: '₹300k',
     status: 'Quotation Sent',
     manager: 'Jane Smith',
-    followUp: 'Tomorrow',
+    followUp: '2026-07-15',
     priority: 'Medium',
     notes: 'Sent quote for canopy.',
     history: []
@@ -137,7 +137,7 @@ const initialLeadsData = [
     budget: '₹400k',
     status: 'Quotation Sent',
     manager: 'John Doe',
-    followUp: 'Next Week',
+    followUp: '2026-07-21',
     priority: 'High',
     notes: 'Discussing final discount.',
     history: []
@@ -169,7 +169,7 @@ const initialLeadsData = [
     budget: '₹60k',
     status: 'Junk',
     manager: 'Unassigned',
-    followUp: 'No Date',
+    followUp: '',
     priority: 'Low',
     notes: 'Out of service area.',
     history: []
@@ -185,7 +185,7 @@ const initialLeadsData = [
     budget: '₹250k',
     status: 'New Lead',
     manager: 'Jane Smith',
-    followUp: 'Tomorrow',
+    followUp: '2026-07-15',
     priority: 'High',
     notes: 'Needs urgent installation.',
     history: []
@@ -201,7 +201,7 @@ const initialLeadsData = [
     budget: '₹600k',
     status: 'Warm',
     manager: 'John Doe',
-    followUp: 'Next Week',
+    followUp: '2026-07-21',
     priority: 'Medium',
     notes: 'Requires showroom structure.',
     history: []
@@ -1474,7 +1474,7 @@ const LeadManagement = () => {
                 </td>
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <input 
-                    type="text" 
+                    type="date" 
                     value={lead.followUp || ''}
                     onChange={(e) => {
                       const val = e.target.value;
