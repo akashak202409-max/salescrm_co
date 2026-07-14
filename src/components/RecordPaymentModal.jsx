@@ -109,26 +109,6 @@ export default function RecordPaymentModal({ isOpen, onClose, onSave }) {
         {/* Form Body */}
         <div className="pay-scroll" style={{ padding: '2rem', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           
-          {/* Section 1: Invoice & Client Info */}
-          <div style={{ backgroundColor: '#FFFFFF', padding: '1.5rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-            <h3 style={{ margin: '0 0 1.25rem 0', fontSize: '1rem', fontWeight: '700', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <FileText size={18} color="var(--primary-color)" /> Invoice & Client Details
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-              <div style={{ gridColumn: 'span 2' }}>
-                <label style={labelStyle}>Invoice / Reference ID</label>
-                <input type="text" name="invoiceId" value={formData.invoiceId} onChange={handleChange} placeholder="e.g. INV-1025 (Optional)" style={inputStyle} />
-              </div>
-              <div>
-                <label style={labelStyle}>Customer Name</label>
-                <input type="text" name="customer" value={formData.customer} onChange={handleChange} placeholder="e.g. Sarah Jenkins" style={inputStyle} />
-              </div>
-              <div>
-                <label style={labelStyle}>Company Name</label>
-                <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="e.g. Nexus Retail" style={inputStyle} />
-              </div>
-            </div>
-          </div>
 
           {/* Section 2: Transaction Details */}
           <div style={{ backgroundColor: '#FFFFFF', padding: '1.5rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
