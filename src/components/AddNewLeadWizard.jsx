@@ -227,6 +227,18 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                   <input type="number" placeholder="Enter project value" style={{ ...inputStyle, paddingLeft: '2rem' }} value={formData.projectValue || ''} onChange={e => handleChange('projectValue', e.target.value ? parseInt(e.target.value, 10) : '')} />
                 </div>
               </div>
+              <div>
+                <label style={labelStyle}>Expected Timeline</label>
+                <select style={inputStyle} value={formData.expectedTimeline || ''} onChange={e => handleChange('expectedTimeline', e.target.value)}>
+                  <option value="" disabled>Select Expected Timeline</option>
+                  <option value="Immediately">Immediately</option>
+                  <option value="15 Days">15 Days</option>
+                  <option value="1 Month">1 Month</option>
+                  <option value="2 Months">2 Months</option>
+                  <option value="3 Months">3 Months</option>
+                  <option value="6 Months+">6 Months+</option>
+                </select>
+              </div>
             </div>
             
 
