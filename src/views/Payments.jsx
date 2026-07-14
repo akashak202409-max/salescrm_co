@@ -96,8 +96,6 @@ export default function Payments() {
               <tr>
                 <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Invoice ID</th>
                 <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Customer</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Company</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Milestone</th>
                 <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Order Value</th>
                 <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Amount Collect</th>
                 <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Status</th>
@@ -117,8 +115,6 @@ export default function Payments() {
                 >
                   <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '600', color: 'var(--primary-color)', whiteSpace: 'nowrap' }}>{payment.id}</td>
                   <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '600', color: '#1E293B', whiteSpace: 'nowrap' }}>{payment.customer}</td>
-                  <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#475569', whiteSpace: 'nowrap' }}>{payment.company}</td>
-                  <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#475569', whiteSpace: 'nowrap' }}>{payment.milestone}</td>
                   <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '700', color: '#1E293B', whiteSpace: 'nowrap' }}>{payment.amountDue}</td>
                   <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '700', color: '#10B981', whiteSpace: 'nowrap' }}>{payment.amountPaid}</td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{getStatusBadge(payment.status)}</td>
