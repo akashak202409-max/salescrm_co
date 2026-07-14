@@ -2758,100 +2758,173 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
         );
       case 8:
         return (
+
           <div className="step-content animate-fade-in">
-             <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '0.5rem', color: '#1E293B' }}>Review Lead Requirements</h3>
-             <p style={{ fontSize: '0.875rem', color: '#64748B', marginBottom: '1.5rem' }}>Verify all parameters below before confirming saving lead records.</p>
-             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-               
+             <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '1.5rem', color: '#1E293B' }}>Review Information</h3>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+             
                {/* 1. Basic Info */}
                <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0' }}>
+                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0' }}>
                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>1. Basic Information</h4>
                  </div>
-                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1.5rem' }}>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Name:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.name || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Company:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.companyName || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Phone:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.phone || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Email:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.email || 'N/A'}</span></div>
-                   
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Location:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.projectLocation || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Sales Executive:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.assignedExecutive}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Next Follow-up:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.nextFollowUp || 'Not Set'}</span></div>
+                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                   {[
+                     { label: 'Customer Name', value: formData.name },
+                     { label: 'Company Name', value: formData.companyName },
+                     { label: 'Phone', value: formData.phone },
+                     { label: 'Alt Mobile', value: formData.altMobile },
+                     { label: 'Email', value: formData.email },
+                     { label: 'Lead Source', value: formData.source },
+                     { label: 'Service', value: formData.projectType },
+                     { label: 'Project Location', value: formData.projectLocation },
+                     { label: 'Assigned Executive', value: formData.assignedExecutive },
+                     { label: 'Expected Timeline', value: formData.expectedTimeline },
+                     { label: 'Next Follow-up', value: formData.nextFollowUp },
+                     { label: 'Status', value: formData.status },
+                   ].filter(item => item.value).map((item, idx) => (
+                     <div key={idx}>
+                       <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>{item.label}:</span>
+                       <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{item.value}</span>
+                     </div>
+                   ))}
                  </div>
                </div>
 
                {/* 2. Project Details */}
                <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0' }}>
+                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0' }}>
                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>2. Project Details</h4>
                  </div>
-                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Service Type:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.projectType === 'Other roofing' ? formData.customProjectType : formData.projectType}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Project Type:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.projectTypeDetail || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Priority:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.priority || 'Medium'}</span></div>
+                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                   {[
+                     { label: 'Priority', value: formData.priority },
+                     { label: 'Structure Type', value: formData.structureType === 'Other' ? formData.custom_structureType : formData.structureType },
+                     { label: 'Installation Area', value: formData.installationArea === 'Other' ? formData.custom_installationArea : formData.installationArea },
+                     { label: 'Project Size', value: formData.projectSize },
+                     { label: 'Existing Structure', value: formData.existingStructure ? 'Yes' : 'No' },
+                     { label: 'Site Condition', value: formData.siteCondition === 'Other' ? formData.custom_siteCondition : formData.siteCondition },
+                     { label: 'Design 3D Required', value: formData.design3D ? 'Yes' : 'No' },
+                   ].filter(item => item.value !== undefined && item.value !== '').map((item, idx) => (
+                     <div key={idx}>
+                       <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>{item.label}:</span>
+                       <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{String(item.value)}</span>
+                     </div>
+                   ))}
                  </div>
                </div>
-               
+
                {/* 3. Site Dimensions */}
                <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0' }}>
+                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0' }}>
                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>3. Site Dimensions</h4>
                  </div>
-                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1.5rem' }}>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Length:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.length || '0'} ft</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Width:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.width || '0'} ft</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Side Height:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.sideHeight || '0'} ft</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Center Height:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.centerHeight || '0'} ft</span></div>
+                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                   {[
+                     { label: 'Total Area', value: formData.totalArea },
+                     { label: 'Approx Area', value: formData.approxArea },
+                     { label: 'Length', value: formData.length ? `${formData.length} ft` : '' },
+                     { label: 'Width', value: formData.width ? `${formData.width} ft` : '' },
+                     { label: 'Side Height', value: formData.sideHeight ? `${formData.sideHeight} ft` : '' },
+                     { label: 'Center Height', value: formData.centerHeight ? `${formData.centerHeight} ft` : '' },
+                     { label: 'Eave Height', value: formData.eaveHeight },
+                     { label: 'Clear Height', value: formData.clearHeight },
+                     { label: 'Plot Length', value: formData.plotLength },
+                     { label: 'Plot Width', value: formData.plotWidth },
+                   ].filter(item => item.value).map((item, idx) => (
+                     <div key={idx}>
+                       <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>{item.label}:</span>
+                       <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{item.value}</span>
+                     </div>
+                   ))}
                  </div>
                </div>
                
                {/* 4. Technical Details */}
                <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0' }}>
+                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0' }}>
                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>4. Technical Details</h4>
                  </div>
-                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Soil Type:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.soilType || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Foundation Requirement:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.foundationRequirement || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Crane Requirement:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.craneRequirement || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Power & Access:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.heavyEquipmentAccess ? 'Heavy Equip Access' : 'No Heavy Equip'}, {formData.powerAvailability ? 'Power Available' : 'No Power'}</span></div>
-                 </div>
-               </div>
-               
-               {/* 5. Quotations */}
-               <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0' }}>
-                   <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>5. Quotations</h4>
-                 </div>
-                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF' }}>
-                   <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>Quotation details configured in Step 5.</span>
+                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                   {[
+                     { label: 'Soil Type', value: formData.soilType === 'Other' ? formData.custom_soilType : formData.soilType },
+                     { label: 'Structure Grade', value: formData.structureGrade },
+                     { label: 'Material Thickness', value: formData.materialThickness },
+                     { label: 'Roof Material', value: formData.roofMaterial === 'Other' ? formData.custom_roofMaterial : formData.roofMaterial },
+                     { label: 'Fabric Material', value: formData.fabricMaterial === 'Other' ? formData.custom_fabricMaterial : formData.fabricMaterial },
+                     { label: 'Fabric GSM', value: formData.fabricGsm === 'Other' ? formData.custom_fabricGsm : formData.fabricGsm },
+                     { label: 'Wind Load', value: formData.windLoad },
+                     { label: 'Seismic Zone', value: formData.seismicZone },
+                     { label: 'Water Drainage', value: formData.waterDrainage },
+                     { label: 'Safety Film', value: formData.safetyFilm ? 'Yes' : 'No' },
+                   ].filter(item => item.value !== undefined && item.value !== '').map((item, idx) => (
+                     <div key={idx}>
+                       <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>{item.label}:</span>
+                       <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{String(item.value)}</span>
+                     </div>
+                   ))}
                  </div>
                </div>
 
-               {/* 6. Order Confirmed / Attachments */}
+               {/* 5. Quotations */}
                <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0' }}>
-                   <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>6. Order Confirmed</h4>
+                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0' }}>
+                   <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>5. Quotations</h4>
+                 </div>
+                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                   {[
+                     { label: 'Quotation Generated', value: formData.quotationGenerated ? 'Yes' : 'Pending' },
+                     { label: 'Estimated Revenue', value: formData.estimatedRevenue },
+                   ].filter(item => item.value !== undefined && item.value !== '').map((item, idx) => (
+                     <div key={idx}>
+                       <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>{item.label}:</span>
+                       <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{String(item.value)}</span>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+
+               {/* 6. Order Confirmed */}
+               <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
+                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0' }}>
+                   <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>6. Order Confirmed (Attachments)</h4>
                  </div>
                  <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF' }}>
-                   <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>Files uploaded in Step 6.</span>
+                   <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>
+                     {formData.attachments && formData.attachments.length > 0 ? `${formData.attachments.length} files attached.` : 'No files attached.'}
+                   </span>
                  </div>
                </div>
 
                {/* 7. Project Filing */}
-               <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden', marginTop: '1.5rem' }}>
-                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0' }}>
+               <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
+                 <div style={{ backgroundColor: '#F8FAFC', padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0' }}>
                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: '700', color: '#334155' }}>7. Project Filing</h4>
                  </div>
-                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Quoted Price:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.quotedPrice || 'N/A'}</span></div>
-                   <div><span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>Completion Date:</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{formData.completionDate || 'N/A'}</span></div>
+                 <div style={{ padding: '1.5rem', backgroundColor: '#FFFFFF', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                   {[
+                     { label: 'Final Client Name', value: formData.clientName },
+                     { label: 'Billing Name', value: formData.billingName },
+                     { label: 'Billing Address', value: formData.billingAddress },
+                     { label: 'Site Address', value: formData.siteAddress },
+                     { label: 'Quoted Price', value: formData.quotedPrice },
+                     { label: 'Final GST (%)', value: formData.gst },
+                     { label: 'Expected Start Date', value: formData.startDate },
+                     { label: 'Completion Date', value: formData.completionDate },
+                   ].filter(item => item.value).map((item, idx) => (
+                     <div key={idx}>
+                       <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>{item.label}:</span>
+                       <span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{item.value}</span>
+                     </div>
+                   ))}
                  </div>
                </div>
 
              </div>
           </div>
+
         );
+      
       default:
         return null;
     }
