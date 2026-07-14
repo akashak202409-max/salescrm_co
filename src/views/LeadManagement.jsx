@@ -1321,6 +1321,7 @@ const LeadManagement = () => {
                     <option value="Lost" style={{ color: 'var(--text-main)' }}>LOST</option>
                   </select>
                 </th>
+                 <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Design Requirement</th>
                  <th style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
                   <select
                     value={headerFilters.assignTo}
@@ -1455,6 +1456,29 @@ const LeadManagement = () => {
                     <option value="Order Confirm">ORDER CONFIRM</option>
                     <option value="Junk">JUNK</option>
                     <option value="Lost">LOST</option>
+                  </select>
+                </td>
+                {/* Design Requirement */}
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap', minWidth: '140px' }} onClick={(e) => e.stopPropagation()}>
+                  <select
+                    value={lead.designRequirement || ''}
+                    onChange={(e) => setLeads(leads.map(l => l.id === lead.id ? { ...l, designRequirement: e.target.value } : l))}
+                    style={{
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '6px',
+                      border: '1px solid #E2E8F0',
+                      fontSize: '0.8rem',
+                      outline: 'none',
+                      width: '140px',
+                      backgroundColor: '#FAFAFA',
+                      color: lead.designRequirement ? 'var(--text-main)' : '#94A3B8',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <option value="">Select...</option>
+                    <option value="2D Design">2D Design</option>
+                    <option value="3D Design">3D Design</option>
+                    <option value="Both">Both</option>
                   </select>
                 </td>
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
