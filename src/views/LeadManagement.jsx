@@ -928,6 +928,9 @@ const LeadManagement = () => {
         </div>
       </div>
 
+      {/* Global Filter Bar */}
+      <GlobalFilterBar />
+
       {/* Overview Section */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
