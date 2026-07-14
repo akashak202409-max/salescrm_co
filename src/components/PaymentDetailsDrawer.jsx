@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, UserPlus, IndianRupee, CalendarCheck, FileText, CheckCircle2, MessageSquare, ArrowRight, Activity, Download, Bell, CreditCard } from 'lucide-react';
+import { X, UserPlus, IndianRupee, CalendarCheck, FileText, CheckCircle2, MessageSquare, ArrowRight, Activity, Download, Bell, CreditCard, Building2, Save } from 'lucide-react';
+import BillingDetailsForm from './BillingDetailsForm';
 
 const PaymentDetailsDrawer = ({ payment, isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('payment_overview');
@@ -111,86 +112,7 @@ const PaymentDetailsDrawer = ({ payment, isOpen, onClose }) => {
           )}
 
           {activeTab === 'billing_details' && (
-             <div style={{ backgroundColor: '#FFFFFF', padding: '2rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-               <h3 style={{ margin: '0 0 1.5rem 0', fontSize: '1.25rem', fontWeight: '800', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                 <Building size={20} color="var(--primary-color)" /> 1. Client & Project Details
-               </h3>
-               
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                 {/* Row 1 */}
-                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Client Name *</label>
-                     <input type="text" placeholder="e.g. Sree Brindaavan Kindergarten" defaultValue={payment.customer || ''} style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Project Location *</label>
-                     <input type="text" placeholder="e.g. Chitlapakkam" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Contact Details (Phone/Email)</label>
-                     <input type="text" placeholder="e.g. 9840714353 / ..." style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                 </div>
-
-                 {/* Row 2 */}
-                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Billing Name</label>
-                     <input type="text" placeholder="e.g. Sree Brindaavan Kindergarten" defaultValue={payment.company || ''} style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Mobile Number *</label>
-                     <input type="text" placeholder="e.g. 9551269990" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Alternate Mobile Number</label>
-                     <input type="text" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                 </div>
-
-                 {/* Row 3 */}
-                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Site Address *</label>
-                     <textarea placeholder="e.g. 46, First main Road, Venkatraman Nagar, Chennai-600064" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none', resize: 'vertical', minHeight: '80px' }}></textarea>
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Billing Address</label>
-                     <textarea style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none', resize: 'vertical', minHeight: '80px' }}></textarea>
-                   </div>
-                 </div>
-
-                 {/* Row 4 */}
-                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>GST Number</label>
-                     <input type="text" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Email ID / WhatsApp Number</label>
-                     <input type="text" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Salesperson Name *</label>
-                     <input type="text" placeholder="e.g. Saleem Khan" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                 </div>
-
-                 {/* Row 5 */}
-                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Date of Order *</label>
-                     <input type="date" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none', color: '#64748B' }} />
-                   </div>
-                   <div>
-                     <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Proposal Ref No *</label>
-                     <input type="text" placeholder="e.g. TES/ENT/176-R1" style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
-                   </div>
-                   <div></div> {/* Empty column for alignment */}
-                 </div>
-               </div>
-             </div>
+            <BillingDetailsForm payment={payment} />
           )}
 
           {activeTab === 'upload_invoice' && (
