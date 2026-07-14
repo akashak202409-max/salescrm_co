@@ -1186,6 +1186,17 @@ const LeadManagement = () => {
             onClick={() => toggleFilter('Order Confirmed')}
           />
           <LeadOverviewCard 
+            title="Project Filing" 
+            value={leadsInDateRange.filter(l => (l.status||'').toLowerCase() === 'project filing').length} 
+            subtitle="Handed over to ops" 
+            icon={FileSignature} 
+            color="var(--primary-color)" 
+            bg="#EEF4FF" 
+            borderColor="#C7D2FE" 
+            isSelected={statusFilter === 'Project Filing'}
+            onClick={() => toggleFilter('Project Filing')}
+          />
+          <LeadOverviewCard 
             title="Junk" 
             value={leadsInDateRange.filter(l => (l.status||'').toLowerCase().includes('junk')).length} 
             subtitle="Unqualified leads" 
