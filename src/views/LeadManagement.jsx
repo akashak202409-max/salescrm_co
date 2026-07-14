@@ -1489,7 +1489,7 @@ const LeadManagement = () => {
                       fontSize: '0.8125rem',
                       backgroundColor: 'var(--surface-color)',
                       color: 'var(--text-main)',
-                      width: '100px',
+                      minWidth: '125px',
                       textAlign: 'center',
                       outline: 'none'
                     }}
