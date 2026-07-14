@@ -20,7 +20,7 @@ const menuItems = [
   { path: '/pipeline', label: 'Sales Pipeline', icon: KanbanSquare },
   { path: '/appointments', label: 'Appointments', icon: Calendar },
   { path: '/quotations', label: 'Quotations', icon: FileText },
-  { path: '/projects', label: 'Project Filing', icon: FolderOpen },
+  { path: '/projects', label: 'Order Confirm', icon: FolderOpen },
   { path: '/payments', label: 'Payment Collection', icon: CreditCard },
 ];
 
