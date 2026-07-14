@@ -90,18 +90,21 @@ const PaymentDetailsDrawer = ({ payment, isOpen, onClose }) => {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
                   <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Order Value</span><span style={{ fontWeight: '700', color: '#1E293B', fontSize: '1.125rem' }}>{payment.amountDue}</span></div>
                   <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Amount Collect</span><span style={{ fontWeight: '700', color: '#10B981', fontSize: '1.125rem' }}>{payment.amountPaid}</span></div>
+                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Upcoming Dues</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '1rem' }}>{payment.upcomingDues || '₹0'}</span></div>
+                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Pending Payments</span><span style={{ fontWeight: '600', color: '#F59E0B', fontSize: '1rem' }}>{payment.pendingPayments || '₹0'}</span></div>
+                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Overdue Payments</span><span style={{ fontWeight: '600', color: '#EF4444', fontSize: '1rem' }}>{payment.overduePayments || '₹0'}</span></div>
+                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Invoice Value</span><span style={{ fontWeight: '600', color: '#8B5CF6', fontSize: '1rem' }}>{payment.invoiceValue || '₹0'}</span></div>
                   <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Due Date</span><span style={{ fontWeight: '600', color: payment.status === 'Overdue' ? '#EF4444' : '#1E293B', fontSize: '0.875rem' }}>{payment.dueDate}</span></div>
-                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Milestone</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{payment.milestone}</span></div>
+                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Status</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{payment.status}</span></div>
                 </div>
               </div>
 
               <div style={{ backgroundColor: '#FFFFFF', padding: '1.5rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
                 <h3 style={{ margin: '0 0 1rem 0', fontSize: '1rem', fontWeight: '700', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <FileText size={18} color="var(--primary-color)" /> Project Reference
+                  <FileText size={18} color="var(--primary-color)" /> Payment Method
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.25rem' }}>
-                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Service Type</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{payment.service}</span></div>
-                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Total Project Value</span><span style={{ fontWeight: '700', color: '#6366F1', fontSize: '1rem' }}>₹45,00,000</span></div>
+                  <div><span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', color: '#94A3B8', marginBottom: '0.25rem', textTransform: 'uppercase' }}>Selected Method</span><span style={{ fontWeight: '600', color: '#1E293B', fontSize: '0.875rem' }}>{payment.method || '-'}</span></div>
                 </div>
               </div>
             </div>
@@ -129,7 +132,7 @@ const PaymentDetailsDrawer = ({ payment, isOpen, onClose }) => {
                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.25rem' }}>
                  <div>
                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#475569', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Invoice Value</label>
-                   <input type="number" placeholder="Enter value" style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
+                   <input type="text" placeholder="Enter value" defaultValue={payment.invoiceValue || ''} style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.875rem', outline: 'none' }} />
                  </div>
                  <div>
                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#475569', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Upload Document</label>
