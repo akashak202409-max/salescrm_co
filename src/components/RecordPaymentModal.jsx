@@ -136,7 +136,7 @@ export default function RecordPaymentModal({ isOpen, onClose, onSave }) {
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
               <div>
-                <label style={labelStyle}>Amount Paid</label>
+                <label style={labelStyle}>Amount Collect</label>
                 <div style={{ position: 'relative' }}>
                   <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#64748B', fontWeight: '600' }}>₹</span>
                   <input type="number" name="amountPaid" value={formData.amountPaid} onChange={handleChange} placeholder="0.00" style={{ ...inputStyle, paddingLeft: '2rem' }} />
