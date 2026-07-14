@@ -184,6 +184,7 @@ export default function Payments() {
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button style={{ padding: '0.4rem', border: 'none', backgroundColor: '#F1F5F9', color: '#64748B', borderRadius: '6px', cursor: 'pointer' }} title="View Details"><Eye size={14} /></button>
+                      <button style={{ padding: '0.4rem', border: 'none', backgroundColor: '#F1F5F9', color: '#64748B', borderRadius: '6px', cursor: 'pointer' }} title="Edit"><Edit2 size={14} /></button>
                       <button onClick={(e) => { e.stopPropagation(); setIsRecordModalOpen(true); }} style={{ padding: '0.4rem', border: 'none', backgroundColor: '#EEF2FF', color: 'var(--primary-color)', borderRadius: '6px', cursor: 'pointer' }} title="Record Payment"><CreditCard size={14} /></button>
                       <button style={{ padding: '0.4rem', border: 'none', backgroundColor: '#F1F5F9', color: '#64748B', borderRadius: '6px', cursor: 'pointer' }} title="Download Invoice"><Download size={14} /></button>
                     </div>
