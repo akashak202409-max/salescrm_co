@@ -2708,26 +2708,13 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
               </div>
             </div>
 
-            {/* 5 & 6. Declarations */}
+            {/* 5. Declarations */}
             <div style={{ ...sectionStyle, backgroundColor: '#f8fafc', border: '1px dashed #94a3b8' }}>
-              <h3 style={headerStyle}><PenTool size={20} color="#64748b" /> 5 & 6. Confirmations & Declarations</h3>
+              <h3 style={headerStyle}><PenTool size={20} color="#64748b" /> 5. Confirmations & Declarations</h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                  <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e293b', margin: '0 0 1rem 0' }}>5. Site Engineer Visit Completed</h4>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontWeight: '500', color: '#0f172a' }}>
-                      <input type="checkbox" name="engineerVisit" checked={formData.engineerVisit || false} onChange={e => handleChange('engineerVisit', e.target.checked)} style={{ width: '20px', height: '20px', accentColor: 'var(--primary-color)' }} />
-                      Visit Completed
-                    </label>
-                    <div style={{ flex: 1, display: formData.engineerVisit ? 'block' : 'none' }}>
-                      <input name="engineerSign" value={formData.engineerSign || ''} onChange={e => handleChange('engineerSign', e.target.value)} style={{ ...inputStyle, borderBottom: '2px solid #cbd5e1', borderTop: 'none', borderLeft: 'none', borderRight: 'none', borderRadius: 0, backgroundColor: 'transparent' }} placeholder="Site Engineer Sign / Name" />
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                  <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e293b', margin: '0 0 1rem 0' }}>6. Salesperson Declaration</h4>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e293b', margin: '0 0 1rem 0' }}>5. Salesperson Declaration</h4>
                   <label style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', cursor: 'pointer' }}>
                     <input required type="checkbox" name="salespersonDeclaration" checked={formData.salespersonDeclaration || false} onChange={e => handleChange('salespersonDeclaration', e.target.checked)} style={{ width: '24px', height: '24px', accentColor: '#10b981', marginTop: '2px' }} />
                     <span style={{ fontSize: '0.95rem', color: '#475569', lineHeight: '1.6' }}>
