@@ -20,12 +20,12 @@ const SUMMARY_CARDS = [
 ];
 
 const INITIAL_PIPELINE = [
-  { id: 'OP-1001', customer: 'Akash Kumar', company: 'ABC Builders', service: 'PEB Structure', stage: 'New Lead', pipelineStatus: 'On Track', assigned: 'John Smith', expectedClose: '25 Jul 2026', value: '₹8,50,000', probability: '25%', lastActivity: 'Today', followUp: 'Tomorrow' },
-  { id: 'OP-1002', customer: 'Sarah Jenkins', company: 'Nexus Retail', service: 'Tensile Roofing', stage: 'Qualified', pipelineStatus: 'Follow Up', assigned: 'Mike Johnson', expectedClose: '12 Aug 2026', value: '₹12,00,000', probability: '40%', lastActivity: 'Yesterday', followUp: 'Today' },
-  { id: 'OP-1003', customer: 'Ramesh Patel', company: 'Patel Logistics', service: 'PEB Structure', stage: 'Quotation Sent', pipelineStatus: 'Delayed', assigned: 'Sarah Lee', expectedClose: '30 Jul 2026', value: '₹45,00,000', probability: '60%', lastActivity: '2 Days Ago', followUp: 'Next Week' },
-  { id: 'OP-1004', customer: 'Emma Watson', company: 'Watson Industries', service: 'Other roofing', stage: 'Negotiation', pipelineStatus: 'On Track', assigned: 'John Smith', expectedClose: '05 Aug 2026', value: '₹3,25,000', probability: '85%', lastActivity: 'Today', followUp: 'Tomorrow' },
-  { id: 'OP-1005', customer: 'David Chen', company: 'Oriental Tech', service: 'Tensile Roofing', stage: 'Won', pipelineStatus: 'On Track', assigned: 'Mike Johnson', expectedClose: '10 Jul 2026', value: '₹22,50,000', probability: '100%', lastActivity: '1 Week Ago', followUp: 'None' },
-  { id: 'OP-1006', customer: 'Anita Desai', company: 'Desai Properties', service: 'PEB Structure', stage: 'Lost', pipelineStatus: 'Delayed', assigned: 'Sarah Lee', expectedClose: '01 Jul 2026', value: '₹5,00,000', probability: '0%', lastActivity: '1 Month Ago', followUp: 'None' },
+  { id: 'OP-1001', customer: 'Akash Kumar', company: 'ABC Builders', service: 'PEB Structure', stage: 'New Lead', pipelineStatus: 'On Track', assigned: 'John Smith', expectedClose: '25 Jul 2026', value: '₹8,50,000', probability: '25%', lastActivity: 'Today', followUp: '2026-07-15' },
+  { id: 'OP-1002', customer: 'Sarah Jenkins', company: 'Nexus Retail', service: 'Tensile Roofing', stage: 'Qualified', pipelineStatus: 'Follow Up', assigned: 'Mike Johnson', expectedClose: '12 Aug 2026', value: '₹12,00,000', probability: '40%', lastActivity: 'Yesterday', followUp: '2026-07-14' },
+  { id: 'OP-1003', customer: 'Ramesh Patel', company: 'Patel Logistics', service: 'PEB Structure', stage: 'Quotation Sent', pipelineStatus: 'Delayed', assigned: 'Sarah Lee', expectedClose: '30 Jul 2026', value: '₹45,00,000', probability: '60%', lastActivity: '2 Days Ago', followUp: '2026-07-21' },
+  { id: 'OP-1004', customer: 'Emma Watson', company: 'Watson Industries', service: 'Other roofing', stage: 'Negotiation', pipelineStatus: 'On Track', assigned: 'John Smith', expectedClose: '05 Aug 2026', value: '₹3,25,000', probability: '85%', lastActivity: 'Today', followUp: '2026-07-15' },
+  { id: 'OP-1005', customer: 'David Chen', company: 'Oriental Tech', service: 'Tensile Roofing', stage: 'Won', pipelineStatus: 'On Track', assigned: 'Mike Johnson', expectedClose: '10 Jul 2026', value: '₹22,50,000', probability: '100%', lastActivity: '1 Week Ago', followUp: '' },
+  { id: 'OP-1006', customer: 'Anita Desai', company: 'Desai Properties', service: 'PEB Structure', stage: 'Lost', pipelineStatus: 'Delayed', assigned: 'Sarah Lee', expectedClose: '01 Jul 2026', value: '₹5,00,000', probability: '0%', lastActivity: '1 Month Ago', followUp: '' },
 ];
 
 const getStageStyle = (stage) => {
@@ -81,6 +81,10 @@ export default function Pipeline() {
     const matchService = !serviceFilter || opp.service === serviceFilter;
     return matchSearch && matchStage && matchExec && matchService;
   });
+
+  const handleFollowUpChange = (id, newDate) => {
+    setOpportunities(opportunities.map(o => o.id === id ? { ...o, followUp: newDate } : o));
+  };
 
   const handleResetFilters = () => {
     setSearch('');
@@ -209,6 +213,10 @@ export default function Pipeline() {
     return matchSearch && matchStage && matchExec && matchService;
   });
 
+  const handleFollowUpChange = (id, newDate) => {
+    setOpportunities(opportunities.map(o => o.id === id ? { ...o, followUp: newDate } : o));
+  };
+
   const handleResetFilters = () => {
     setSearch('');
     setStageFilter('');
@@ -242,7 +250,24 @@ export default function Pipeline() {
                     <td style={{ padding: '1rem', fontSize: '0.875rem', whiteSpace: 'nowrap', color: '#475569' }}>{opp.expectedClose}</td>
                     <td style={{ padding: '1rem', fontSize: '0.875rem', whiteSpace: 'nowrap', fontWeight: '700', color: '#10B981' }}>{opp.value}</td>
                     <td style={{ padding: '1rem', fontSize: '0.875rem', whiteSpace: 'nowrap', color: '#475569' }}>{opp.lastActivity}</td>
-                    <td style={{ padding: '1rem', fontSize: '0.875rem', whiteSpace: 'nowrap', color: '#475569' }}>{opp.followUp}</td>
+                    <td style={{ padding: '1rem', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
+                      <input 
+                        type="date" 
+                        value={opp.followUp} 
+                        onChange={(e) => handleFollowUpChange(opp.id, e.target.value)}
+                        style={{ 
+                          border: '1px solid #E2E8F0', 
+                          borderRadius: '6px', 
+                          padding: '0.25rem 0.5rem', 
+                          fontSize: '0.75rem', 
+                          color: '#475569',
+                          fontWeight: '500',
+                          outline: 'none',
+                          cursor: 'pointer',
+                          backgroundColor: 'transparent'
+                        }} 
+                      />
+                    </td>
                     <td style={{ padding: '1rem', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button style={{ padding: '0.4rem', border: 'none', backgroundColor: '#F1F5F9', color: '#64748B', borderRadius: '6px', cursor: 'pointer' }} title="View"><Eye size={14} /></button>
