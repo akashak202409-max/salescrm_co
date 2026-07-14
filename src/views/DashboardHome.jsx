@@ -12,6 +12,7 @@ import {
 import { useToast } from '../components/Toast';
 import SectionHeader from '../components/SectionHeader';
 import DateRangePicker from '../components/DateRangePicker';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 // --- MOCK DATA ---
 const pipelineData = [
@@ -148,8 +149,8 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      {/* Date Picker Controls */}
-      <DateRangePicker dateRange={dateRange} setDateRange={setDateRange} />
+      {/* Global Filter Bar */}
+      <GlobalFilterBar />
 
       
       {/* 2. KPI Cards */}

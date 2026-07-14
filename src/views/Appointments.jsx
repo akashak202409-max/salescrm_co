@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, User, Phone, MapPin, ChevronLeft, ChevronRight, CalendarCheck2, CalendarClock, CheckCircle2, Flag, X, Calendar as CalendarIcon } from 'lucide-react';
 import { useToast } from '../components/Toast';
 import DateRangePicker from '../components/DateRangePicker';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 const APPT_API = 'http://localhost:5000/api/appointments';
 
@@ -200,6 +201,8 @@ const Appointments = () => {
           <CalendarIcon size={16} /> Schedule Visit
         </button>
       </div>
+
+      <GlobalFilterBar />
 
       {/* ── 4 Stat Cards ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>

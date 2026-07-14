@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Download, Eye, Plus, CheckCircle, Clock, X, ThumbsUp, Send, Upload } from 'lucide-react';
 import QuotationPreviewModal from '../components/QuotationPreviewModal';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 const initialQuotesData = [
   { id: 'QT-5001', leadId: 'LD-1001', client: 'Reference Client', project: 'PEB', amount: '₹100,000', gst: '₹18,000', approvalStatus: 'Pending', quotationStatus: 'In Preparation', revision: 'Rev 0', fileName: null },
@@ -146,6 +147,8 @@ const Quotations = () => {
           <Plus size={16} /> Upload Quotation
         </button>
       </div>
+
+      <GlobalFilterBar />
 
       {/* ── 4 Stat Cards ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>

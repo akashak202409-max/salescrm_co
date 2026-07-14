@@ -5,6 +5,7 @@ import { useToast } from '../components/Toast';
 import AddNewLeadWizard from '../components/AddNewLeadWizard';
 import LeadDetailsDrawer from '../components/LeadDetailsDrawer';
 import { useNavigate } from 'react-router-dom';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 const LEAD_SOURCES = [
   'Referral',
@@ -1625,7 +1626,9 @@ const LeadManagement = () => {
               </button>
             </div>
 
-            {/* Form */}
+                  <GlobalFilterBar />
+
+{/* Form */}
             <form onSubmit={handleGenQuoteSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               
               {/* Row 1: Lead ID | Client Name */}

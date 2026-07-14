@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import PaymentDetailsDrawer from '../components/PaymentDetailsDrawer';
 import RecordPaymentModal from '../components/RecordPaymentModal';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 
 const SUMMARY_CARDS = [
@@ -71,7 +72,9 @@ export default function Payments() {
         </div>
       </div>
 
-      {/* Summary Cards */}
+            <GlobalFilterBar />
+
+{/* Summary Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {SUMMARY_CARDS.map((card, idx) => (
           <div key={idx} style={{ backgroundColor: '#FFFFFF', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>

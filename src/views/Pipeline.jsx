@@ -7,6 +7,7 @@ import PipelineDetailsDrawer from '../components/PipelineDetailsDrawer';
 import AddNewOpportunityModal from '../components/AddNewOpportunityModal';
 
 import AddNewLeadWizard from '../components/AddNewLeadWizard';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 const SUMMARY_CARDS = [
   { title: 'Total Opportunities', value: '142', bg: '#EFF6FF', color: 'var(--primary-color)', icon: <Filter size={20} /> },
@@ -109,7 +110,9 @@ export default function Pipeline() {
         </div>
       </div>
 
-      {/* Summary Cards */}
+            <GlobalFilterBar />
+
+{/* Summary Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1rem' }}>
         {SUMMARY_CARDS.slice(0,4).map((card, idx) => (
           <div key={idx} style={{ backgroundColor: '#FFFFFF', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>

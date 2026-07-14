@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Save, X, CheckCircle2, Building, ClipboardList, Calendar, IndianRupee, PenTool, Plus, Edit2, ChevronLeft } from 'lucide-react';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 const dummyProjects = [
   {
@@ -203,6 +204,8 @@ const ProjectFiling = () => {
               <Plus size={18} /> New Handover Form
             </button>
           </div>
+
+          <GlobalFilterBar />
 
           <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto' }}>
