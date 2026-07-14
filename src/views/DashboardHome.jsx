@@ -176,7 +176,7 @@ const DashboardHome = () => {
         {/* Appointments Group */}
         <div>
           <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '1rem' }}>Appointments</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
             <KpiCard title="Total Appointments" value={"10"} subtitle="All scheduled appointments" icon={Calendar} color="#4F46E5" bg="#EEF2FF" borderColor="#C7D2FE" />
             <KpiCard title="Total Visit Planned" value={"8"} subtitle="Upcoming & pending visits" icon={CalendarClock} color="#0EA5E9" bg="#F0F9FF" borderColor="#BAE6FD" />
             <KpiCard title="Completed Appointments" value={"2"} subtitle="Successfully completed" icon={CheckCircle2} color="#22C55E" bg="#F0FDF4" borderColor="#BBF7D0" />
@@ -187,7 +187,7 @@ const DashboardHome = () => {
         {/* Quotations Group */}
         <div>
           <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '1rem' }}>Quotations</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
             <KpiCard title="Requested Quotations" value={"1"} subtitle="Draft & initial requests" icon={FileText} color="#4F46E5" bg="#EEF2FF" borderColor="#C7D2FE" />
             <KpiCard title="Pending Quotations" value={"1"} subtitle="Awaiting client/mgr approval" icon={Clock} color="#D97706" bg="#FFFBEB" borderColor="#FDE68A" />
             <KpiCard title="Completed Quotations" value={"0"} subtitle="Prepared & sent to clients" icon={Send} color="#0EA5E9" bg="#F0F9FF" borderColor="#BAE6FD" />
@@ -198,7 +198,7 @@ const DashboardHome = () => {
         {/* Payments Group */}
         <div>
           <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '1rem' }}>Payments</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
             <KpiCard title="Total Collected" value="₹2.4Cr" subtitle="Total Collected" icon={CheckCircle2} color="#10B981" bg="#ECFDF5" borderColor="#A7F3D0" />
             <KpiCard title="Upcoming Dues" value="₹45L" subtitle="Upcoming Dues" icon={Clock} color="#6366F1" bg="#EEF2FF" borderColor="#C7D2FE" />
             <KpiCard title="Pending Payments" value="₹12L" subtitle="Pending Payments" icon={AlertCircle} color="#F59E0B" bg="#FFFBEB" borderColor="#FDE68A" />
