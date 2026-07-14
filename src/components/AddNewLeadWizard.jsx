@@ -291,25 +291,40 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Project Type</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Industrial', 'Warehouse', 'Commercial', 'Cold Storage', 'Institutional'].map(t => (
+                     {['Industrial', 'Warehouse', 'Commercial', 'Cold Storage', 'Institutional', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                      ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Structure Type</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Clear Span', 'Multi-span', 'Mezzanine', 'Multi-storey'].map(t => (
+                     {['Clear Span', 'Multi-span', 'Mezzanine', 'Multi-storey', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.structureType === t} onClick={() => handleChange('structureType', t)} />
                      ))}
+                      {formData.structureType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify structuretype..." style={inputStyle} value={formData.custom_structureType || ''} onChange={e => handleChange('custom_structureType', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Site Condition</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Flat', 'Slope', 'Filled', 'Rock'].map(t => (
+                     {['Flat', 'Slope', 'Filled', 'Rock', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.siteCondition === t} onClick={() => handleChange('siteCondition', t)} />
                      ))}
+                      {formData.siteCondition === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sitecondition..." style={inputStyle} value={formData.custom_siteCondition || ''} onChange={e => handleChange('custom_siteCondition', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div>
@@ -327,57 +342,92 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Project Type</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Commercial', 'Hospitality', 'Sports Complex', 'Event Space', 'Walkway / Canopy', 'Parking', 'Swimming Pool', 'Amphitheatre', 'Airport / Metro', 'Residential'].map(t => (
+                     {['Commercial', 'Hospitality', 'Sports Complex', 'Event Space', 'Walkway / Canopy', 'Parking', 'Swimming Pool', 'Amphitheatre', 'Airport / Metro', 'Residential', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                      ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Structure Type</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Entrance Canopy', 'Walkway Canopy', 'Car Parking Shade', 'Tensile Roof', 'Dome Structure', 'Cone Structure', 'Hypar Structure', 'Arch Structure', 'Gazebo', 'Custom Design'].map(t => (
+                     {['Entrance Canopy', 'Walkway Canopy', 'Car Parking Shade', 'Tensile Roof', 'Dome Structure', 'Cone Structure', 'Hypar Structure', 'Arch Structure', 'Gazebo', 'Custom Design', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.structureType === t} onClick={() => handleChange('structureType', t)} />
                      ))}
+                      {formData.structureType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify structuretype..." style={inputStyle} value={formData.custom_structureType || ''} onChange={e => handleChange('custom_structureType', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Installation Area</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Ground Mounted', 'Rooftop', 'Existing Building', 'Steel Structure', 'RCC Structure'].map(t => (
+                     {['Ground Mounted', 'Rooftop', 'Existing Building', 'Steel Structure', 'RCC Structure', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.installationArea === t} onClick={() => handleChange('installationArea', t)} />
                      ))}
+                      {formData.installationArea === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify installationarea..." style={inputStyle} value={formData.custom_installationArea || ''} onChange={e => handleChange('custom_installationArea', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Fabric Material</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['PVC', 'PVDF', 'PTFE', 'ETFE', 'HDPE Shade Net'].map(t => (
+                     {['PVC', 'PVDF', 'PTFE', 'ETFE', 'HDPE Shade Net', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.fabricMaterial === t} onClick={() => handleChange('fabricMaterial', t)} />
                      ))}
+                      {formData.fabricMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify fabricmaterial..." style={inputStyle} value={formData.custom_fabricMaterial || ''} onChange={e => handleChange('custom_fabricMaterial', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                   <div style={{ marginBottom: '1.5rem' }}>
                     <label style={labelStyle}>Fabric GSM</label>
                     <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                      {['450 GSM', '550 GSM', '650 GSM', '750 GSM', '900 GSM', '1050 GSM'].map(t => (
+                      {['450 GSM', '550 GSM', '650 GSM', '750 GSM', '900 GSM', '1050 GSM', 'Other'].map(t => (
                         <SelectPill key={t} label={t} selected={formData.fabricGsm === t} onClick={() => handleChange('fabricGsm', t)} />
                       ))}
+                      {formData.fabricGsm === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify fabricgsm..." style={inputStyle} value={formData.custom_fabricGsm || ''} onChange={e => handleChange('custom_fabricGsm', e.target.value)} />
+                        </div>
+                      )}
                     </div>
                   </div>
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Frame Material</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Mild Steel', 'Galvanized Steel', 'Stainless Steel', 'Aluminium'].map(t => (
+                     {['Mild Steel', 'Galvanized Steel', 'Stainless Steel', 'Aluminium', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.frameMaterial === t} onClick={() => handleChange('frameMaterial', t)} />
                      ))}
+                      {formData.frameMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify framematerial..." style={inputStyle} value={formData.custom_frameMaterial || ''} onChange={e => handleChange('custom_frameMaterial', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div style={{ marginBottom: '1.5rem' }}>
                    <label style={labelStyle}>Site Condition</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Flat', 'Slope', 'Coastal Area', 'High Wind Zone'].map(t => (
+                     {['Flat', 'Slope', 'Coastal Area', 'High Wind Zone', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.siteCondition === t} onClick={() => handleChange('siteCondition', t)} />
                      ))}
+                      {formData.siteCondition === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sitecondition..." style={inputStyle} value={formData.custom_siteCondition || ''} onChange={e => handleChange('custom_siteCondition', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
@@ -412,9 +462,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Fabric Material</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['PVC', 'PVDF', 'PTFE', 'ETFE', 'HDPE Shade Net'].map(t => (
+                         {['PVC', 'PVDF', 'PTFE', 'ETFE', 'HDPE Shade Net', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.fabricMaterial === t} onClick={() => handleChange('fabricMaterial', t)} />
                          ))}
+                      {formData.fabricMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify fabricmaterial..." style={inputStyle} value={formData.custom_fabricMaterial || ''} onChange={e => handleChange('custom_fabricMaterial', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
@@ -466,57 +521,92 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Project Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Car Parking', 'Walkway', 'Entrance Canopy', 'Swimming Pool', 'Sports Stadium', 'Auditorium', 'Resort', 'Shopping Mall', 'Commercial Building', 'Airport', 'Bus Terminal', 'School / College', 'Custom Project'].map(t => (
+                         {['Car Parking', 'Walkway', 'Entrance Canopy', 'Swimming Pool', 'Sports Stadium', 'Auditorium', 'Resort', 'Shopping Mall', 'Commercial Building', 'Airport', 'Bus Terminal', 'School / College', 'Custom Project', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Fabric Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['PVC Fabric', 'PTFE Fabric', 'ETFE Membrane', 'HDPE Shade Net', 'PVDF Fabric'].map(t => (
+                         {['PVC Fabric', 'PTFE Fabric', 'ETFE Membrane', 'HDPE Shade Net', 'PVDF Fabric', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.fabricType === t} onClick={() => handleChange('fabricType', t)} />
                          ))}
+                      {formData.fabricType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify fabrictype..." style={inputStyle} value={formData.custom_fabricType || ''} onChange={e => handleChange('custom_fabricType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Structure Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Cantilever', 'Cone', 'Hypar', 'Barrel Vault', 'Arch', 'Pyramid', 'Wave', 'Umbrella', 'Custom Design'].map(t => (
+                         {['Cantilever', 'Cone', 'Hypar', 'Barrel Vault', 'Arch', 'Pyramid', 'Wave', 'Umbrella', 'Custom Design', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.structureType === t} onClick={() => handleChange('structureType', t)} />
                          ))}
+                      {formData.structureType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify structuretype..." style={inputStyle} value={formData.custom_structureType || ''} onChange={e => handleChange('custom_structureType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Frame Material</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Mild Steel', 'Galvanized Steel', 'Stainless Steel', 'Aluminium'].map(t => (
+                         {['Mild Steel', 'Galvanized Steel', 'Stainless Steel', 'Aluminium', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.frameMaterial === t} onClick={() => handleChange('frameMaterial', t)} />
                          ))}
+                      {formData.frameMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify framematerial..." style={inputStyle} value={formData.custom_frameMaterial || ''} onChange={e => handleChange('custom_frameMaterial', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Area Size</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Below 500 sq.ft', '500-1000 sq.ft', '1000-3000 sq.ft', '3000-5000 sq.ft', 'Above 5000 sq.ft'].map(t => (
+                         {['Below 500 sq.ft', '500-1000 sq.ft', '1000-3000 sq.ft', '3000-5000 sq.ft', 'Above 5000 sq.ft', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.areaSize === t} onClick={() => handleChange('areaSize', t)} />
                          ))}
+                      {formData.areaSize === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify areasize..." style={inputStyle} value={formData.custom_areaSize || ''} onChange={e => handleChange('custom_areaSize', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Wind Load Requirement</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Normal', 'Coastal', 'High Wind', 'Cyclone Zone'].map(t => (
+                         {['Normal', 'Coastal', 'High Wind', 'Cyclone Zone', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.windLoad === t} onClick={() => handleChange('windLoad', t)} />
                          ))}
+                      {formData.windLoad === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify windload..." style={inputStyle} value={formData.custom_windLoad || ''} onChange={e => handleChange('custom_windLoad', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Site Condition</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Flat Land', 'Sloped Land', 'Existing Building', 'RCC Terrace'].map(t => (
+                         {['Flat Land', 'Sloped Land', 'Existing Building', 'RCC Terrace', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.siteCondition === t} onClick={() => handleChange('siteCondition', t)} />
                          ))}
+                      {formData.siteCondition === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sitecondition..." style={inputStyle} value={formData.custom_siteCondition || ''} onChange={e => handleChange('custom_siteCondition', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div>
@@ -534,65 +624,105 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Building Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Factory', 'Warehouse', 'Industrial Shed', 'Residential', 'Commercial', 'Farm House', 'Poultry Farm'].map(t => (
+                         {['Factory', 'Warehouse', 'Industrial Shed', 'Residential', 'Commercial', 'Farm House', 'Poultry Farm', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Purpose</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['New Roofing', 'Roof Replacement', 'Roof Extension'].map(t => (
+                         {['New Roofing', 'Roof Replacement', 'Roof Extension', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.purpose === t} onClick={() => handleChange('purpose', t)} />
                          ))}
+                      {formData.purpose === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify purpose..." style={inputStyle} value={formData.custom_purpose || ''} onChange={e => handleChange('custom_purpose', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Sheet Thickness</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['2 mm', '2.5 mm', '3 mm', '4 mm'].map(t => (
+                         {['2 mm', '2.5 mm', '3 mm', '4 mm', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sheetThickness === t} onClick={() => handleChange('sheetThickness', t)} />
                          ))}
+                      {formData.sheetThickness === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sheetthickness..." style={inputStyle} value={formData.custom_sheetThickness || ''} onChange={e => handleChange('custom_sheetThickness', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Sheet Profile</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Corrugated', 'Trapezoidal', 'Tile Profile'].map(t => (
+                         {['Corrugated', 'Trapezoidal', 'Tile Profile', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sheetProfile === t} onClick={() => handleChange('sheetProfile', t)} />
                          ))}
+                      {formData.sheetProfile === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sheetprofile..." style={inputStyle} value={formData.custom_sheetProfile || ''} onChange={e => handleChange('custom_sheetProfile', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Building Width</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Below 20 ft', '20-40 ft', '40-80 ft', 'Above 80 ft'].map(t => (
+                         {['Below 20 ft', '20-40 ft', '40-80 ft', 'Above 80 ft', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.buildingWidth === t} onClick={() => handleChange('buildingWidth', t)} />
                          ))}
+                      {formData.buildingWidth === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify buildingwidth..." style={inputStyle} value={formData.custom_buildingWidth || ''} onChange={e => handleChange('custom_buildingWidth', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Roof Slope</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Flat', 'Medium', 'High'].map(t => (
+                         {['Flat', 'Medium', 'High', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.roofSlope === t} onClick={() => handleChange('roofSlope', t)} />
                          ))}
+                      {formData.roofSlope === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify roofslope..." style={inputStyle} value={formData.custom_roofSlope || ''} onChange={e => handleChange('custom_roofSlope', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Location Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Coastal', 'Industrial', 'Residential', 'High Temperature Area'].map(t => (
+                         {['Coastal', 'Industrial', 'Residential', 'High Temperature Area', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.locationType === t} onClick={() => handleChange('locationType', t)} />
                          ))}
+                      {formData.locationType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify locationtype..." style={inputStyle} value={formData.custom_locationType || ''} onChange={e => handleChange('custom_locationType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Existing Roof</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['RCC', 'GI Sheet', 'Asbestos', 'No Existing Roof'].map(t => (
+                         {['RCC', 'GI Sheet', 'Asbestos', 'No Existing Roof', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.existingRoof === t} onClick={() => handleChange('existingRoof', t)} />
                          ))}
+                      {formData.existingRoof === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify existingroof..." style={inputStyle} value={formData.custom_existingRoof || ''} onChange={e => handleChange('custom_existingRoof', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div>
@@ -610,41 +740,66 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Application</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Skylight', 'Walkway', 'Balcony', 'Car Parking', 'Greenhouse', 'Terrace', 'Commercial Entrance'].map(t => (
+                         {['Skylight', 'Walkway', 'Balcony', 'Car Parking', 'Greenhouse', 'Terrace', 'Commercial Entrance', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Sheet Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Solid', 'Multiwall', 'Corrugated', 'Twin Wall', 'Honeycomb'].map(t => (
+                         {['Solid', 'Multiwall', 'Corrugated', 'Twin Wall', 'Honeycomb', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sheetType === t} onClick={() => handleChange('sheetType', t)} />
                          ))}
+                      {formData.sheetType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sheettype..." style={inputStyle} value={formData.custom_sheetType || ''} onChange={e => handleChange('custom_sheetType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Sheet Color</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Clear', 'Blue', 'Bronze', 'Green', 'Opal', 'Grey'].map(t => (
+                         {['Clear', 'Blue', 'Bronze', 'Green', 'Opal', 'Grey', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sheetColor === t} onClick={() => handleChange('sheetColor', t)} />
                          ))}
+                      {formData.sheetColor === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sheetcolor..." style={inputStyle} value={formData.custom_sheetColor || ''} onChange={e => handleChange('custom_sheetColor', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Frame Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Aluminium', 'Mild Steel', 'Stainless Steel', 'Existing Frame'].map(t => (
+                         {['Aluminium', 'Mild Steel', 'Stainless Steel', 'Existing Frame', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.frameMaterial === t} onClick={() => handleChange('frameMaterial', t)} />
                          ))}
+                      {formData.frameMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify framematerial..." style={inputStyle} value={formData.custom_frameMaterial || ''} onChange={e => handleChange('custom_frameMaterial', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Installation</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['New', 'Replacement'].map(t => (
+                         {['New', 'Replacement', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.installationType === t} onClick={() => handleChange('installationType', t)} />
                          ))}
+                      {formData.installationType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify installationtype..." style={inputStyle} value={formData.custom_installationType || ''} onChange={e => handleChange('custom_installationType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
@@ -671,49 +826,79 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Application</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Skylight', 'Atrium', 'Villa', 'Office', 'Terrace', 'Shopping Mall', 'Hotel'].map(t => (
+                         {['Skylight', 'Atrium', 'Villa', 'Office', 'Terrace', 'Shopping Mall', 'Hotel', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Glass Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Toughened', 'Laminated', 'Double Glazed', 'Tempered', 'Low-E Glass'].map(t => (
+                         {['Toughened', 'Laminated', 'Double Glazed', 'Tempered', 'Low-E Glass', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.glassType === t} onClick={() => handleChange('glassType', t)} />
                          ))}
+                      {formData.glassType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify glasstype..." style={inputStyle} value={formData.custom_glassType || ''} onChange={e => handleChange('custom_glassType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Glass Thickness</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['8 mm', '10 mm', '12 mm', 'Custom'].map(t => (
+                         {['8 mm', '10 mm', '12 mm', 'Custom', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.glassThickness === t} onClick={() => handleChange('glassThickness', t)} />
                          ))}
+                      {formData.glassThickness === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify glassthickness..." style={inputStyle} value={formData.custom_glassThickness || ''} onChange={e => handleChange('custom_glassThickness', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Frame Material</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Aluminium', 'Stainless Steel', 'Mild Steel'].map(t => (
+                         {['Aluminium', 'Stainless Steel', 'Mild Steel', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.frameMaterial === t} onClick={() => handleChange('frameMaterial', t)} />
                          ))}
+                      {formData.frameMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify framematerial..." style={inputStyle} value={formData.custom_frameMaterial || ''} onChange={e => handleChange('custom_frameMaterial', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Design Style</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Flat', 'Pyramid', 'Dome', 'Sloped', 'Custom'].map(t => (
+                         {['Flat', 'Pyramid', 'Dome', 'Sloped', 'Custom', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.structureType === t} onClick={() => handleChange('structureType', t)} />
                          ))}
+                      {formData.structureType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify structuretype..." style={inputStyle} value={formData.custom_structureType || ''} onChange={e => handleChange('custom_structureType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Water Drainage</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Internal', 'External'].map(t => (
+                         {['Internal', 'External', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.waterDrainage === t} onClick={() => handleChange('waterDrainage', t)} />
                          ))}
+                      {formData.waterDrainage === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify waterdrainage..." style={inputStyle} value={formData.custom_waterDrainage || ''} onChange={e => handleChange('custom_waterDrainage', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div>
@@ -731,41 +916,66 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Building Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['House', 'Villa', 'Temple', 'Resort', 'Heritage Building'].map(t => (
+                         {['House', 'Villa', 'Temple', 'Resort', 'Heritage Building', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Tile Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Clay Tile', 'Ceramic Tile', 'Traditional Tile', 'Premium Tile'].map(t => (
+                         {['Clay Tile', 'Ceramic Tile', 'Traditional Tile', 'Premium Tile', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.tileType === t} onClick={() => handleChange('tileType', t)} />
                          ))}
+                      {formData.tileType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify tiletype..." style={inputStyle} value={formData.custom_tileType || ''} onChange={e => handleChange('custom_tileType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Roof Frame</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Wooden', 'Steel', 'RCC'].map(t => (
+                         {['Wooden', 'Steel', 'RCC', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.frameMaterial === t} onClick={() => handleChange('frameMaterial', t)} />
                          ))}
+                      {formData.frameMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify framematerial..." style={inputStyle} value={formData.custom_frameMaterial || ''} onChange={e => handleChange('custom_frameMaterial', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>New or Replacement</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['New', 'Replacement'].map(t => (
+                         {['New', 'Replacement', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.installationType === t} onClick={() => handleChange('installationType', t)} />
                          ))}
+                      {formData.installationType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify installationtype..." style={inputStyle} value={formData.custom_installationType || ''} onChange={e => handleChange('custom_installationType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Roof Slope</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Low', 'Medium', 'High'].map(t => (
+                         {['Low', 'Medium', 'High', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.roofSlope === t} onClick={() => handleChange('roofSlope', t)} />
                          ))}
+                      {formData.roofSlope === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify roofslope..." style={inputStyle} value={formData.custom_roofSlope || ''} onChange={e => handleChange('custom_roofSlope', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
@@ -792,33 +1002,53 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Application</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['House', 'Villa', 'Cottage', 'Resort', 'Gazebo'].map(t => (
+                         {['House', 'Villa', 'Cottage', 'Resort', 'Gazebo', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Shingle Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Asphalt', 'Fiberglass', 'Designer', 'Architectural'].map(t => (
+                         {['Asphalt', 'Fiberglass', 'Designer', 'Architectural', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.shingleType === t} onClick={() => handleChange('shingleType', t)} />
                          ))}
+                      {formData.shingleType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify shingletype..." style={inputStyle} value={formData.custom_shingleType || ''} onChange={e => handleChange('custom_shingleType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Color</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Black', 'Brown', 'Grey', 'Red', 'Green'].map(t => (
+                         {['Black', 'Brown', 'Grey', 'Red', 'Green', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sheetColor === t} onClick={() => handleChange('sheetColor', t)} />
                          ))}
+                      {formData.sheetColor === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sheetcolor..." style={inputStyle} value={formData.custom_sheetColor || ''} onChange={e => handleChange('custom_sheetColor', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Roof Shape</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Gable', 'Hip', 'Pyramid', 'Flat'].map(t => (
+                         {['Gable', 'Hip', 'Pyramid', 'Flat', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.structureType === t} onClick={() => handleChange('structureType', t)} />
                          ))}
+                      {formData.structureType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify structuretype..." style={inputStyle} value={formData.custom_structureType || ''} onChange={e => handleChange('custom_structureType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
@@ -845,41 +1075,66 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Building Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Factory', 'Warehouse', 'Workshop', 'Commercial', 'Agricultural'].map(t => (
+                         {['Factory', 'Warehouse', 'Workshop', 'Commercial', 'Agricultural', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Sheet Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Corrugated', 'Trapezoidal', 'Plain GI', 'Color Coated'].map(t => (
+                         {['Corrugated', 'Trapezoidal', 'Plain GI', 'Color Coated', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sheetType === t} onClick={() => handleChange('sheetType', t)} />
                          ))}
+                      {formData.sheetType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sheettype..." style={inputStyle} value={formData.custom_sheetType || ''} onChange={e => handleChange('custom_sheetType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Sheet Thickness</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['0.35 mm', '0.45 mm', '0.50 mm', '0.60 mm'].map(t => (
+                         {['0.35 mm', '0.45 mm', '0.50 mm', '0.60 mm', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sheetThickness === t} onClick={() => handleChange('sheetThickness', t)} />
                          ))}
+                      {formData.sheetThickness === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sheetthickness..." style={inputStyle} value={formData.custom_sheetThickness || ''} onChange={e => handleChange('custom_sheetThickness', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Insulation</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['PUF Panel', 'Glass Wool', 'Rock Wool', 'None'].map(t => (
+                         {['PUF Panel', 'Glass Wool', 'Rock Wool', 'None', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.insulationRequired === t} onClick={() => handleChange('insulationRequired', t)} />
                          ))}
+                      {formData.insulationRequired === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify insulationrequired..." style={inputStyle} value={formData.custom_insulationRequired || ''} onChange={e => handleChange('custom_insulationRequired', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Structure</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['New', 'Existing', 'Extension'].map(t => (
+                         {['New', 'Existing', 'Extension', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.structureType === t} onClick={() => handleChange('structureType', t)} />
                          ))}
+                      {formData.structureType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify structuretype..." style={inputStyle} value={formData.custom_structureType || ''} onChange={e => handleChange('custom_structureType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
@@ -906,65 +1161,105 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Application</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Restaurant', 'Café', 'Terrace', 'Balcony', 'Swimming Pool', 'Resort'].map(t => (
+                         {['Restaurant', 'Café', 'Terrace', 'Balcony', 'Swimming Pool', 'Resort', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.projectTypeDetail === t} onClick={() => handleChange('projectTypeDetail', t)} />
                          ))}
+                      {formData.projectTypeDetail === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify projecttype..." style={inputStyle} value={formData.custom_projectTypeDetail || ''} onChange={e => handleChange('custom_projectTypeDetail', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Operating Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Manual', 'Motorized', 'Remote Control', 'Smart Automation'].map(t => (
+                         {['Manual', 'Motorized', 'Remote Control', 'Smart Automation', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.operatingType === t} onClick={() => handleChange('operatingType', t)} />
                          ))}
+                      {formData.operatingType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify operatingtype..." style={inputStyle} value={formData.custom_operatingType || ''} onChange={e => handleChange('custom_operatingType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Roof Material</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['PVC Fabric', 'Polycarbonate', 'Glass'].map(t => (
+                         {['PVC Fabric', 'Polycarbonate', 'Glass', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.roofMaterial === t} onClick={() => handleChange('roofMaterial', t)} />
                          ))}
+                      {formData.roofMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify roofmaterial..." style={inputStyle} value={formData.custom_roofMaterial || ''} onChange={e => handleChange('custom_roofMaterial', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Frame Material</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Aluminium', 'Mild Steel', 'Stainless Steel'].map(t => (
+                         {['Aluminium', 'Mild Steel', 'Stainless Steel', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.frameMaterial === t} onClick={() => handleChange('frameMaterial', t)} />
                          ))}
+                      {formData.frameMaterial === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify framematerial..." style={inputStyle} value={formData.custom_frameMaterial || ''} onChange={e => handleChange('custom_frameMaterial', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Weather Sensor</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Rain Sensor', 'Wind Sensor', 'Both', 'None'].map(t => (
+                         {['Rain Sensor', 'Wind Sensor', 'Both', 'None', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.weatherSensor === t} onClick={() => handleChange('weatherSensor', t)} />
                          ))}
+                      {formData.weatherSensor === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify weathersensor..." style={inputStyle} value={formData.custom_weatherSensor || ''} onChange={e => handleChange('custom_weatherSensor', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Lighting Required</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['LED Lighting', 'Decorative Lighting', 'None'].map(t => (
+                         {['LED Lighting', 'Decorative Lighting', 'None', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.lighting === t} onClick={() => handleChange('lighting', t)} />
                          ))}
+                      {formData.lighting === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify lighting..." style={inputStyle} value={formData.custom_lighting || ''} onChange={e => handleChange('custom_lighting', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Side Cover</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Glass', 'Fabric', 'Aluminium', 'None'].map(t => (
+                         {['Glass', 'Fabric', 'Aluminium', 'None', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.sideCover === t} onClick={() => handleChange('sideCover', t)} />
                          ))}
+                      {formData.sideCover === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sidecover..." style={inputStyle} value={formData.custom_sideCover || ''} onChange={e => handleChange('custom_sideCover', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div style={{ marginBottom: '1.5rem' }}>
                        <label style={labelStyle}>Warranty Expectation</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['5 Years', '10 Years', '15 Years'].map(t => (
+                         {['5 Years', '10 Years', '15 Years', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.warranty === t} onClick={() => handleChange('warranty', t)} />
                          ))}
+                      {formData.warranty === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify warranty..." style={inputStyle} value={formData.custom_warranty || ''} onChange={e => handleChange('custom_warranty', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                    </>
@@ -999,9 +1294,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                <div style={{ marginBottom: '1.5rem' }}>
                  <label style={labelStyle}>Expected Start Date</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                   {['Immediately', 'Within 1 Month', 'Within 3 Months', 'Just Planning'].map(t => (
+                   {['Immediately', 'Within 1 Month', 'Within 3 Months', 'Just Planning', 'Other'].map(t => (
                      <SelectPill key={t} label={t} selected={formData.expectedStartDate === t} onClick={() => handleChange('expectedStartDate', t)} />
                    ))}
+                      {formData.expectedStartDate === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify expectedstartdate..." style={inputStyle} value={formData.custom_expectedStartDate || ''} onChange={e => handleChange('custom_expectedStartDate', e.target.value)} />
+                        </div>
+                      )}
                  </div>
                </div>
              </div>
@@ -1044,9 +1344,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                    <div style={{ marginTop: '1.5rem' }}>
                      <label style={labelStyle}>Roof Slope</label>
                      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                       {['Flat', '5°', '10°', '15°', '20°', 'Custom'].map(t => (
+                       {['Flat', '5°', '10°', '15°', '20°', 'Custom', 'Other'].map(t => (
                          <SelectPill key={t} label={t} selected={formData.roofSlope === t} onClick={() => handleChange('roofSlope', t)} />
                        ))}
+                      {formData.roofSlope === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify roofslope..." style={inputStyle} value={formData.custom_roofSlope || ''} onChange={e => handleChange('custom_roofSlope', e.target.value)} />
+                        </div>
+                      )}
                      </div>
                    </div>
                  </div>
@@ -1087,17 +1392,27 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div>
                        <label style={labelStyle}>Soil Type</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Normal', 'Soft', 'Hard Rock'].map(t => (
+                         {['Normal', 'Soft', 'Hard Rock', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.soilType === t} onClick={() => handleChange('soilType', t)} />
                          ))}
+                      {formData.soilType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify soiltype..." style={inputStyle} value={formData.custom_soilType || ''} onChange={e => handleChange('custom_soilType', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div>
                        <label style={labelStyle}>Ground Level</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Even', 'Uneven', 'Slope'].map(t => (
+                         {['Even', 'Uneven', 'Slope', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.groundLevel === t} onClick={() => handleChange('groundLevel', t)} />
                          ))}
+                      {formData.groundLevel === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify groundlevel..." style={inputStyle} value={formData.custom_groundLevel || ''} onChange={e => handleChange('custom_groundLevel', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div>
@@ -1140,18 +1455,28 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                  <div style={{ marginBottom: '2.5rem' }}>
                    <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Structure Shape</h4>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Cone', 'Hypar', 'Arch', 'Dome', 'Pyramid', 'Custom'].map(t => (
+                     {['Cone', 'Hypar', 'Arch', 'Dome', 'Pyramid', 'Custom', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.structureShape === t} onClick={() => handleChange('structureShape', t)} />
                      ))}
+                      {formData.structureShape === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify structureshape..." style={inputStyle} value={formData.custom_structureShape || ''} onChange={e => handleChange('custom_structureShape', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
 
                  <div style={{ marginBottom: '2.5rem' }}>
                    <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Installation Area</h4>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Ground', 'Rooftop', 'Existing Building', 'Steel Structure'].map(t => (
+                     {['Ground', 'Rooftop', 'Existing Building', 'Steel Structure', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.installationArea === t} onClick={() => handleChange('installationArea', t)} />
                      ))}
+                      {formData.installationArea === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify installationarea..." style={inputStyle} value={formData.custom_installationArea || ''} onChange={e => handleChange('custom_installationArea', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
 
@@ -1161,9 +1486,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <div>
                        <label style={labelStyle}>Wind Exposure</label>
                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                         {['Low', 'Medium', 'High'].map(t => (
+                         {['Low', 'Medium', 'High', 'Other'].map(t => (
                            <SelectPill key={t} label={t} selected={formData.windExposure === t} onClick={() => handleChange('windExposure', t)} />
                          ))}
+                      {formData.windExposure === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify windexposure..." style={inputStyle} value={formData.custom_windExposure || ''} onChange={e => handleChange('custom_windExposure', e.target.value)} />
+                        </div>
+                      )}
                        </div>
                      </div>
                      <div>
@@ -1208,9 +1538,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                        <div>
                          <label style={labelStyle}>Curved / Flat Roof</label>
                          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                           {['Flat', 'Curved'].map(t => (
+                           {['Flat', 'Curved', 'Other'].map(t => (
                              <SelectPill key={t} label={t} selected={formData.curvedFlatRoof === t} onClick={() => handleChange('curvedFlatRoof', t)} />
                            ))}
+                      {formData.curvedFlatRoof === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify curvedflatroof..." style={inputStyle} value={formData.custom_curvedFlatRoof || ''} onChange={e => handleChange('custom_curvedFlatRoof', e.target.value)} />
+                        </div>
+                      )}
                          </div>
                        </div>
                        <UnitInput label="Frame Spacing" placeholder="Enter spacing" unit="ft" value={formData.frameSpacing || ''} onChange={v => handleChange('frameSpacing', v)} />
@@ -1293,9 +1628,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                        <div>
                          <label style={labelStyle}>Motor Location</label>
                          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                           {['Left', 'Right', 'Center'].map(t => (
+                           {['Left', 'Right', 'Center', 'Other'].map(t => (
                              <SelectPill key={t} label={t} selected={formData.motorLocation === t} onClick={() => handleChange('motorLocation', t)} />
                            ))}
+                      {formData.motorLocation === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify motorlocation..." style={inputStyle} value={formData.custom_motorLocation || ''} onChange={e => handleChange('custom_motorLocation', e.target.value)} />
+                        </div>
+                      )}
                          </div>
                        </div>
                        <UnitInput label="Track Length" placeholder="Enter length" unit="ft" value={formData.trackLength || ''} onChange={v => handleChange('trackLength', v)} />
@@ -1303,9 +1643,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                        <div>
                          <label style={labelStyle}>Control Type</label>
                          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                           {['Remote', 'Switch', 'Smart Home'].map(t => (
+                           {['Remote', 'Switch', 'Smart Home', 'Other'].map(t => (
                              <SelectPill key={t} label={t} selected={formData.controlType === t} onClick={() => handleChange('controlType', t)} />
                            ))}
+                      {formData.controlType === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify controltype..." style={inputStyle} value={formData.custom_controlType || ''} onChange={e => handleChange('custom_controlType', e.target.value)} />
+                        </div>
+                      )}
                          </div>
                        </div>
                      </div>
@@ -1323,9 +1668,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                <div style={{ marginBottom: '1.5rem' }}>
                  <label style={labelStyle}>Road Width</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                   {['Under 10 ft', '10-20 ft', '20-30 ft', 'Above 30 ft'].map(t => (
+                   {['Under 10 ft', '10-20 ft', '20-30 ft', 'Above 30 ft', 'Other'].map(t => (
                      <SelectPill key={t} label={t} selected={formData.roadAccessWidth === t} onClick={() => handleChange('roadAccessWidth', t)} />
                    ))}
+                      {formData.roadAccessWidth === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify roadaccesswidth..." style={inputStyle} value={formData.custom_roadAccessWidth || ''} onChange={e => handleChange('custom_roadAccessWidth', e.target.value)} />
+                        </div>
+                      )}
                  </div>
                </div>
 
@@ -1368,9 +1718,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                <div style={{ marginBottom: '1.5rem' }}>
                  <label style={labelStyle}>Working Space</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                   {['Limited', 'Moderate', 'Open Area'].map(t => (
+                   {['Limited', 'Moderate', 'Open Area', 'Other'].map(t => (
                      <SelectPill key={t} label={t} selected={formData.workingSpace === t} onClick={() => handleChange('workingSpace', t)} />
                    ))}
+                      {formData.workingSpace === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify workingspace..." style={inputStyle} value={formData.custom_workingSpace || ''} onChange={e => handleChange('custom_workingSpace', e.target.value)} />
+                        </div>
+                      )}
                  </div>
                </div>
              </div>
@@ -1383,18 +1738,28 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                <div style={{ marginBottom: '1.5rem' }}>
                  <label style={labelStyle}>Direction</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                   {['North', 'South', 'East', 'West'].map(t => (
+                   {['North', 'South', 'East', 'West', 'Other'].map(t => (
                      <SelectPill key={t} label={t} selected={formData.roofDirection === t} onClick={() => handleChange('roofDirection', t)} />
                    ))}
+                      {formData.roofDirection === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify roofdirection..." style={inputStyle} value={formData.custom_roofDirection || ''} onChange={e => handleChange('custom_roofDirection', e.target.value)} />
+                        </div>
+                      )}
                  </div>
                </div>
 
                <div style={{ marginBottom: '1.5rem' }}>
                  <label style={labelStyle}>Sun Exposure</label>
                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                   {['Low', 'Medium', 'High'].map(t => (
+                   {['Low', 'Medium', 'High', 'Other'].map(t => (
                      <SelectPill key={t} label={t} selected={formData.sunExposure === t} onClick={() => handleChange('sunExposure', t)} />
                    ))}
+                      {formData.sunExposure === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify sunexposure..." style={inputStyle} value={formData.custom_sunExposure || ''} onChange={e => handleChange('custom_sunExposure', e.target.value)} />
+                        </div>
+                      )}
                  </div>
                </div>
 
@@ -1646,9 +2011,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                    <div>
                      <label style={labelStyle}>Thickness</label>
                      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                       {['25mm', '50mm', '75mm', '100mm'].map(t => (
+                       {['25mm', '50mm', '75mm', '100mm', 'Other'].map(t => (
                          <SelectPill key={t} label={t} selected={formData.insulationThickness === t} onClick={() => handleChange('insulationThickness', t)} />
                        ))}
+                      {formData.insulationThickness === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify insulationthickness..." style={inputStyle} value={formData.custom_insulationThickness || ''} onChange={e => handleChange('custom_insulationThickness', e.target.value)} />
+                        </div>
+                      )}
                      </div>
                    </div>
                  )}
@@ -1730,9 +2100,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                  <div>
                    <label style={labelStyle}>Installation Priority</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Normal', 'Urgent', 'Immediate'].map(t => (
+                     {['Normal', 'Urgent', 'Immediate', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.installationPriority === t} onClick={() => handleChange('installationPriority', t)} />
                      ))}
+                      {formData.installationPriority === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify installationpriority..." style={inputStyle} value={formData.custom_installationPriority || ''} onChange={e => handleChange('custom_installationPriority', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                  <div>
@@ -1799,9 +2174,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                  <div>
                    <label style={labelStyle}>Annual Maintenance</label>
                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                     {['Yes', 'No', 'AMC Required'].map(t => (
+                     {['Yes', 'No', 'AMC Required', 'Other'].map(t => (
                        <SelectPill key={t} label={t} selected={formData.annualMaintenance === t} onClick={() => handleChange('annualMaintenance', t)} />
                      ))}
+                      {formData.annualMaintenance === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify annualmaintenance..." style={inputStyle} value={formData.custom_annualMaintenance || ''} onChange={e => handleChange('custom_annualMaintenance', e.target.value)} />
+                        </div>
+                      )}
                    </div>
                  </div>
                </div>
@@ -1923,9 +2303,14 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                        <div>
                          <label style={labelStyle}>Solid / Multiwall</label>
                          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                           {['Solid', 'Multiwall'].map(t => (
+                           {['Solid', 'Multiwall', 'Other'].map(t => (
                              <SelectPill key={t} label={t} selected={formData.solidMultiwall === t} onClick={() => handleChange('solidMultiwall', t)} />
                            ))}
+                      {formData.solidMultiwall === 'Other' && (
+                        <div style={{ width: '100%', marginTop: '0.25rem' }}>
+                          <input type="text" placeholder="Please specify solidmultiwall..." style={inputStyle} value={formData.custom_solidMultiwall || ''} onChange={e => handleChange('custom_solidMultiwall', e.target.value)} />
+                        </div>
+                      )}
                          </div>
                        </div>
                        <div>
