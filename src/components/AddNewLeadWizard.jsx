@@ -2486,7 +2486,7 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                    </select>
                  </div>
                )}
-               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
                  <div>
                    <label style={labelStyle}>Quotation Type</label>
                    <select style={inputStyle}>
@@ -2494,6 +2494,10 @@ export default function AddNewLeadWizard({ isOpen, onClose, onSave, initialData 
                      <option>Revised Quotation</option>
                      <option>Final Quotation</option>
                    </select>
+                 </div>
+                 <div>
+                   <label style={labelStyle}>Project Value (₹)</label>
+                   <input type="number" placeholder="Enter project value" style={inputStyle} value={formData.projectValue || ''} onChange={e => handleChange('projectValue', e.target.value)} />
                  </div>
                  <div>
                    <label style={labelStyle}>Upload File (PDF)</label>
