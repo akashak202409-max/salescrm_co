@@ -86,6 +86,7 @@ const DashboardHome = () => {
   const coldLeadsCount = countBy('cold');
   const junkLeadsCount = countBy('junk');
   const appointmentFixedCount = countBy('appointment');
+  const lostLeadsCount = countBy('lost');
 
   // Live lead-status pie data (replaces hardcoded leadStatusData)
   const liveLeadStatusData = [
@@ -168,7 +169,7 @@ const DashboardHome = () => {
             <KpiCard title="Appt. Fixed" value={appointmentFixedCount || "1"} subtitle="Meetings scheduled" icon={CalendarCheck} color="#22C55E" bg="#F0FDF4" borderColor="#BBF7D0" />
             <KpiCard title="Quotation Send" value={quotationPreparedCount || "2"} subtitle="Awaiting response" icon={FileText} color="#8B5CF6" bg="#F5F3FF" borderColor="#DDD6FE" />
             <KpiCard title="Order Confirmed" value={"1"} subtitle="Successfully closed" icon={CheckCircle2} color="#10B981" bg="#ECFDF5" borderColor="#A7F3D0" />
-            <KpiCard title="Order Confirm" value={"0"} subtitle="Handed over to ops" icon={PenTool} color="#3B82F6" bg="#EFF6FF" borderColor="#BFDBFE" />
+            <KpiCard title="Lost" value={lostLeadsCount || "0"} subtitle="Unconverted leads" icon={XCircle} color="#EF4444" bg="#FEF2F2" borderColor="#FECACA" />
             <KpiCard title="Junk" value={junkLeadsCount || "1"} subtitle="Unqualified leads" icon={Trash} color="#94A3B8" bg="#F1F5F9" borderColor="#E2E8F0" />
           </div>
         </div>
