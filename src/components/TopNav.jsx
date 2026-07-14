@@ -31,6 +31,21 @@ const TopNav = () => {
       {/* Right Section */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <select style={{
+            padding: '0.5rem 1rem',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--border-color)',
+            backgroundColor: 'var(--surface-color)',
+            color: 'var(--text-main)',
+            fontSize: '0.875rem',
+            cursor: 'pointer',
+            outline: 'none',
+          }}>
+            <option value="All">All Sales Managers</option>
+            <option value="Sarah Smith">Sarah Smith</option>
+            <option value="Mike Johnson">Mike Johnson</option>
+            <option value="Alex Wong">Alex Wong</option>
+          </select>
           <button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', position: 'relative' }} onClick={() => addToast('Opening Notification Center')}>
             <Bell size={20} />
             <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', backgroundColor: 'var(--danger-color)', borderRadius: '50%' }}></span>
