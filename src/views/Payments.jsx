@@ -15,12 +15,12 @@ const SUMMARY_CARDS = [
 ];
 
 const INITIAL_PAYMENTS = [
-  { id: 'INV-1024', customer: 'Akash Kumar', company: 'ABC Builders', service: 'PEB Structure', milestone: '50% Advance', amountDue: '₹4,25,000', amountPaid: '₹4,25,000', status: 'Paid', dueDate: '15 Jun 2026', method: 'Bank Transfer' },
-  { id: 'INV-1025', customer: 'Sarah Jenkins', company: 'Nexus Retail', service: 'Tensile Roofing', milestone: 'Completion (20%)', amountDue: '₹2,40,000', amountPaid: '₹0', status: 'Pending', dueDate: '30 Jul 2026', method: '-' },
-  { id: 'INV-1026', customer: 'Ramesh Patel', company: 'Patel Logistics', service: 'PEB Structure', milestone: 'Material Delivery (30%)', amountDue: '₹13,50,000', amountPaid: '₹5,00,000', status: 'Partially Paid', dueDate: '10 Jul 2026', method: 'Cheque' },
-  { id: 'INV-1027', customer: 'Emma Watson', company: 'Watson Industries', service: 'Other roofing', milestone: 'Final Settlement (10%)', amountDue: '₹32,500', amountPaid: '₹0', status: 'Overdue', dueDate: '01 Jul 2026', method: '-' },
-  { id: 'INV-1028', customer: 'David Chen', company: 'Oriental Tech', service: 'Tensile Roofing', milestone: '100% Advance', amountDue: '₹22,50,000', amountPaid: '₹22,50,000', status: 'Paid', dueDate: '05 Jun 2026', method: 'UPI' },
-  { id: 'INV-1029', customer: 'Anita Desai', company: 'Desai Properties', service: 'PEB Structure', milestone: 'Installation (40%)', amountDue: '₹2,00,000', amountPaid: '₹0', status: 'Overdue', dueDate: '15 May 2026', method: '-' },
+  { id: 'INV-1024', customer: 'Akash Kumar', company: 'ABC Builders', service: 'PEB Structure', milestone: '50% Advance', amountDue: '₹4,25,000', amountPaid: '₹4,25,000', status: 'Paid', dueDate: '2026-06-15', method: 'Bank Transfer' },
+  { id: 'INV-1025', customer: 'Sarah Jenkins', company: 'Nexus Retail', service: 'Tensile Roofing', milestone: 'Completion (20%)', amountDue: '₹2,40,000', amountPaid: '₹0', status: 'Pending', dueDate: '2026-07-30', method: '-' },
+  { id: 'INV-1026', customer: 'Ramesh Patel', company: 'Patel Logistics', service: 'PEB Structure', milestone: 'Material Delivery (30%)', amountDue: '₹13,50,000', amountPaid: '₹5,00,000', status: 'Partially Paid', dueDate: '2026-07-10', method: 'Cheque' },
+  { id: 'INV-1027', customer: 'Emma Watson', company: 'Watson Industries', service: 'Other roofing', milestone: 'Final Settlement (10%)', amountDue: '₹32,500', amountPaid: '₹0', status: 'Overdue', dueDate: '2026-07-01', method: '-' },
+  { id: 'INV-1028', customer: 'David Chen', company: 'Oriental Tech', service: 'Tensile Roofing', milestone: '100% Advance', amountDue: '₹22,50,000', amountPaid: '₹22,50,000', status: 'Paid', dueDate: '2026-06-05', method: 'UPI' },
+  { id: 'INV-1029', customer: 'Anita Desai', company: 'Desai Properties', service: 'PEB Structure', milestone: 'Installation (40%)', amountDue: '₹2,00,000', amountPaid: '₹0', status: 'Overdue', dueDate: '2026-05-15', method: '-' },
 ];
 
 const getStatusBadge = (status) => {
@@ -38,6 +38,10 @@ export default function Payments() {
   const [search, setSearch] = useState('');
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+
+  const handleDateChange = (id, newDate) => {
+    setPayments(payments.map(p => p.id === id ? { ...p, dueDate: newDate } : p));
+  };
 
   const handleSavePayment = (newPayment) => {
     setPayments([newPayment, ...payments]);
@@ -118,7 +122,24 @@ export default function Payments() {
                   <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '700', color: '#1E293B', whiteSpace: 'nowrap' }}>{payment.amountDue}</td>
                   <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '700', color: '#10B981', whiteSpace: 'nowrap' }}>{payment.amountPaid}</td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{getStatusBadge(payment.status)}</td>
-                  <td style={{ padding: '1rem', fontSize: '0.875rem', color: payment.status === 'Overdue' ? '#EF4444' : '#475569', fontWeight: payment.status === 'Overdue' ? '600' : '400', whiteSpace: 'nowrap' }}>{payment.dueDate}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
+                    <input 
+                      type="date" 
+                      value={payment.dueDate} 
+                      onChange={(e) => handleDateChange(payment.id, e.target.value)}
+                      style={{ 
+                        border: '1px solid #E2E8F0', 
+                        borderRadius: '6px', 
+                        padding: '0.25rem 0.5rem', 
+                        fontSize: '0.75rem', 
+                        color: payment.status === 'Overdue' ? '#EF4444' : '#475569',
+                        fontWeight: payment.status === 'Overdue' ? '700' : '500',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        backgroundColor: 'transparent'
+                      }} 
+                    />
+                  </td>
                   <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#475569', whiteSpace: 'nowrap' }}>{payment.method}</td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
