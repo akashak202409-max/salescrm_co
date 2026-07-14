@@ -1676,35 +1676,61 @@ const LeadManagement = () => {
                 </div>
               </div>
 
-              {/* Row 2: Services */}
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
-                  Services
-                </label>
-                <select 
-                  required 
-                  value={genQuoteDetails.project} 
-                  onChange={(e) => setGenQuoteDetails({...genQuoteDetails, project: e.target.value})} 
-                  style={{ 
-                    width: '100%', 
-                    padding: '0.625rem 0.875rem', 
-                    borderRadius: 'var(--radius-md)', 
-                    border: '1px solid var(--border-color)', 
-                    backgroundColor: 'var(--surface-color)', 
-                    color: 'var(--text-main)', 
-                    outline: 'none',
-                    fontSize: '0.875rem',
-                    transition: 'border-color 0.2s',
-                    cursor: 'pointer'
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
-                  onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
-                >
-                  <option value="">Select type</option>
-                  <option value="PEB">PEB</option>
-                  <option value="Tensile">Tensile</option>
-                  <option value="Other roofing">Other roofing</option>
-                </select>
+              {/* Row 2: Services and Project Value */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
+                    Services
+                  </label>
+                  <select 
+                    required 
+                    value={genQuoteDetails.project} 
+                    onChange={(e) => setGenQuoteDetails({...genQuoteDetails, project: e.target.value})} 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.625rem 0.875rem', 
+                      borderRadius: 'var(--radius-md)', 
+                      border: '1px solid var(--border-color)', 
+                      backgroundColor: 'var(--surface-color)', 
+                      color: 'var(--text-main)', 
+                      outline: 'none',
+                      fontSize: '0.875rem',
+                      transition: 'border-color 0.2s',
+                      cursor: 'pointer'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                  >
+                    <option value="">Select type</option>
+                    <option value="PEB">PEB</option>
+                    <option value="Tensile">Tensile</option>
+                    <option value="Other roofing">Other roofing</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem', color: '#64748B' }}>
+                    Project Value (₹)
+                  </label>
+                  <input 
+                    required 
+                    value={genQuoteDetails.projectValue || ''} 
+                    onChange={(e) => setGenQuoteDetails({...genQuoteDetails, projectValue: e.target.value})} 
+                    type="number" 
+                    placeholder="Enter project value" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.625rem 0.875rem', 
+                      borderRadius: 'var(--radius-md)', 
+                      border: '1px solid var(--border-color)', 
+                      outline: 'none',
+                      fontSize: '0.875rem',
+                      color: 'var(--text-main)',
+                      transition: 'border-color 0.2s'
+                    }} 
+                    onFocus={(e) => e.target.style.borderColor = 'var(--secondary-color)'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                  />
+                </div>
               </div>
 
               {/* Row 4: Quotation Type | File Upload */}

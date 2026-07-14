@@ -324,14 +324,20 @@ const Quotations = () => {
                   <input required value={newQuote.client} onChange={(e) => setNewQuote({...newQuote, client: e.target.value})} type="text" placeholder="e.g. Acme Corp" style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', outline: 'none' }} />
                 </div>
               </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Services</label>
-                <select required value={newQuote.project} onChange={(e) => setNewQuote({...newQuote, project: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--surface-color)', color: 'var(--text-main)', outline: 'none' }}>
-                  <option value="">Select type</option>
-                  <option value="PEB">PEB</option>
-                  <option value="Tensile">Tensile</option>
-                  <option value="Other roofing">Other roofing</option>
-                </select>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Services</label>
+                  <select required value={newQuote.project} onChange={(e) => setNewQuote({...newQuote, project: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--surface-color)', color: 'var(--text-main)', outline: 'none' }}>
+                    <option value="">Select type</option>
+                    <option value="PEB">PEB</option>
+                    <option value="Tensile">Tensile</option>
+                    <option value="Other roofing">Other roofing</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Project Value (₹)</label>
+                  <input required type="number" placeholder="Enter project value" value={newQuote.projectValue || ''} onChange={(e) => setNewQuote({...newQuote, projectValue: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', outline: 'none' }} />
+                </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
