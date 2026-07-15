@@ -1314,7 +1314,13 @@ const LeadManagement = () => {
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap', minWidth: '140px' }} onClick={(e) => e.stopPropagation()}>
                   <select
                     value={lead.designRequirement || ''}
-                    onChange={(e) => setLeads(leads.map(l => l.id === lead.id ? { ...l, designRequirement: e.target.value } : l))}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setLeads(leads.map(l => l.id === lead.id ? { ...l, designRequirement: val } : l));
+                      if (val) {
+                        setDesignReqModal({ open: true, lead: lead, designType: val });
+                      }
+                    }}
                     style={{
                       padding: '0.3rem 0.75rem',
                       borderRadius: '6px',
