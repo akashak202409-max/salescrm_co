@@ -162,16 +162,16 @@ const filteredOpportunities = opportunities.filter(opp => {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '1400px' }}>
             <thead style={{ position: 'sticky', top: 0, backgroundColor: '#F8FAFC', zIndex: 10 }}>
               <tr>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Lead ID</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Customer</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Service</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Stage</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Assigned To</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Expected Close</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap', cursor: 'pointer' }}><div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>Project Value <ArrowUpDown size={14} /></div></th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Last Activity</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Follow-up</th>
-                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Actions</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Lead id</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Customer</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Service</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Stage</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Assigned to</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Expected close</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap', cursor: 'pointer' }}><div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>Project value <ArrowUpDown size={14} /></div></th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Last activity</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Follow-up</th>
+                <th style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', color: '#64748B', fontSize: '0.75rem', fontWeight: '700', whiteSpace: 'nowrap' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
