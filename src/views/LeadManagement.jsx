@@ -1347,7 +1347,7 @@ const LeadManagement = () => {
                 </td>
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <select 
-                    value={lead.designReq || '2D Design'}
+                    value={lead.designReq || ''}
                     onChange={(e) => {
                       const val = e.target.value;
                       setLeads(leads.map(l => l.id === lead.id ? { ...l, designReq: val } : l));
@@ -1365,10 +1365,10 @@ const LeadManagement = () => {
                       backgroundColor: 'var(--surface-color)',
                       color: 'var(--text-main)',
                       cursor: 'pointer',
-                      outline: 'none',
-                      textTransform: 'uppercase'
+                      outline: 'none'
                     }}
                   >
+                    <option value="" disabled>Select</option>
                     <option value="2D Design">2D Design</option>
                     <option value="3D Design">3D Design</option>
                     <option value="Both">Both</option>
