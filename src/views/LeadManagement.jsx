@@ -964,7 +964,7 @@ const LeadManagement = () => {
               <div style={{
                 position: 'absolute',
                 top: '48px',
-                right: 0,
+                left: 0,
                 backgroundColor: 'var(--surface-color)',
                 border: '1px solid var(--border-color)',
                 borderRadius: 'var(--radius-lg)',
