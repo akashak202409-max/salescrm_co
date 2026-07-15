@@ -1107,10 +1107,10 @@ const LeadManagement = () => {
                       fontFamily: 'inherit'
                     }}
                   >
-                    <option value="All" style={{ color: 'var(--text-main)' }}>SERVICES (ALL)</option>
+                    <option value="All" style={{ color: 'var(--text-main)' }}>Services (All)</option>
                     <option value="PEB" style={{ color: 'var(--text-main)' }}>PEB</option>
-                    <option value="Tensile" style={{ color: 'var(--text-main)' }}>TENSILE</option>
-                    <option value="Other roofing" style={{ color: 'var(--text-main)' }}>OTHER ROOFING</option>
+                    <option value="Tensile" style={{ color: 'var(--text-main)' }}>Tensile</option>
+                    <option value="Other roofing" style={{ color: 'var(--text-main)' }}>Other Roofing</option>
                   </select>
                 </th>
                  <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Project Value</th>
@@ -1138,9 +1138,9 @@ const LeadManagement = () => {
                       fontFamily: 'inherit'
                     }}
                   >
-                    <option value="All" style={{ color: 'var(--text-main)' }}>LEAD SOURCE (ALL)</option>
+                    <option value="All" style={{ color: 'var(--text-main)' }}>Lead Source (All)</option>
                     {LEAD_SOURCES.map(src => (
-                      <option key={src} value={src} style={{ color: 'var(--text-main)' }}>{src.toUpperCase()}</option>
+                      <option key={src} value={src} style={{ color: 'var(--text-main)' }}>{src}</option>
                     ))}
                   </select>
                 </th>
@@ -1167,17 +1167,17 @@ const LeadManagement = () => {
                       fontFamily: 'inherit'
                     }}
                   >
-                    <option value="All" style={{ color: 'var(--text-main)' }}>STATUS (ALL)</option>
-                    <option value="New" style={{ color: 'var(--text-main)' }}>NEW LEAD</option>
-                    <option value="Hot" style={{ color: 'var(--text-main)' }}>HOT</option>
-                    <option value="Warm" style={{ color: 'var(--text-main)' }}>WARM</option>
-                    <option value="Cold" style={{ color: 'var(--text-main)' }}>COLD</option>
-                    <option value="Appt. Fixed" style={{ color: 'var(--text-main)' }}>APPT FIXED</option>
-                    <option value="Quotation Send" style={{ color: 'var(--text-main)' }}>QUOTATION SEND</option>
+                    <option value="All" style={{ color: 'var(--text-main)' }}>Status (All)</option>
+                    <option value="New" style={{ color: 'var(--text-main)' }}>New Lead</option>
+                    <option value="Hot" style={{ color: 'var(--text-main)' }}>Hot</option>
+                    <option value="Warm" style={{ color: 'var(--text-main)' }}>Warm</option>
+                    <option value="Cold" style={{ color: 'var(--text-main)' }}>Cold</option>
+                    <option value="Appt. Fixed" style={{ color: 'var(--text-main)' }}>Appt Fixed</option>
+                    <option value="Quotation Send" style={{ color: 'var(--text-main)' }}>Quotation Send</option>
                     
-                    <option value="Order Confirmed" style={{ color: 'var(--text-main)' }}>ORDER CONFIRMED</option>
-                    <option value="Junk" style={{ color: 'var(--text-main)' }}>JUNK</option>
-                    <option value="Lost" style={{ color: 'var(--text-main)' }}>LOST</option>
+                    <option value="Order Confirmed" style={{ color: 'var(--text-main)' }}>Order Confirmed</option>
+                    <option value="Junk" style={{ color: 'var(--text-main)' }}>Junk</option>
+                    <option value="Lost" style={{ color: 'var(--text-main)' }}>Lost</option>
                   </select>
                 </th>
                 <th style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
@@ -1203,10 +1203,10 @@ const LeadManagement = () => {
                       fontFamily: 'inherit'
                     }}
                   >
-                    <option value="All" style={{ color: 'var(--text-main)' }}>DESIGN REQ</option>
-                    <option value="2D Design" style={{ color: 'var(--text-main)' }}>2D DESIGN</option>
-                    <option value="3D Design" style={{ color: 'var(--text-main)' }}>3D DESIGN</option>
-                    <option value="Both" style={{ color: 'var(--text-main)' }}>BOTH</option>
+                    <option value="All" style={{ color: 'var(--text-main)' }}>Design Req</option>
+                    <option value="2D Design" style={{ color: 'var(--text-main)' }}>2D Design</option>
+                    <option value="3D Design" style={{ color: 'var(--text-main)' }}>3D Design</option>
+                    <option value="Both" style={{ color: 'var(--text-main)' }}>Both</option>
                   </select>
                 </th>
                  
@@ -1233,11 +1233,11 @@ const LeadManagement = () => {
                       fontFamily: 'inherit'
                     }}
                   >
-                    <option value="All" style={{ color: 'var(--text-main)' }}>ASSIGN TO (ALL)</option>
-                    <option value="Unassigned" style={{ color: 'var(--text-main)' }}>UNASSIGNED</option>
-                    <option value="Sarah Smith" style={{ color: 'var(--text-main)' }}>SARAH SMITH</option>
-                    <option value="Mike Johnson" style={{ color: 'var(--text-main)' }}>MIKE JOHNSON</option>
-                    <option value="Alex Wong" style={{ color: 'var(--text-main)' }}>ALEX WONG</option>
+                    <option value="All" style={{ color: 'var(--text-main)' }}>Assign To (All)</option>
+                    <option value="Unassigned" style={{ color: 'var(--text-main)' }}>Unassigned</option>
+                    <option value="Sarah Smith" style={{ color: 'var(--text-main)' }}>Sarah Smith</option>
+                    <option value="Mike Johnson" style={{ color: 'var(--text-main)' }}>Mike Johnson</option>
+                    <option value="Alex Wong" style={{ color: 'var(--text-main)' }}>Alex Wong</option>
                   </select>
                 </th>
                  <th style={{ padding: '0.75rem 1rem', fontWeight: '600', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', whiteSpace: 'nowrap' }}>Follow Up</th>
@@ -1304,7 +1304,7 @@ const LeadManagement = () => {
                       }}
                     >
                       {LEAD_SOURCES.map(src => (
-                        <option key={src} value={src}>{src.toUpperCase()}</option>
+                        <option key={src} value={src}>{src}</option>
                       ))}
                     </select>
                   </div>
@@ -1333,16 +1333,16 @@ const LeadManagement = () => {
                       backgroundSize: '0.65rem auto'
                     }}
                   >
-                    <option value="New Lead">NEW LEAD</option>
-                    <option value="Hot">HOT</option>
-                    <option value="Warm">WARM</option>
-                    <option value="Cold">COLD</option>
-                    <option value="Appointment Fixed">APPT FIXED</option>
-                    <option value="Quotation Sent">QUOTATION SEND</option>
+                    <option value="New Lead">New Lead</option>
+                    <option value="Hot">Hot</option>
+                    <option value="Warm">Warm</option>
+                    <option value="Cold">Cold</option>
+                    <option value="Appointment Fixed">Appt Fixed</option>
+                    <option value="Quotation Sent">Quotation Send</option>
                     
-                    <option value="Order Confirmed">ORDER CONFIRMED</option>
-                    <option value="Junk">JUNK</option>
-                    <option value="Lost">LOST</option>
+                    <option value="Order Confirmed">Order Confirmed</option>
+                    <option value="Junk">Junk</option>
+                    <option value="Lost">Lost</option>
                   </select>
                 </td>
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
@@ -1369,9 +1369,9 @@ const LeadManagement = () => {
                       textTransform: 'uppercase'
                     }}
                   >
-                    <option value="2D Design">2D DESIGN</option>
-                    <option value="3D Design">3D DESIGN</option>
-                    <option value="Both">BOTH</option>
+                    <option value="2D Design">2D Design</option>
+                    <option value="3D Design">3D Design</option>
+                    <option value="Both">Both</option>
                   </select>
                 </td>
 
