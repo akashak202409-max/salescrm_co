@@ -324,7 +324,7 @@ export default function DesignRequirementModal({ lead, designType, onClose, onSa
 
         {/* Footer */}
         <div style={{ padding: '1rem 1.5rem', backgroundColor: '#FFFFFF', borderTop: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button
+          <button onClick={() => setActiveTab(activeTab === 1 ? 3 : 3)}
             disabled={activeTab === 1}
             style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.25rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: '#FFFFFF', cursor: activeTab === 1 ? 'not-allowed' : 'pointer', color: '#64748B', fontWeight: '600', fontSize: '0.875rem', opacity: activeTab === 1 ? 0.4 : 1 }}
             onClick={() => setActiveTab(1)}>
