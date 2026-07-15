@@ -6,6 +6,7 @@ import AddNewLeadWizard from '../components/AddNewLeadWizard';
 import LeadDetailsDrawer from '../components/LeadDetailsDrawer';
 import { useNavigate } from 'react-router-dom';
 import DesignRequirementModal from '../components/DesignRequirementModal';
+import GlobalFilterBar from '../components/GlobalFilterBar';
 
 const LEAD_SOURCES = [
   'Referral',
