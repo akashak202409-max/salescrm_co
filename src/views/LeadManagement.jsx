@@ -1343,6 +1343,31 @@ const LeadManagement = () => {
                     <option value="Lost">LOST</option>
                   </select>
                 </td>
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
+                  <select 
+                    value={lead.designReq || '2D Design'}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setLeads(leads.map(l => l.id === lead.id ? { ...l, designReq: val } : l));
+                    }}
+                    style={{
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: '4px',
+                      border: '1px solid var(--border-color)',
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      backgroundColor: 'var(--surface-color)',
+                      color: 'var(--text-main)',
+                      cursor: 'pointer',
+                      outline: 'none',
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    <option value="2D Design">2D DESIGN</option>
+                    <option value="3D Design">3D DESIGN</option>
+                    <option value="Both">BOTH</option>
+                  </select>
+                </td>
 
                 <td style={{ padding: '0.75rem 1rem', textAlign: 'center', whiteSpace: 'nowrap' }} onClick={(e) => e.stopPropagation()}>
                   <select 
