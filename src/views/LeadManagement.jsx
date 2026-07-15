@@ -1958,7 +1958,19 @@ const LeadManagement = () => {
 
 
 
-    </div>
+    
+      {designReqModal.open && (
+        <DesignRequirementModal 
+          lead={designReqModal.lead}
+          designType={designReqModal.designType}
+          onClose={() => setDesignReqModal({ open: false, lead: null, designType: '' })}
+          onSave={(data) => {
+            console.log("Design Req saved:", data);
+            setDesignReqModal({ open: false, lead: null, designType: '' });
+          }}
+        />
+      )}
+</div>
   );
 };
 
