@@ -614,7 +614,7 @@ const LeadManagement = () => {
         file: null
       });
       setIsGenQuoteModalOpen(true);
-    } else if (newStatus === 'Order Confirm') {
+    } else if (newStatus === 'Order Confirmed') {
       setProjectFileLeadId(id);
       setIsProjectFileModalOpen(true);
     } else if (newStatus === 'New Lead') {
@@ -1170,7 +1170,6 @@ const LeadManagement = () => {
                     <option value="Quotation Send" style={{ color: 'var(--text-main)' }}>QUOTATION SEND</option>
                     
                     <option value="Order Confirmed" style={{ color: 'var(--text-main)' }}>ORDER CONFIRMED</option>
-                    <option value="Order Confirm" style={{ color: 'var(--text-main)' }}>ORDER CONFIRM</option>
                     <option value="Junk" style={{ color: 'var(--text-main)' }}>JUNK</option>
                     <option value="Lost" style={{ color: 'var(--text-main)' }}>LOST</option>
                   </select>
@@ -1307,7 +1306,6 @@ const LeadManagement = () => {
                     <option value="Quotation Sent">QUOTATION SEND</option>
                     
                     <option value="Order Confirmed">ORDER CONFIRMED</option>
-                    <option value="Order Confirm">ORDER CONFIRM</option>
                     <option value="Junk">JUNK</option>
                     <option value="Lost">LOST</option>
                   </select>
