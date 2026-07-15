@@ -9,10 +9,10 @@ import GlobalFilterBar from '../components/GlobalFilterBar';
 
 
 const SUMMARY_CARDS = [
-  { title: 'Total Collected', value: '₹2.4Cr', bg: '#ECFDF5', border: '#BBF7D0', color: '#10B981', sub: 'Amount realized', icon: <CheckCircle2 size={18} color="#10B981" /> },
-  { title: 'Upcoming Dues', value: '₹45L', bg: '#EFF6FF', border: '#C7D2FE', color: 'var(--primary-color)', sub: 'To be collected', icon: <Clock size={18} color="var(--primary-color)" /> },
-  { title: 'Pending Payments', value: '₹12L', bg: '#FFF7ED', border: '#FED7AA', color: '#F97316', sub: 'Awaiting clearance', icon: <AlertCircle size={18} color="#F97316" /> },
-  { title: 'Overdue Payments', value: '₹8.5L', bg: '#FEF2F2', border: '#FECACA', color: '#EF4444', sub: 'Past due date', icon: <X size={18} color="#EF4444" /> },
+  { title: 'Total Collected', value: '₹2.4Cr', bg: '#ECFDF5', color: '#10B981', icon: <CheckCircle2 size={20} /> },
+  { title: 'Upcoming Dues', value: '₹45L', bg: '#EFF6FF', color: 'var(--primary-color)', icon: <Clock size={20} /> },
+  { title: 'Pending Payments', value: '₹12L', bg: '#FFF7ED', color: '#F97316', icon: <AlertCircle size={20} /> },
+  { title: 'Overdue Payments', value: '₹8.5L', bg: '#FEF2F2', color: '#EF4444', icon: <X size={20} /> },
 ];
 
 const INITIAL_PAYMENTS = [
@@ -75,17 +75,18 @@ export default function Payments() {
             <GlobalFilterBar />
 
 {/* Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {SUMMARY_CARDS.map((card, idx) => (
-          <div key={idx} style={{ display: 'flex', flexDirection: 'column', padding: '1.25rem', backgroundColor: card.bg, border: `1px solid ${card.border}`, boxShadow: '0 2px 4px rgba(0,0,0,0.02)', borderRadius: 'var(--radius-lg, 12px)', gap: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <p style={{ color: 'var(--text-muted, #64748B)', fontSize: '0.875rem', fontWeight: '500', margin: 0 }}>{card.title}</p>
-              {card.icon}
-            </div>
-            <div>
-              <h3 style={{ fontSize: '1.75rem', fontWeight: '700', color: 'var(--text-main, #1E293B)', margin: '0 0 0.5rem 0', letterSpacing: '-0.5px' }}>{card.value}</h3>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted, #64748B)', fontWeight: '500' }}>{card.sub}</span>
-            </div>
+          <div key={idx} style={{ backgroundColor: '#FFFFFF', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+               <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: card.bg, color: card.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 {card.icon}
+               </div>
+               <div>
+                 <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>{card.value}</h3>
+                 <p style={{ color: '#64748B', fontSize: '0.875rem', fontWeight: '500', margin: '0.25rem 0 0 0', whiteSpace: 'nowrap' }}>{card.title}</p>
+               </div>
+             </div>
           </div>
         ))}
       </div>
