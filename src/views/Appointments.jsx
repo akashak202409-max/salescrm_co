@@ -202,7 +202,7 @@ const Appointments = () => {
         </button>
       </div>
 
-      <GlobalFilterBar />
+
 
       {/* ── 4 Stat Cards ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
