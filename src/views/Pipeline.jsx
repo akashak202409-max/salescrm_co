@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Search, Filter, Plus, Calendar, MoreVertical, Edit2, Trash2, Eye, 
-  ArrowUpDown, Download, CheckCircle2, ChevronLeft, ChevronRight, X 
+  ArrowUpDown, Download, CheckCircle2, ChevronLeft, ChevronRight, X, Flame, Activity, Snowflake, XCircle 
 } from 'lucide-react';
 import PipelineDetailsDrawer from '../components/PipelineDetailsDrawer';
 import AddNewOpportunityModal from '../components/AddNewOpportunityModal';
