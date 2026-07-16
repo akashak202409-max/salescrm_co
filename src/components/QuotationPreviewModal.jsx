@@ -55,16 +55,8 @@ const QuotationPreviewModal = ({ quotation, onClose }) => {
             {/* Header */}
             <div style={{ padding: '40px 40px 20px 40px', borderBottom: '3px solid #65a30d' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <div style={{ color: '#65a30d', display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                    <div style={{ width: '20px', height: '4px', backgroundColor: '#65a30d', transform: 'skewX(-30deg)' }}></div>
-                    <div style={{ width: '26px', height: '4px', backgroundColor: '#65a30d', transform: 'skewX(-30deg)' }}></div>
-                    <div style={{ width: '32px', height: '4px', backgroundColor: '#65a30d', transform: 'skewX(-30deg)' }}></div>
-                  </div>
-                  <div>
-                    <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', letterSpacing: '1px', color: '#1e293b', lineHeight: 1 }}>TESCO</h1>
-                    <div style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '3px', color: '#64748b', marginTop: '2px' }}>STRUCTURES</div>
-                  </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <img src="/tesco_structure.png" alt="Tesco Structures" style={{ height: '36px' }} />
                 </div>
                 <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
                   tescostructures@gmail.com
