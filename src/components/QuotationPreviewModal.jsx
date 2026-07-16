@@ -6,6 +6,29 @@ const QuotationPreviewModal = ({ quotation, onClose }) => {
 
   const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
+  const sectionHeaderStyle = {
+    fontSize: '13px', 
+    fontWeight: '800', 
+    color: '#1e40af', 
+    textTransform: 'uppercase', 
+    borderBottom: '2px solid #bfdbfe', 
+    paddingBottom: '8px', 
+    marginBottom: '16px',
+    marginTop: '32px'
+  };
+
+  const gridRowStyle = {
+    display: 'grid', 
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+    gap: '16px', 
+    fontSize: '12px',
+    borderBottom: '1px solid #f1f5f9',
+    padding: '12px 0'
+  };
+
+  const labelStyle = { color: '#64748b' };
+  const valueStyle = { fontWeight: '600', color: '#1e293b' };
+
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -19,7 +42,7 @@ const QuotationPreviewModal = ({ quotation, onClose }) => {
         backgroundColor: '#f1f5f9',
         borderRadius: 'var(--radius-lg)',
         width: '100%',
-        maxWidth: '900px',
+        maxWidth: '1000px',
         maxHeight: '90vh',
         display: 'flex',
         flexDirection: 'column',
@@ -77,78 +100,78 @@ const QuotationPreviewModal = ({ quotation, onClose }) => {
                 <div><span style={{ fontWeight: '700', color: '#1e293b' }}>Validity:</span> <span style={{ color: '#475569' }}>30 Days</span></div>
               </div>
 
-              {/* Cards Row */}
-              <div style={{ display: 'flex', gap: '20px', marginBottom: '40px', flexWrap: 'wrap' }}>
-                <div style={{ flex: 1, minWidth: '200px', padding: '20px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
-                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--primary-color)', textTransform: 'uppercase', marginBottom: '10px' }}>QUOTATION PREPARED FOR</div>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>{quotation.name || 'Client Name'}</div>
+              {/* 1. Basic Info */}
+              <div style={sectionHeaderStyle}>1. Basic Info</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+                <div style={{ padding: '16px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
+                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--primary-color)', textTransform: 'uppercase', marginBottom: '10px' }}>Client Details</div>
+                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b', marginBottom: '4px' }}>{quotation.name || 'Client Name'}</div>
                   <div style={{ fontSize: '11px', color: '#64748b', lineHeight: '1.6' }}>
-                    Phone: {quotation.phone || '+91 87654 32109'}<br/>
-                    Email: {quotation.email || 'client@example.com'}<br/>
-                    Site Location: {quotation.projectLocation || 'Chennai, TN'}
+                    Billing Name: {quotation.billingName || quotation.name || 'N/A'}<br/>
+                    GST: {quotation.gst || 'Not Provided'}
                   </div>
                 </div>
-                <div style={{ flex: 1, minWidth: '200px', padding: '20px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
-                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--primary-color)', textTransform: 'uppercase', marginBottom: '10px' }}>ASSIGNED REPRESENTATIVE</div>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>Alex Wong</div>
-                  <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '12px' }}>Tesco Structures Sales Division</div>
-                  <div style={{ fontSize: '10px', color: '#64748b' }}>
-                    <span style={{ fontWeight: '600' }}>Reference Segment:</span> {quotation.projectType || 'PEB Building'}
+                <div style={{ padding: '16px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
+                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--primary-color)', textTransform: 'uppercase', marginBottom: '10px' }}>Contact Info</div>
+                  <div style={{ fontSize: '11px', color: '#64748b', lineHeight: '1.6' }}>
+                    <span style={valueStyle}>Mobile:</span> {quotation.phone || '+91 XXXXX XXXXX'}<br/>
+                    <span style={valueStyle}>Alt Mobile:</span> {quotation.altMobile || 'N/A'}<br/>
+                    <span style={valueStyle}>Email:</span> {quotation.email || 'client@example.com'}
                   </div>
                 </div>
-              </div>
-
-              {/* Specifications Table */}
-              <div style={{ marginBottom: '40px' }}>
-                <div style={{ fontSize: '12px', fontWeight: '800', color: '#1e40af', textTransform: 'uppercase', borderBottom: '2px solid #bfdbfe', paddingBottom: '8px', marginBottom: '16px' }}>
-                  PROJECT DESIGN SPECIFICATIONS
+                <div style={{ padding: '16px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
+                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--primary-color)', textTransform: 'uppercase', marginBottom: '10px' }}>Location</div>
+                  <div style={{ fontSize: '11px', color: '#64748b', lineHeight: '1.6' }}>
+                    <span style={valueStyle}>Site Location:</span> {quotation.projectLocation || 'Chennai, TN'}<br/>
+                    <span style={valueStyle}>Site Address:</span> {quotation.siteAddress || 'Not Provided'}<br/>
+                    <span style={valueStyle}>Billing Address:</span> {quotation.billingAddress || 'Same as Site'}
+                  </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'x', fontSize: '12px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9' }}>
-                    <div style={{ color: '#64748b' }}>Segment Category</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>{quotation.projectType || 'PEB Building'}</div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9', paddingLeft: '16px' }}>
-                    <div style={{ color: '#64748b' }}>Work Type / Segment Detail</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>{quotation.workType || 'New'}</div>
-                  </div>
-                  
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9' }}>
-                    <div style={{ color: '#64748b' }}>Span / Structure Type</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>Multi-span</div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9', paddingLeft: '16px' }}>
-                    <div style={{ color: '#64748b' }}>Site Area / Dimensions</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>-</div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9' }}>
-                    <div style={{ color: '#64748b' }}>Roof Covering Sheeting</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>GI</div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9', paddingLeft: '16px' }}>
-                    <div style={{ color: '#64748b' }}>Site Condition / Soil Test</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>Filled / Not Done</div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9' }}>
-                    <div style={{ color: '#64748b' }}>Insulation Work</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>Not Included</div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px 0', borderBottom: '1px solid #f1f5f9', paddingLeft: '16px' }}>
-                    <div style={{ color: '#64748b' }}>Working Scope</div>
-                    <div style={{ fontWeight: '600', color: '#1e293b' }}>Steel Only</div>
-                  </div>
+                <div style={{ padding: '16px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
+                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--primary-color)', textTransform: 'uppercase', marginBottom: '10px' }}>Sales Representative</div>
+                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b', marginBottom: '4px' }}>{quotation.salesperson || quotation.assignedExecutive || 'Unassigned'}</div>
+                  <div style={{ fontSize: '11px', color: '#64748b' }}>Tesco Structures Sales Division</div>
                 </div>
               </div>
 
-              {/* Estimate Breakdown */}
-              <div style={{ marginBottom: '40px' }}>
-                <div style={{ fontSize: '12px', fontWeight: '800', color: '#1e40af', textTransform: 'uppercase', borderBottom: '2px solid #bfdbfe', paddingBottom: '8px', marginBottom: '16px' }}>
-                  COMMERCIAL ESTIMATE BREAKDOWN
+              {/* 2. Project Details */}
+              <div style={sectionHeaderStyle}>2. Project Details</div>
+              <div style={{ marginBottom: '20px' }}>
+                <div style={gridRowStyle}>
+                  <div><div style={labelStyle}>Segment Category</div><div style={valueStyle}>{quotation.projectType || 'PEB Building'}</div></div>
+                  <div><div style={labelStyle}>Work Type / Segment</div><div style={valueStyle}>{quotation.workType || quotation.projectTypeStr || 'New'}</div></div>
+                  <div><div style={labelStyle}>Structure Type</div><div style={valueStyle}>{quotation.structureType || 'Clear Span'}</div></div>
                 </div>
                 
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                <div style={gridRowStyle}>
+                  <div><div style={labelStyle}>Plot Dimensions</div><div style={valueStyle}>{quotation.plotLength || '-'} x {quotation.plotWidth || '-'}</div></div>
+                  <div><div style={labelStyle}>Roof Area / Size</div><div style={valueStyle}>{quotation.roofArea || quotation.projectSize || '-'}</div></div>
+                  <div><div style={labelStyle}>Heights (Roof/Clearance/Eave)</div><div style={valueStyle}>{quotation.roofHeight || '-'} / {quotation.clearanceHeight || '-'} / {quotation.eaveHeight || '-'}</div></div>
+                </div>
+
+                <div style={gridRowStyle}>
+                  <div><div style={labelStyle}>Roof Covering Sheeting</div><div style={valueStyle}>{quotation.roofCovering || 'GI'}</div></div>
+                  <div><div style={labelStyle}>Site Condition / Soil Test</div><div style={valueStyle}>{quotation.siteCondition || 'Flat'} / {quotation.soilTestDone || 'Not Done'}</div></div>
+                  <div><div style={labelStyle}>Insulation Work</div><div style={valueStyle}>{quotation.insulation || 'Not Included'}</div></div>
+                </div>
+
+                <div style={gridRowStyle}>
+                  <div><div style={labelStyle}>Site Access (Road/Crane/HV)</div><div style={valueStyle}>{quotation.roadAccessWidth || '-'} / {quotation.craneAccess ? 'Yes' : 'No'} / {quotation.heavyVehicleAccess ? 'Yes' : 'No'}</div></div>
+                  <div><div style={labelStyle}>Environment (Sun/Wind/Drain)</div><div style={valueStyle}>{quotation.sunExposure || '-'} / {quotation.windDirection || '-'} / {quotation.drainageAvailable ? 'Yes' : 'No'}</div></div>
+                  <div><div style={labelStyle}>Working Space</div><div style={valueStyle}>{quotation.workingSpace || 'Moderate'}</div></div>
+                </div>
+              </div>
+
+              {/* 3. Quotations */}
+              <div style={sectionHeaderStyle}>3. Quotations</div>
+              <div style={{ marginBottom: '20px' }}>
+                <div style={gridRowStyle}>
+                  <div><div style={labelStyle}>Design Services</div><div style={valueStyle}>3D: {quotation.design3D ? 'Yes' : 'No'} | 2D: {quotation.design2D ? 'Yes' : 'No'}</div></div>
+                  <div><div style={labelStyle}>Transportation Scope</div><div style={valueStyle}>{quotation.transportationScope === 'yes' ? 'Included' : 'Excluded'}</div></div>
+                  <div><div style={labelStyle}>Scaffolding Scope</div><div style={valueStyle}>{quotation.scaffoldingScope === 'yes' ? 'Included' : 'Excluded'}</div></div>
+                </div>
+
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', marginTop: '16px' }}>
                   <thead>
                     <tr style={{ backgroundColor: '#f8fafc', color: '#475569' }}>
                       <th style={{ textAlign: 'left', padding: '12px', fontWeight: '600', borderBottom: '1px solid #e2e8f0' }}>Description of Work</th>
@@ -165,62 +188,77 @@ const QuotationPreviewModal = ({ quotation, onClose }) => {
                         </div>
                       </td>
                       <td style={{ padding: '20px 12px', textAlign: 'right', fontWeight: '700', color: '#1e293b', verticalAlign: 'top' }}>
-                        {quotation.budget || '₹10,00,000'}
+                        {quotation.quotedPrice || quotation.budget || '₹10,00,000'}
                       </td>
                     </tr>
                     <tr style={{ backgroundColor: '#f8fafc' }}>
                       <td style={{ padding: '12px', textAlign: 'right', color: '#64748b' }}>Subtotal:</td>
-                      <td style={{ padding: '12px', textAlign: 'right', fontWeight: '700', color: '#1e293b' }}>{quotation.budget || '₹10,00,000'}</td>
+                      <td style={{ padding: '12px', textAlign: 'right', fontWeight: '700', color: '#1e293b' }}>{quotation.quotedPrice || quotation.budget || '₹10,00,000'}</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '16px 12px', textAlign: 'right', fontWeight: '800', color: '#1e40af', fontSize: '13px' }}>Grand Total (All-Inclusive):</td>
-                      <td style={{ padding: '16px 12px', textAlign: 'right', fontWeight: '800', color: '#059669', fontSize: '14px' }}>{quotation.budget || '₹10,00,000'}</td>
+                      <td style={{ padding: '16px 12px', textAlign: 'right', fontWeight: '800', color: '#059669', fontSize: '14px' }}>{quotation.quotedPrice || quotation.budget || '₹10,00,000'}</td>
                     </tr>
                   </tbody>
                 </table>
-              </div>
 
-              {/* Milestones Schedule */}
-              <div>
-                <div style={{ fontSize: '12px', fontWeight: '800', color: '#1e40af', textTransform: 'uppercase', borderBottom: '2px solid #bfdbfe', paddingBottom: '8px', marginBottom: '16px' }}>
-                  PRICING & PAYMENT MILESTONES SCHEDULE
-                </div>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#1e293b', marginTop: '24px', marginBottom: '12px', textTransform: 'uppercase' }}>Pricing & Payment Milestones Schedule</div>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                   <thead>
                     <tr style={{ color: '#475569' }}>
                       <th style={{ textAlign: 'left', padding: '12px 4px', fontWeight: '600', borderBottom: '1px solid #e2e8f0' }}>Billing Milestone Event Description</th>
                       <th style={{ textAlign: 'right', padding: '12px 4px', fontWeight: '600', borderBottom: '1px solid #e2e8f0' }}>Percentage</th>
-                      <th style={{ textAlign: 'right', padding: '12px 4px', fontWeight: '600', borderBottom: '1px solid #e2e8f0' }}>Milestone Value (INR)</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td style={{ padding: '12px 4px', color: '#1e293b', borderBottom: '1px dashed #f1f5f9' }}>1. Advance with Purchase Order (PO)</td>
                       <td style={{ padding: '12px 4px', textAlign: 'right', color: '#1e293b', fontWeight: '600', borderBottom: '1px dashed #f1f5f9' }}>10%</td>
-                      <td style={{ padding: '12px 4px', textAlign: 'right', color: '#64748b', borderBottom: '1px dashed #f1f5f9' }}>₹1,00,000</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '12px 4px', color: '#1e293b', borderBottom: '1px dashed #f1f5f9' }}>2. Dispatch / after Drawing Approval</td>
                       <td style={{ padding: '12px 4px', textAlign: 'right', color: '#1e293b', fontWeight: '600', borderBottom: '1px dashed #f1f5f9' }}>30%</td>
-                      <td style={{ padding: '12px 4px', textAlign: 'right', color: '#64748b', borderBottom: '1px dashed #f1f5f9' }}>₹3,00,000</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '12px 4px', color: '#1e293b', borderBottom: '1px dashed #f1f5f9' }}>3. Erection / after Structure Work Completion</td>
                       <td style={{ padding: '12px 4px', textAlign: 'right', color: '#1e293b', fontWeight: '600', borderBottom: '1px dashed #f1f5f9' }}>40%</td>
-                      <td style={{ padding: '12px 4px', textAlign: 'right', color: '#64748b', borderBottom: '1px dashed #f1f5f9' }}>₹4,00,000</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '12px 4px', color: '#1e293b' }}>4. Handover / after Completion Sign-off</td>
                       <td style={{ padding: '12px 4px', textAlign: 'right', color: '#1e293b', fontWeight: '600' }}>20%</td>
-                      <td style={{ padding: '12px 4px', textAlign: 'right', color: '#64748b' }}>₹2,00,000</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+
+              {/* 4. Order Confirm */}
+              <div style={sectionHeaderStyle}>4. Order Confirm</div>
+              <div style={{ marginBottom: '40px' }}>
+                <div style={gridRowStyle}>
+                  <div><div style={labelStyle}>Order Date</div><div style={valueStyle}>{quotation.orderDate || '-'}</div></div>
+                  <div><div style={labelStyle}>Proposal Ref</div><div style={valueStyle}>{quotation.proposalRef || '-'}</div></div>
+                  <div><div style={labelStyle}>Lead Time</div><div style={valueStyle}>{quotation.leadTime || '-'}</div></div>
+                </div>
+                <div style={gridRowStyle}>
+                  <div><div style={labelStyle}>Start Date</div><div style={valueStyle}>{quotation.startDate || '-'}</div></div>
+                  <div><div style={labelStyle}>Completion Date</div><div style={valueStyle}>{quotation.completionDate || '-'}</div></div>
+                  <div><div style={labelStyle}>Salesperson Declaration</div><div style={valueStyle}>{quotation.salespersonDeclaration ? 'Agreed' : 'Pending'}</div></div>
+                </div>
+                
+                <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '24px', fontFamily: 'cursive', color: '#1e293b', borderBottom: '1px solid #cbd5e1', paddingBottom: '4px', minWidth: '150px' }}>
+                      {quotation.salespersonSign || ''}
+                    </div>
+                    <div style={{ fontSize: '10px', color: '#64748b', marginTop: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Authorized Signature</div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             {/* Footer */}
-            <div style={{ marginTop: 'auto', backgroundColor: '#84cc16', color: 'white', padding: '16px', textAlign: 'center', fontSize: '10px', fontWeight: '600', letterSpacing: '0.5px' }}>
+            <div style={{ backgroundColor: '#84cc16', color: 'white', padding: '16px', textAlign: 'center', fontSize: '10px', fontWeight: '600', letterSpacing: '0.5px', marginTop: 'auto' }}>
               www.tescostructures.com &nbsp;|&nbsp; +91 90033 28229 &nbsp;|&nbsp; 37, 15th St, Gandhi Nagar, Ashok Nagar, Chennai, Tamil Nadu 600083
             </div>
 
