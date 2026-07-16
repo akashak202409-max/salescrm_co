@@ -1997,8 +1997,21 @@ const LeadManagement = () => {
           }}
         />
       )}
+      {previewQuote && (
+        <QuotationPreviewModal 
+          quotation={{
+            id: 'QT-' + previewQuote.id,
+            leadId: previewQuote.id,
+            client: previewQuote.name,
+            project: previewQuote.projectType || previewQuote.service,
+            amount: previewQuote.budget || previewQuote.value
+          }} 
+          onClose={() => setPreviewQuote(null)} 
+        />
+      )}
 </div>
   );
 };
 
 export default LeadManagement;
+
