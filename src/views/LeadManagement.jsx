@@ -1448,7 +1448,7 @@ const LeadManagement = () => {
                     <button title="Edit" onClick={() => openEditModal(lead)} style={{ background: '#E0E7FF', border: 'none', color: 'var(--primary-color)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                       <Edit2 size={12} />
                     </button>
-                    <button title="Download" onClick={(e) => { e.stopPropagation(); setPreviewQuote(lead); }} style={{ background: '#DCFCE7', border: 'none', color: '#166534', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', outline: 'none' }}>
+                    <button title="Download" onClick={(e) => { e.stopPropagation(); setSelectedQuotationLead(lead); }} style={{ background: '#DCFCE7', border: 'none', color: '#166534', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', outline: 'none' }}>
                       <Download size={12} />
                     </button>
                     <button title="Delete" onClick={(e) => { e.stopPropagation(); setLeadToDelete(lead); }} style={{ background: '#FEE2E2', border: 'none', color: 'var(--danger-color, #991B1B)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', outline: 'none' }}>
@@ -1998,7 +1998,13 @@ const LeadManagement = () => {
           }}
         />
       )}
-</div>
+      {selectedQuotationLead && (
+        <QuotationPreviewModal 
+          quotation={selectedQuotationLead} 
+          onClose={() => setSelectedQuotationLead(null)} 
+        />
+      )}
+    </div>
   );
 };
 
